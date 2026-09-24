@@ -52,6 +52,8 @@ import { ProUpgradeModal } from '@/components/pro-upgrade-modal'
 import { useTheme } from 'next-themes'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { scaleIngredientAmount, getRecipeNutrition } from '@/lib/recipe-utils'
+import { CookMode } from '@/components/cook-mode'
 
 const QUICK_STAPLES = [
   { name: 'Eggs', key: 'egg', icon: '🥚' },
@@ -94,6 +96,8 @@ export function SnapChefClient() {
   const [likeDeltas, setLikeDeltas] = useState<Record<string, number>>({})
   const [proModalOpen, setProModalOpen] = useState(false)
   const [isPro, setIsPro] = useState(false)
+  const [servingMultiplier, setServingMultiplier] = useState(1)
+  const [isCooking, setIsCooking] = useState(false)
 
   const scannerRef = useRef<HTMLDivElement>(null)
   const recipesRef = useRef<HTMLDivElement>(null)
@@ -723,8 +727,13 @@ export function SnapChefClient() {
       {/* FULL RECIPE DETAIL DIALOG                                          */}
       {/* =================================================================== */}
       <Dialog
-        open={selectedRecipe !== null}
-        onOpenChange={(open) => !open && setSelectedRecipe(null)}
+        open={selectedRecipe !== null && !isCooking}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedRecipe(null)
+            setTimeout(() => setServingMultiplier(1), 300) // Reset after animation
+          }
+        }}
       >
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto p-5 md:p-6 border-2 border-border/80 rounded-3xl">
           {selectedRecipe && (
@@ -803,8 +812,45 @@ export function SnapChefClient() {
                 </div>
                 <div>
                   <span className="text-[10px] text-muted-foreground block uppercase font-medium">Yield</span>
-                  <span className="font-bold text-foreground">{selectedRecipe.servings} Servings</span>
+                  <span className="font-bold text-foreground">{selectedRecipe.servings * servingMultiplier} Servings</span>
                 </div>
+              </div>
+
+              {/* Serving Scaler & Nutrition */}
+              <div className="space-y-4 pt-2">
+                 <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold uppercase tracking-wider text-muted-foreground">Scale Recipe:</span>
+                    <div className="flex gap-2">
+                       {[1, 2, 3, 4].map(num => (
+                         <Button 
+                            key={num} 
+                            size="sm" 
+                            variant={servingMultiplier === num ? 'default' : 'outline'} 
+                            onClick={() => setServingMultiplier(num)} 
+                            className={cn("h-8 w-10 text-xs font-bold border-2 transition-all", servingMultiplier === num ? "bg-emerald-600 hover:bg-emerald-700" : "")}
+                         >
+                            {num}x
+                         </Button>
+                       ))}
+                    </div>
+                 </div>
+                 
+                 <div className="grid grid-cols-4 gap-2">
+                    {(() => {
+                       const nut = getRecipeNutrition(selectedRecipe, servingMultiplier);
+                       return [
+                          { label: 'Calories', val: nut.cal },
+                          { label: 'Protein', val: nut.pro + 'g' },
+                          { label: 'Carbs', val: nut.carb + 'g' },
+                          { label: 'Fat', val: nut.fat + 'g' },
+                       ].map(n => (
+                          <div key={n.label} className="bg-muted/30 border-2 border-border/60 rounded-xl p-2 text-center flex flex-col items-center justify-center">
+                            <span className="text-[10px] text-muted-foreground uppercase font-bold">{n.label}</span>
+                            <span className="text-sm font-black text-foreground">{n.val}</span>
+                          </div>
+                       ))
+                    })()}
+                 </div>
               </div>
 
               {/* Ingredients Breakdown */}
@@ -864,7 +910,7 @@ export function SnapChefClient() {
                                     )}
                                   </div>
                                   <span className="text-muted-foreground font-mono text-[11px] font-semibold">
-                                    {ing.amount}
+                                    {scaleIngredientAmount(ing.amount, servingMultiplier)}
                                   </span>
                                 </li>
                               )
@@ -942,54 +988,56 @@ export function SnapChefClient() {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t-2 border-border/60 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+              <div className="pt-3 border-t-2 border-border/60 flex flex-col gap-2">
                 <Button
-                  variant="outline"
-                  size="sm"
-                  className={cn(
-                    'gap-1.5 text-xs font-bold border-2 transition-all',
-                    favoriteIds.includes(selectedRecipe.id)
-                      ? 'bg-amber-400/20 text-amber-950 dark:text-amber-200 border-amber-500'
-                      : 'border-border/80 text-foreground hover:border-amber-400'
-                  )}
-                  onClick={() => handleToggleFavorite(selectedRecipe.id)}
+                  size="lg"
+                  className="w-full gap-2 text-sm font-black bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg h-12 rounded-2xl active:scale-98"
+                  onClick={() => setIsCooking(true)}
                 >
-                  <Star
+                  <Flame className="h-4 w-4 fill-white" />
+                  <span>Start Cooking</span>
+                </Button>
+                
+                <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
                     className={cn(
-                      'h-3.5 w-3.5',
-                      favoriteIds.includes(selectedRecipe.id) ? 'fill-amber-500 text-amber-500' : 'text-muted-foreground'
+                      'gap-1.5 text-xs font-bold border-2 transition-all flex-1',
+                      favoriteIds.includes(selectedRecipe.id)
+                        ? 'bg-amber-400/20 text-amber-950 dark:text-amber-200 border-amber-500'
+                        : 'border-border/80 text-foreground hover:border-amber-400'
                     )}
-                  />
-                  <span>{favoriteIds.includes(selectedRecipe.id) ? 'Favorited ⭐' : 'Add to Favorites'}</span>
-                </Button>
+                    onClick={() => handleToggleFavorite(selectedRecipe.id)}
+                  >
+                    <Star
+                      className={cn(
+                        'h-3.5 w-3.5',
+                        favoriteIds.includes(selectedRecipe.id) ? 'fill-amber-500 text-amber-500' : 'text-muted-foreground'
+                      )}
+                    />
+                    <span>{favoriteIds.includes(selectedRecipe.id) ? 'Favorited ⭐' : 'Favorite'}</span>
+                  </Button>
 
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="gap-1.5 text-xs flex-1 border-2 font-bold"
-                  onClick={() => copyRecipe(selectedRecipe)}
-                >
-                  {copied ? (
-                    <>
-                      <Check className="h-3.5 w-3.5 text-emerald-500" />
-                      <span>Copied Recipe!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-3.5 w-3.5" />
-                      <span>Copy Recipe</span>
-                    </>
-                  )}
-                </Button>
-
-                <Button
-                  size="sm"
-                  variant="default"
-                  className="text-xs font-bold px-4"
-                  onClick={() => setSelectedRecipe(null)}
-                >
-                  Done
-                </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-1.5 text-xs flex-1 border-2 font-bold"
+                    onClick={() => copyRecipe(selectedRecipe)}
+                  >
+                    {copied ? (
+                      <>
+                        <Check className="h-3.5 w-3.5 text-emerald-500" />
+                        <span>Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3.5 w-3.5" />
+                        <span>Copy Recipe</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           )}
@@ -1025,6 +1073,15 @@ export function SnapChefClient() {
 
       {/* Pro Upgrade Modal */}
       <ProUpgradeModal open={proModalOpen} onOpenChange={setProModalOpen} />
+
+      {/* Cook Mode Fullscreen Overlay */}
+      {isCooking && selectedRecipe && (
+        <CookMode
+          recipe={selectedRecipe}
+          onClose={() => setIsCooking(false)}
+          servingMultiplier={servingMultiplier}
+        />
+      )}
     </div>
   )
 }

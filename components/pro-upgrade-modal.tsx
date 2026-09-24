@@ -178,14 +178,7 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
             <span>{isPro ? 'Manage Pro Subscription' : `Get Pro Access — ${selectedPlan === 'lifetime' ? '$19.99' : '$4.99/mo'}`}</span>
           </Button>
 
-          <div className="flex items-center justify-between text-[11px] text-muted-foreground pt-1">
-            <button
-              type="button"
-              onClick={handleToggleDemoPro}
-              className="text-muted-foreground/60 hover:text-foreground underline"
-            >
-              {isPro ? 'Toggle Back to Free' : 'Demo Test Pro'}
-            </button>
+          <div className="flex items-center justify-center text-[11px] text-muted-foreground pt-1">
             <span>🔒 Secure Stripe 256-bit Checkout</span>
           </div>
         </div>
