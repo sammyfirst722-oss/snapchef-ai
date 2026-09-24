@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { SwRegister } from '@/components/sw-register'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -11,12 +12,17 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   icons: {
     icon: '/favicon.ico',
-    apple: '/icon-192.png',
+    apple: '/apple-touch-icon.png',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'SnapChef AI',
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#10b981',
+  themeColor: '#052e16',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
@@ -34,6 +40,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
           <Toaster position="top-center" richColors closeButton />
+          <SwRegister />
         </ThemeProvider>
       </body>
     </html>

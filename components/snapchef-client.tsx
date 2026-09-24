@@ -996,6 +996,33 @@ export function SnapChefClient() {
         </DialogContent>
       </Dialog>
 
+      {/* Footer & Compliance */}
+      <footer className="mt-16 border-t-2 border-border/60 py-8 px-4 text-center text-xs text-muted-foreground">
+        <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <span className="font-black text-foreground">SnapChef AI</span>
+            <span>&copy; {new Date().getFullYear()} All rights reserved.</span>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-4 font-medium">
+            <a href="/privacy" className="hover:text-emerald-500 hover:underline">
+              Privacy Policy
+            </a>
+            <span className="text-border">•</span>
+            <a href="/terms" className="hover:text-emerald-500 hover:underline">
+              Terms of Service
+            </a>
+            <span className="text-border">•</span>
+            <a href="/account-deletion" className="hover:text-emerald-500 hover:underline">
+              Delete Account &amp; Data
+            </a>
+            <span className="text-border">•</span>
+            <a href="mailto:sammyfirst722@gmail.com" className="hover:text-emerald-500 hover:underline">
+              Support
+            </a>
+          </div>
+        </div>
+      </footer>
+
       {/* Pro Upgrade Modal */}
       <ProUpgradeModal open={proModalOpen} onOpenChange={setProModalOpen} />
     </div>
