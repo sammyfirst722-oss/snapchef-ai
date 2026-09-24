@@ -32,3 +32,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# keystores & secrets
+*.keystore
+*.jks
+*keystore-info.txt
+*-service-account*.json
+*.aab

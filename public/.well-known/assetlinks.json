@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.vercel.snapchef_ai.twa",
+      "sha256_cert_fingerprints": [
+        "6C:6D:08:A9:FE:AF:21:20:11:7D:C8:17:1D:64:A4:CE:BD:4D:92:6B:38:B9:6E:85:D1:2A:DE:D7:69:63:46:26"
+      ]
+    }
+  }
+]
