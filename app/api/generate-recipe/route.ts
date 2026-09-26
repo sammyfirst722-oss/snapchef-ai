@@ -1,8 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { getClientIp, rateLimit } from '@/lib/rate-limit'
+
+// Limit: 5 recipe generations per 60 seconds per IP to protect API costs
+const RECIPE_LIMIT = 5
+const RECIPE_WINDOW_SECONDS = 60
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = getClientIp(req)
+    const rateLimitResult = await rateLimit(`generate-recipe:${ip}`, RECIPE_LIMIT, RECIPE_WINDOW_SECONDS)
+
+    if (!rateLimitResult.success) {
+      const retryAfter = Math.max(1, rateLimitResult.reset - Math.floor(Date.now() / 1000))
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded. Please wait a minute before generating another recipe.',
+          retryAfter,
+        },
+        {
+          status: 429,
+          headers: {
+            'X-RateLimit-Limit': String(rateLimitResult.limit),
+            'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+            'X-RateLimit-Reset': String(rateLimitResult.reset),
+            'Retry-After': String(retryAfter),
+          },
+        }
+      )
+    }
+
     const { ingredients = [], preferences = {}, customPrompt = '' } = await req.json()
 
     if (!ingredients || ingredients.length === 0) {
@@ -12,12 +39,18 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const apiKey = process.env.GEMINI_API_KEY
+    const rawKey = process.env.GEMINI_API_KEY
+    const apiKey = rawKey?.replace(/^["']|["']$/g, '').trim()
 
     if (apiKey) {
       try {
         const genAI = new GoogleGenerativeAI(apiKey)
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+        const model = genAI.getGenerativeModel({
+          model: 'gemini-3.8-flash',
+          generationConfig: {
+            responseMimeType: 'application/json',
+          },
+        })
 
         const prompt = `You are SnapChef AI, a Michelin-trained home chef who specializes in turning leftover fridge ingredients into fast, delicious, restaurant-quality meals.
 Available Ingredients: ${ingredients.join(', ')}
@@ -48,26 +81,45 @@ Do not include any conversational fluff, markdown backticks, or text outside the
         const result = await model.generateContent(prompt)
         const text = result.response.text().trim()
         const cleanJson = text.replace(/```json/g, '').replace(/```/g, '').trim()
-        const recipe = JSON.parse(cleanJson)
+        const firstBrace = cleanJson.indexOf('{')
+        const lastBrace = cleanJson.lastIndexOf('}')
 
-        return NextResponse.json({ recipe, source: 'gemini-ai' })
+        const jsonStr =
+          firstBrace !== -1 && lastBrace > firstBrace
+            ? cleanJson.substring(firstBrace, lastBrace + 1)
+            : cleanJson
+
+        const recipe = JSON.parse(jsonStr)
+
+        return NextResponse.json(
+          { recipe, source: 'gemini-ai' },
+          {
+            headers: {
+              'X-RateLimit-Limit': String(rateLimitResult.limit),
+              'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+              'X-RateLimit-Reset': String(rateLimitResult.reset),
+            },
+          }
+        )
       } catch (geminiErr) {
         console.error('Gemini recipe generation error:', geminiErr)
       }
     }
 
     // High quality intelligent recipe generator fallback
-    const mainProtein = ingredients.find((i: string) =>
-      ['chicken', 'beef', 'eggs', 'bacon', 'tofu', 'salmon'].some((p) =>
-        i.toLowerCase().includes(p)
-      )
-    ) || 'Protein'
+    const mainProtein =
+      ingredients.find((i: string) =>
+        ['chicken', 'beef', 'eggs', 'bacon', 'tofu', 'salmon'].some((p) =>
+          i.toLowerCase().includes(p)
+        )
+      ) || 'Protein'
 
-    const mainCarb = ingredients.find((i: string) =>
-      ['rice', 'pasta', 'potato', 'bread', 'noodles'].some((c) =>
-        i.toLowerCase().includes(c)
-      )
-    ) || 'Stir-Fry'
+    const mainCarb =
+      ingredients.find((i: string) =>
+        ['rice', 'pasta', 'potato', 'bread', 'noodles'].some((c) =>
+          i.toLowerCase().includes(c)
+        )
+      ) || 'Stir-Fry'
 
     const fallbackRecipe = {
       title: `Crispy Golden ${mainProtein} & ${mainCarb} Skillet`,
@@ -91,7 +143,16 @@ Do not include any conversational fluff, markdown backticks, or text outside the
       chefTip: 'For extra crispiness, don’t overcrowd the skillet—let each ingredient get direct contact with the pan!',
     }
 
-    return NextResponse.json({ recipe: fallbackRecipe, source: 'curated-generator' })
+    return NextResponse.json(
+      { recipe: fallbackRecipe, source: 'curated-generator' },
+      {
+        headers: {
+          'X-RateLimit-Limit': String(rateLimitResult.limit),
+          'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+          'X-RateLimit-Reset': String(rateLimitResult.reset),
+        },
+      }
+    )
   } catch (err: any) {
     console.error('Generate recipe error:', err)
     return NextResponse.json(

@@ -54,28 +54,17 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
         return
       }
 
-      // If Stripe keys are not yet provided in .env, activate instant Pro trial!
-      setUserPro(true)
-      toast.success('SnapChef Pro Activated! ⭐', {
-        description: 'You now have unlimited AI camera scans and custom leftover chef access!',
+      toast.error('Checkout is temporarily unavailable', {
+        description: data.error || 'Please try again in a few moments.',
       })
-      onOpenChange(false)
     } catch (err: any) {
-      console.error(err)
-      // Instant unlock fallback for demo testing
-      setUserPro(true)
-      toast.success('SnapChef Pro Activated! ⭐')
-      onOpenChange(false)
+      console.error('Checkout error:', err)
+      toast.error('Unable to start checkout', {
+        description: 'Please check your connection and try again.',
+      })
     } finally {
       setLoading(false)
     }
-  }
-
-  const handleToggleDemoPro = () => {
-    const next = !isPro
-    setUserPro(next)
-    toast.info(next ? 'Pro Mode Enabled ⭐' : 'Switched to Free Tier')
-    onOpenChange(false)
   }
 
   return (

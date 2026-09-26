@@ -7,11 +7,10 @@ export async function POST(req: NextRequest) {
     const stripeKey = process.env.STRIPE_SECRET_KEY
 
     if (!stripeKey) {
-      // In demo mode or if keys are not yet pasted, return fallback so client unlocks Pro
-      return NextResponse.json({
-        demo: true,
-        message: 'Stripe keys not set in .env.local yet. Activated demo Pro mode.',
-      })
+      return NextResponse.json(
+        { error: 'Stripe checkout is not configured yet.' },
+        { status: 503 }
+      )
     }
 
     const stripe = new Stripe(stripeKey, {
