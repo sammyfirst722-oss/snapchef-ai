@@ -76,7 +76,7 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     expect(json.error).toContain('select or scan at least one ingredient')
   })
 
-  it('successfully generates recipe via Tier 1 Primary (openai/gpt-4o-mini)', async () => {
+  it('successfully generates recipe via Tier 1 Primary (openrouter/auto)', async () => {
     process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
 
     const mockRecipeData = {
@@ -101,7 +101,7 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        model: 'openai/gpt-4o-mini',
+        model: 'openrouter/auto',
         choices: [{ message: { content: JSON.stringify(mockRecipeData) } }],
       }),
     })
@@ -125,7 +125,7 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     expect(fetchUrl).toBe('https://openrouter.ai/api/v1/chat/completions')
     expect(fetchOptions.headers.Authorization).toBe('Bearer sk-or-v1-test-key')
     const sentBody = JSON.parse(fetchOptions.body)
-    expect(sentBody.model).toBe('openai/gpt-4o-mini')
+    expect(sentBody.model).toBe('openrouter/auto')
   })
 
   it('parses responses wrapped in markdown code fences', async () => {
@@ -147,7 +147,7 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        model: 'openai/gpt-4o-mini',
+        model: 'openrouter/auto',
         choices: [{ message: { content: `\`\`\`json\n${JSON.stringify(mockRecipeData)}\n\`\`\`` } }],
       }),
     })
@@ -161,7 +161,7 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     expect(json.recipe.title).toBe('Crispy Skillet Chicken')
   })
 
-  it('falls back to Tier 2 (openrouter/auto) when Tier 1 fails', async () => {
+  it('falls back to Tier 2 (openai/gpt-4o-mini) when Tier 1 fails', async () => {
     process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
 
     const mockBackupRecipe = {
@@ -184,11 +184,11 @@ describe('POST /api/generate-recipe Integration Tests', () => {
       text: async () => 'Provider error',
     })
 
-    // Tier 2 succeeds with openrouter/auto
+    // Tier 2 succeeds with openai/gpt-4o-mini
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        model: 'openrouter/auto',
+        model: 'openai/gpt-4o-mini',
         choices: [{ message: { content: JSON.stringify(mockBackupRecipe) } }],
       }),
     })
@@ -202,8 +202,10 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     expect(json.recipe.title).toBe('Backup Garden Frittata')
 
     expect(mockFetch).toHaveBeenCalledTimes(2)
+    const tier1Call = JSON.parse(mockFetch.mock.calls[0][1].body)
+    expect(tier1Call.model).toBe('openrouter/auto')
     const tier2Call = JSON.parse(mockFetch.mock.calls[1][1].body)
-    expect(tier2Call.model).toBe('openrouter/auto')
+    expect(tier2Call.model).toBe('openai/gpt-4o-mini')
   })
 
   it('falls back to Tier 3 curated generator when both Tier 1 and Tier 2 fail', async () => {

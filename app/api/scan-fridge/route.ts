@@ -4,8 +4,8 @@ import {
   callOpenRouterChat,
   extractJsonFromText,
   getOpenRouterApiKey,
-  OPENROUTER_PRIMARY_MODEL,
-  OPENROUTER_VISION_BACKUP_MODEL,
+  OPENROUTER_VISION_PRIMARY_MODEL,
+  OPENROUTER_BACKUP_MODEL,
   OpenRouterMessage,
 } from '@/lib/openrouter'
 
@@ -80,12 +80,13 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
         },
       ]
 
-      // Tier 1: Primary Vision Model (Paid, fast, accurate - gpt-4o-mini)
+      // Tier 1: Free Primary Vision Model (stealth/space-bunny-alpha)
+      // Space Bunny Alpha is verified free with multimodal vision support.
       try {
         const primaryRes = await callOpenRouterChat({
-          model: OPENROUTER_PRIMARY_MODEL,
+          model: OPENROUTER_VISION_PRIMARY_MODEL,
           messages,
-          maxTokens: 300,
+          maxTokens: 2500,
           temperature: 0.2,
           apiKey,
         })
@@ -103,17 +104,15 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
           }
         }
       } catch (tier1Err) {
-        console.warn('Tier 1 primary vision scan failed:', tier1Err)
+        console.warn('Tier 1 free vision scan failed:', tier1Err)
       }
 
-      // Tier 2: Free Backup Vision Model (stealth/space-bunny-alpha)
-      // OpenRouter auto-router routes to text/reasoning models that drop vision inputs or exhaust tokens.
-      // Space Bunny Alpha is verified free with multimodal vision support.
+      // Tier 2: Paid Backup Vision Model (openai/gpt-4o-mini)
       try {
         const backupRes = await callOpenRouterChat({
-          model: OPENROUTER_VISION_BACKUP_MODEL,
+          model: OPENROUTER_BACKUP_MODEL,
           messages,
-          maxTokens: 2500,
+          maxTokens: 300,
           temperature: 0.2,
           apiKey,
         })
@@ -131,7 +130,7 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
           }
         }
       } catch (tier2Err) {
-        console.warn('Tier 2 backup vision scan failed:', tier2Err)
+        console.warn('Tier 2 paid backup vision scan failed:', tier2Err)
       }
     }
 

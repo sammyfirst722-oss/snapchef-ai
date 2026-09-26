@@ -3,14 +3,24 @@
  * 
  * Provides unified, resilient AI completion for both text recipe generation
  * and multimodal camera fridge scanning with three fallback tiers:
- *   Tier 1: openai/gpt-4o-mini (paid, primary)
- *   Tier 2: openrouter/auto (free backup for recipes) / stealth/space-bunny-alpha (free backup for vision)
+ *   Tier 1: openrouter/auto (free, primary for recipes) / stealth/space-bunny-alpha (free, primary for vision)
+ *   Tier 2: openai/gpt-4o-mini (paid, backup for both)
  *   Tier 3: Local hardcoded generator / smart detector (last resort, 100% offline reliable)
  */
 
-export const OPENROUTER_PRIMARY_MODEL = 'openai/gpt-4o-mini'
-export const OPENROUTER_RECIPE_BACKUP_MODEL = 'openrouter/auto'
-export const OPENROUTER_VISION_BACKUP_MODEL = 'stealth/space-bunny-alpha'
+export const OPENROUTER_FREE_RECIPE_MODEL = 'openrouter/auto'
+export const OPENROUTER_FREE_VISION_MODEL = 'stealth/space-bunny-alpha'
+export const OPENROUTER_PAID_BACKUP_MODEL = 'openai/gpt-4o-mini'
+
+// Semantic aliases
+export const OPENROUTER_RECIPE_PRIMARY_MODEL = OPENROUTER_FREE_RECIPE_MODEL
+export const OPENROUTER_VISION_PRIMARY_MODEL = OPENROUTER_FREE_VISION_MODEL
+export const OPENROUTER_BACKUP_MODEL = OPENROUTER_PAID_BACKUP_MODEL
+
+// Legacy aliases for backward compatibility
+export const OPENROUTER_PRIMARY_MODEL = OPENROUTER_RECIPE_PRIMARY_MODEL
+export const OPENROUTER_RECIPE_BACKUP_MODEL = OPENROUTER_PAID_BACKUP_MODEL
+export const OPENROUTER_VISION_BACKUP_MODEL = OPENROUTER_PAID_BACKUP_MODEL
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 const SITE_URL = 'https://snapchef-ai-sammy.vercel.app'

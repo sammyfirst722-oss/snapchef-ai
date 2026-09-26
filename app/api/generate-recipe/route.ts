@@ -4,8 +4,8 @@ import {
   callOpenRouterChat,
   extractJsonFromText,
   getOpenRouterApiKey,
-  OPENROUTER_PRIMARY_MODEL,
-  OPENROUTER_RECIPE_BACKUP_MODEL,
+  OPENROUTER_RECIPE_PRIMARY_MODEL,
+  OPENROUTER_BACKUP_MODEL,
 } from '@/lib/openrouter'
 
 // Limit: 5 recipe generations per 60 seconds per IP to protect API costs
@@ -113,10 +113,10 @@ Do not include any conversational fluff, markdown backticks, or text outside the
         },
       ]
 
-      // Tier 1: Primary Model (Paid, fast, structured - gpt-4o-mini)
+      // Tier 1: Free Primary Router (openrouter/auto)
       try {
         const primaryRes = await callOpenRouterChat({
-          model: OPENROUTER_PRIMARY_MODEL,
+          model: OPENROUTER_RECIPE_PRIMARY_MODEL,
           messages,
           maxTokens: 800,
           temperature: 0.4,
@@ -133,13 +133,13 @@ Do not include any conversational fluff, markdown backticks, or text outside the
           }
         }
       } catch (tier1Err) {
-        console.warn('Tier 1 primary recipe generation failed:', tier1Err)
+        console.warn('Tier 1 free recipe generation failed:', tier1Err)
       }
 
-      // Tier 2: Free Backup Router (openrouter/auto)
+      // Tier 2: Paid Backup Model (openai/gpt-4o-mini)
       try {
         const backupRes = await callOpenRouterChat({
-          model: OPENROUTER_RECIPE_BACKUP_MODEL,
+          model: OPENROUTER_BACKUP_MODEL,
           messages,
           maxTokens: 800,
           temperature: 0.4,
@@ -156,7 +156,7 @@ Do not include any conversational fluff, markdown backticks, or text outside the
           }
         }
       } catch (tier2Err) {
-        console.warn('Tier 2 backup recipe generation failed:', tier2Err)
+        console.warn('Tier 2 paid backup recipe generation failed:', tier2Err)
       }
     }
 
