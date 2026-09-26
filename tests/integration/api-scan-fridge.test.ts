@@ -219,4 +219,36 @@ describe('POST /api/scan-fridge Integration Tests', () => {
     expect(json.ingredients.length).toBeGreaterThan(0)
     expect(mockFetch).not.toHaveBeenCalled()
   })
+
+  it('supports multi-image requests and passes all images to the vision model', async () => {
+    process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
+    const detected = ['avocado', 'sourdough bread', 'lime']
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        model: 'stealth/space-bunny-alpha',
+        choices: [{ message: { content: JSON.stringify(detected) } }],
+      }),
+    })
+
+    const req = createRequest({
+      images: [
+        { imageBase64: 'imageShelf1', mimeType: 'image/jpeg' },
+        { imageBase64: 'imageShelf2', mimeType: 'image/jpeg' },
+      ],
+    })
+
+    const res = await POST(req)
+    const json = await res.json()
+
+    expect(res.status).toBe(200)
+    expect(json.ingredients).toEqual(detected)
+    expect(json.photoCount).toBe(2)
+    expect(mockFetch).toHaveBeenCalledTimes(1)
+
+    const callBody = JSON.parse(mockFetch.mock.calls[0][1].body)
+    expect(callBody.messages[0].content).toHaveLength(3) // 1 text prompt + 2 image_url objects
+  })
 })
+

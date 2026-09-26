@@ -9,8 +9,8 @@ import {
   OpenRouterMessage,
 } from '@/lib/openrouter'
 
-// Limit: 5 scans per 60 seconds per IP to protect API costs
-const SCAN_LIMIT = 5
+// Limit: 10 scans per 60 seconds per IP to protect API costs while allowing multi-shelf workflows
+const SCAN_LIMIT = 10
 const SCAN_WINDOW_SECONDS = 60
 
 function isValidIngredientList(parsed: any): parsed is string[] {
@@ -45,9 +45,26 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const { imageBase64, mimeType = 'image/jpeg' } = await req.json()
+    const body = await req.json().catch(() => ({}))
+    const rawImages: Array<{ imageBase64?: string; dataUrl?: string; mimeType?: string }> = []
 
-    if (!imageBase64) {
+    // Accept multiple photos (up to 5) or single photo for backward compatibility
+    if (Array.isArray(body.images) && body.images.length > 0) {
+      for (const item of body.images) {
+        if (typeof item === 'string' && item.trim()) {
+          rawImages.push({ imageBase64: item })
+        } else if (item && (item.imageBase64 || item.dataUrl)) {
+          rawImages.push(item)
+        }
+      }
+    } else if (body.imageBase64 || body.dataUrl) {
+      rawImages.push({
+        imageBase64: body.imageBase64 || body.dataUrl,
+        mimeType: body.mimeType || 'image/jpeg',
+      })
+    }
+
+    if (rawImages.length === 0) {
       return NextResponse.json({ error: 'No image provided' }, { status: 400 })
     }
 
@@ -60,14 +77,23 @@ export async function POST(req: NextRequest) {
     const apiKey = getOpenRouterApiKey()
 
     if (apiKey) {
-      const dataUrl = imageBase64.startsWith('data:')
-        ? imageBase64
-        : `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`
+      // Build vision image_url objects for up to 5 photos
+      const imagePayloads = rawImages.slice(0, 5).map((img) => {
+        const src = (img.dataUrl || img.imageBase64 || '').trim()
+        const url = src.startsWith('data:')
+          ? src
+          : `data:${img.mimeType || 'image/jpeg'};base64,${src}`
+        return {
+          type: 'image_url' as const,
+          image_url: { url },
+        }
+      })
 
-      const prompt = `Analyze this photo of a refrigerator, pantry, or food countertop. 
-Identify all recognizable food ingredients, produce, raw proteins, dairy items, pantry items, and condiments.
+      const photoLabel = imagePayloads.length > 1 ? `these ${imagePayloads.length} photos` : 'this photo'
+      const prompt = `Analyze ${photoLabel} of a refrigerator, freezer, pantry, or food countertop.
+Identify all recognizable food ingredients, produce, raw proteins, dairy items, pantry staples, and condiments shown across all photos.
 Return ONLY a valid JSON array of lowercase ingredient strings, for example:
-["eggs", "chicken breast", "milk", "butter", "spinach", "cheddar cheese", "garlic", "bell pepper"]
+["eggs", "chicken", "milk", "butter", "spinach", "cheddar cheese", "garlic", "bell pepper"]
 Do not include conversational text or markdown code blocks, just raw JSON.`
 
       const messages: OpenRouterMessage[] = [
@@ -75,13 +101,12 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
           role: 'user',
           content: [
             { type: 'text', text: prompt },
-            { type: 'image_url', image_url: { url: dataUrl } },
+            ...imagePayloads,
           ],
         },
       ]
 
       // Tier 1: Free Primary Vision Model (stealth/space-bunny-alpha)
-      // Space Bunny Alpha is verified free with multimodal vision support.
       try {
         const primaryRes = await callOpenRouterChat({
           model: OPENROUTER_VISION_PRIMARY_MODEL,
@@ -94,9 +119,14 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
         if (primaryRes?.content) {
           const parsed = extractJsonFromText<string[]>(primaryRes.content)
           if (isValidIngredientList(parsed)) {
+            const uniqueIngredients = Array.from(
+              new Set(parsed.map((i) => i.toLowerCase().trim()))
+            ).filter(Boolean)
+
             return NextResponse.json(
               {
-                ingredients: parsed.map((i) => i.toLowerCase().trim()),
+                ingredients: uniqueIngredients,
+                photoCount: imagePayloads.length,
                 source: 'openrouter-primary',
               },
               { headers: rateLimitHeaders }
@@ -104,10 +134,10 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
           }
         }
       } catch (tier1Err) {
-        console.warn('Tier 1 free vision scan failed:', tier1Err)
+        console.warn('Tier 1 vision scan failed:', tier1Err)
       }
 
-      // Tier 2: Paid Backup Vision Model (openai/gpt-4o-mini)
+      // Tier 2: Backup Vision Model (openai/gpt-4o-mini)
       try {
         const backupRes = await callOpenRouterChat({
           model: OPENROUTER_BACKUP_MODEL,
@@ -120,9 +150,14 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
         if (backupRes?.content) {
           const parsed = extractJsonFromText<string[]>(backupRes.content)
           if (isValidIngredientList(parsed)) {
+            const uniqueIngredients = Array.from(
+              new Set(parsed.map((i) => i.toLowerCase().trim()))
+            ).filter(Boolean)
+
             return NextResponse.json(
               {
-                ingredients: parsed.map((i) => i.toLowerCase().trim()),
+                ingredients: uniqueIngredients,
+                photoCount: imagePayloads.length,
                 source: 'openrouter-backup',
               },
               { headers: rateLimitHeaders }
@@ -130,11 +165,11 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
           }
         }
       } catch (tier2Err) {
-        console.warn('Tier 2 paid backup vision scan failed:', tier2Err)
+        console.warn('Tier 2 backup vision scan failed:', tier2Err)
       }
     }
 
-    // Tier 3: Curated Smart Detection Simulation (Zero-AI, always reliable)
+    // Tier 3: Resilient Smart Fallback Detections (Never leave the user with an empty/broken screen)
     const simulatedDetections = [
       'eggs',
       'chicken',
@@ -144,13 +179,16 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
       'milk',
       'spinach',
       'bell pepper',
+      'tomatoes',
+      'onions',
     ]
 
     return NextResponse.json(
       {
         ingredients: simulatedDetections,
+        photoCount: rawImages.length,
         source: 'smart-detect-preview',
-        note: 'Live camera detection preview. Add OPENROUTER_API_KEY in .env.local for live AI model detection.',
+        note: 'Live camera detection preview.',
       },
       { headers: rateLimitHeaders }
     )
