@@ -53,8 +53,20 @@ export function scaleIngredientAmount(amount: string, multiplier: number): strin
   const ignore = ['taste', 'pinch', 'dash', 'garnish', 'some']
   if (ignore.some((w) => amount.toLowerCase().includes(w))) return amount
 
+  // Matches ranges like "2-3", "2 - 3", "1/2 - 1" at the start
+  // Order matters: mixed numbers (1 1/2), then fractions (1/2), then decimals/integers (2.5, 3)
+  const numPattern = '(\\d+\\s+\\d+\\/\\d+|\\d+\\/\\d+|\\d+(?:\\.\\d+)?)'
+  const rangeRegex = new RegExp(`^${numPattern}\\s*-\\s*${numPattern}`)
+  const rangeMatch = amount.match(rangeRegex)
+  if (rangeMatch) {
+    const val1 = parseMixed(rangeMatch[1]) * multiplier
+    const val2 = parseMixed(rangeMatch[2]) * multiplier
+    const rest = amount.slice(rangeMatch[0].length)
+    return `${formatAmount(val1)}-${formatAmount(val2)}${rest}`
+  }
+
   // Matches patterns like "1 1/2", "1/2", "2.5", "3" at the start
-  const regex = /^(\d+(?:\.\d+)?|\d+\/\d+|\d+\s+\d+\/\d+)/
+  const regex = new RegExp(`^${numPattern}`)
   const match = amount.match(regex)
   
   if (match) {
