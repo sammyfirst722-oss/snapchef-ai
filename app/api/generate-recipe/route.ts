@@ -1,10 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import { getClientIp, rateLimit } from '@/lib/rate-limit'
+import {
+  callOpenRouterChat,
+  extractJsonFromText,
+  getOpenRouterApiKey,
+  OPENROUTER_PRIMARY_MODEL,
+  OPENROUTER_RECIPE_BACKUP_MODEL,
+} from '@/lib/openrouter'
 
 // Limit: 5 recipe generations per 60 seconds per IP to protect API costs
 const RECIPE_LIMIT = 5
 const RECIPE_WINDOW_SECONDS = 60
+
+interface RecipePayload {
+  title: string
+  category: string
+  prepTime: string
+  cookTime: string
+  servings: number
+  difficulty: string
+  description: string
+  ingredients: Array<{ item: string; amount: string }>
+  instructions: string[]
+  chefTip?: string
+}
+
+function isValidRecipe(recipe: any): recipe is RecipePayload {
+  return (
+    recipe &&
+    typeof recipe === 'object' &&
+    typeof recipe.title === 'string' &&
+    recipe.title.trim().length > 0 &&
+    Array.isArray(recipe.ingredients) &&
+    recipe.ingredients.length > 0 &&
+    Array.isArray(recipe.instructions) &&
+    recipe.instructions.length > 0
+  )
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -39,20 +71,16 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const rawKey = process.env.GEMINI_API_KEY
-    const apiKey = rawKey?.replace(/^["']|["']$/g, '').trim()
+    const rateLimitHeaders = {
+      'X-RateLimit-Limit': String(rateLimitResult.limit),
+      'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+      'X-RateLimit-Reset': String(rateLimitResult.reset),
+    }
+
+    const apiKey = getOpenRouterApiKey()
 
     if (apiKey) {
-      try {
-        const genAI = new GoogleGenerativeAI(apiKey)
-        const model = genAI.getGenerativeModel({
-          model: 'gemini-3.8-flash',
-          generationConfig: {
-            responseMimeType: 'application/json',
-          },
-        })
-
-        const prompt = `You are SnapChef AI, a Michelin-trained home chef who specializes in turning leftover fridge ingredients into fast, delicious, restaurant-quality meals.
+      const prompt = `You are SnapChef AI, a Michelin-trained home chef who specializes in turning leftover fridge ingredients into fast, delicious, restaurant-quality meals.
 Available Ingredients: ${ingredients.join(', ')}
 Dietary Requirements: ${JSON.stringify(preferences)}
 User Note: ${customPrompt || 'Create a quick, delicious 15-20 min meal using these ingredients.'}
@@ -78,35 +106,61 @@ Respond ONLY with a valid JSON object matching this schema:
 }
 Do not include any conversational fluff, markdown backticks, or text outside the JSON object.`
 
-        const result = await model.generateContent(prompt)
-        const text = result.response.text().trim()
-        const cleanJson = text.replace(/```json/g, '').replace(/```/g, '').trim()
-        const firstBrace = cleanJson.indexOf('{')
-        const lastBrace = cleanJson.lastIndexOf('}')
+      const messages = [
+        {
+          role: 'user' as const,
+          content: prompt,
+        },
+      ]
 
-        const jsonStr =
-          firstBrace !== -1 && lastBrace > firstBrace
-            ? cleanJson.substring(firstBrace, lastBrace + 1)
-            : cleanJson
+      // Tier 1: Primary Model (Paid, fast, structured - gpt-4o-mini)
+      try {
+        const primaryRes = await callOpenRouterChat({
+          model: OPENROUTER_PRIMARY_MODEL,
+          messages,
+          maxTokens: 800,
+          temperature: 0.4,
+          apiKey,
+        })
 
-        const recipe = JSON.parse(jsonStr)
-
-        return NextResponse.json(
-          { recipe, source: 'gemini-ai' },
-          {
-            headers: {
-              'X-RateLimit-Limit': String(rateLimitResult.limit),
-              'X-RateLimit-Remaining': String(rateLimitResult.remaining),
-              'X-RateLimit-Reset': String(rateLimitResult.reset),
-            },
+        if (primaryRes?.content) {
+          const parsed = extractJsonFromText<RecipePayload>(primaryRes.content)
+          if (isValidRecipe(parsed)) {
+            return NextResponse.json(
+              { recipe: parsed, source: 'openrouter-primary' },
+              { headers: rateLimitHeaders }
+            )
           }
-        )
-      } catch (geminiErr) {
-        console.error('Gemini recipe generation error:', geminiErr)
+        }
+      } catch (tier1Err) {
+        console.warn('Tier 1 primary recipe generation failed:', tier1Err)
+      }
+
+      // Tier 2: Free Backup Router (openrouter/auto)
+      try {
+        const backupRes = await callOpenRouterChat({
+          model: OPENROUTER_RECIPE_BACKUP_MODEL,
+          messages,
+          maxTokens: 800,
+          temperature: 0.4,
+          apiKey,
+        })
+
+        if (backupRes?.content) {
+          const parsed = extractJsonFromText<RecipePayload>(backupRes.content)
+          if (isValidRecipe(parsed)) {
+            return NextResponse.json(
+              { recipe: parsed, source: 'openrouter-backup' },
+              { headers: rateLimitHeaders }
+            )
+          }
+        }
+      } catch (tier2Err) {
+        console.warn('Tier 2 backup recipe generation failed:', tier2Err)
       }
     }
 
-    // High quality intelligent recipe generator fallback
+    // Tier 3: High quality intelligent recipe generator fallback (Zero-AI, always reliable)
     const mainProtein =
       ingredients.find((i: string) =>
         ['chicken', 'beef', 'eggs', 'bacon', 'tofu', 'salmon'].some((p) =>
@@ -145,13 +199,7 @@ Do not include any conversational fluff, markdown backticks, or text outside the
 
     return NextResponse.json(
       { recipe: fallbackRecipe, source: 'curated-generator' },
-      {
-        headers: {
-          'X-RateLimit-Limit': String(rateLimitResult.limit),
-          'X-RateLimit-Remaining': String(rateLimitResult.remaining),
-          'X-RateLimit-Reset': String(rateLimitResult.reset),
-        },
-      }
+      { headers: rateLimitHeaders }
     )
   } catch (err: any) {
     console.error('Generate recipe error:', err)

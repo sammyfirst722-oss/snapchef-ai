@@ -1,10 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { GoogleGenerativeAI } from '@google/generative-ai'
 import { getClientIp, rateLimit } from '@/lib/rate-limit'
+import {
+  callOpenRouterChat,
+  extractJsonFromText,
+  getOpenRouterApiKey,
+  OPENROUTER_PRIMARY_MODEL,
+  OPENROUTER_VISION_BACKUP_MODEL,
+  OpenRouterMessage,
+} from '@/lib/openrouter'
 
 // Limit: 5 scans per 60 seconds per IP to protect API costs
 const SCAN_LIMIT = 5
 const SCAN_WINDOW_SECONDS = 60
+
+function isValidIngredientList(parsed: any): parsed is string[] {
+  return (
+    Array.isArray(parsed) &&
+    parsed.length > 0 &&
+    parsed.every((item) => typeof item === 'string' && item.trim().length > 0)
+  )
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -36,70 +51,91 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No image provided' }, { status: 400 })
     }
 
-    const rawKey = process.env.GEMINI_API_KEY
-    const apiKey = rawKey?.replace(/^["']|["']$/g, '').trim()
+    const rateLimitHeaders = {
+      'X-RateLimit-Limit': String(rateLimitResult.limit),
+      'X-RateLimit-Remaining': String(rateLimitResult.remaining),
+      'X-RateLimit-Reset': String(rateLimitResult.reset),
+    }
 
-    // If Gemini API Key is available, use real AI vision with gemini-3.8-flash
+    const apiKey = getOpenRouterApiKey()
+
     if (apiKey) {
-      try {
-        const genAI = new GoogleGenerativeAI(apiKey)
-        const model = genAI.getGenerativeModel({
-          model: 'gemini-3.8-flash',
-          generationConfig: {
-            responseMimeType: 'application/json',
-          },
-        })
+      const dataUrl = imageBase64.startsWith('data:')
+        ? imageBase64
+        : `data:${mimeType || 'image/jpeg'};base64,${imageBase64}`
 
-        const prompt = `Analyze this photo of a refrigerator, pantry, or food countertop. 
+      const prompt = `Analyze this photo of a refrigerator, pantry, or food countertop. 
 Identify all recognizable food ingredients, produce, raw proteins, dairy items, pantry items, and condiments.
 Return ONLY a valid JSON array of lowercase ingredient strings, for example:
 ["eggs", "chicken breast", "milk", "butter", "spinach", "cheddar cheese", "garlic", "bell pepper"]
 Do not include conversational text or markdown code blocks, just raw JSON.`
 
-        const imagePart = {
-          inlineData: {
-            data: imageBase64.replace(/^data:image\/\w+;base64,/, ''),
-            mimeType: mimeType || 'image/jpeg',
-          },
-        }
+      const messages: OpenRouterMessage[] = [
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
+            { type: 'image_url', image_url: { url: dataUrl } },
+          ],
+        },
+      ]
 
-        const result = await model.generateContent([prompt, imagePart])
-        const text = result.response.text().trim()
+      // Tier 1: Primary Vision Model (Paid, fast, accurate - gpt-4o-mini)
+      try {
+        const primaryRes = await callOpenRouterChat({
+          model: OPENROUTER_PRIMARY_MODEL,
+          messages,
+          maxTokens: 300,
+          temperature: 0.2,
+          apiKey,
+        })
 
-        // Robust JSON extraction (strip code fences if any)
-        const cleanJson = text.replace(/```json/g, '').replace(/```/g, '').trim()
-        const firstBracket = cleanJson.indexOf('[')
-        const lastBracket = cleanJson.lastIndexOf(']')
-
-        const jsonStr =
-          firstBracket !== -1 && lastBracket > firstBracket
-            ? cleanJson.substring(firstBracket, lastBracket + 1)
-            : cleanJson
-
-        const parsed = JSON.parse(jsonStr)
-
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          return NextResponse.json(
-            {
-              ingredients: parsed,
-              source: 'gemini-vision',
-            },
-            {
-              headers: {
-                'X-RateLimit-Limit': String(rateLimitResult.limit),
-                'X-RateLimit-Remaining': String(rateLimitResult.remaining),
-                'X-RateLimit-Reset': String(rateLimitResult.reset),
+        if (primaryRes?.content) {
+          const parsed = extractJsonFromText<string[]>(primaryRes.content)
+          if (isValidIngredientList(parsed)) {
+            return NextResponse.json(
+              {
+                ingredients: parsed.map((i) => i.toLowerCase().trim()),
+                source: 'openrouter-primary',
               },
-            }
-          )
+              { headers: rateLimitHeaders }
+            )
+          }
         }
-      } catch (geminiErr) {
-        console.error('Gemini vision API error:', geminiErr)
-        // Fall back to intelligent simulation below
+      } catch (tier1Err) {
+        console.warn('Tier 1 primary vision scan failed:', tier1Err)
+      }
+
+      // Tier 2: Free Backup Vision Model (stealth/space-bunny-alpha)
+      // OpenRouter auto-router routes to text/reasoning models that drop vision inputs or exhaust tokens.
+      // Space Bunny Alpha is verified free with multimodal vision support.
+      try {
+        const backupRes = await callOpenRouterChat({
+          model: OPENROUTER_VISION_BACKUP_MODEL,
+          messages,
+          maxTokens: 2500,
+          temperature: 0.2,
+          apiKey,
+        })
+
+        if (backupRes?.content) {
+          const parsed = extractJsonFromText<string[]>(backupRes.content)
+          if (isValidIngredientList(parsed)) {
+            return NextResponse.json(
+              {
+                ingredients: parsed.map((i) => i.toLowerCase().trim()),
+                source: 'openrouter-backup',
+              },
+              { headers: rateLimitHeaders }
+            )
+          }
+        }
+      } catch (tier2Err) {
+        console.warn('Tier 2 backup vision scan failed:', tier2Err)
       }
     }
 
-    // Fallback detection (realistic common staples detected from photo)
+    // Tier 3: Curated Smart Detection Simulation (Zero-AI, always reliable)
     const simulatedDetections = [
       'eggs',
       'chicken',
@@ -115,15 +151,9 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
       {
         ingredients: simulatedDetections,
         source: 'smart-detect-preview',
-        note: 'Live camera detection preview. Add GEMINI_API_KEY in .env.local for custom AI model detection.',
+        note: 'Live camera detection preview. Add OPENROUTER_API_KEY in .env.local for live AI model detection.',
       },
-      {
-        headers: {
-          'X-RateLimit-Limit': String(rateLimitResult.limit),
-          'X-RateLimit-Remaining': String(rateLimitResult.remaining),
-          'X-RateLimit-Reset': String(rateLimitResult.reset),
-        },
-      }
+      { headers: rateLimitHeaders }
     )
   } catch (err: any) {
     console.error('Scan fridge error:', err)

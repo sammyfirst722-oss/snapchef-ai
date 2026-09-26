@@ -3,14 +3,6 @@ import { NextRequest } from 'next/server'
 import { POST } from '@/app/api/generate-recipe/route'
 import { rateLimit } from '@/lib/rate-limit'
 
-const { mockGenerateContent, mockGetGenerativeModel } = vi.hoisted(() => {
-  const mockGenerateContent = vi.fn()
-  const mockGetGenerativeModel = vi.fn().mockReturnValue({
-    generateContent: mockGenerateContent,
-  })
-  return { mockGenerateContent, mockGetGenerativeModel }
-})
-
 vi.mock('@/lib/rate-limit', async () => {
   const actual = await vi.importActual<typeof import('@/lib/rate-limit')>('@/lib/rate-limit')
   return {
@@ -19,23 +11,17 @@ vi.mock('@/lib/rate-limit', async () => {
   }
 })
 
-vi.mock('@google/generative-ai', () => {
-  class MockGoogleGenerativeAI {
-    constructor(_apiKey: string) {}
-    getGenerativeModel = mockGetGenerativeModel
-  }
-  return {
-    GoogleGenerativeAI: MockGoogleGenerativeAI,
-  }
-})
-
 describe('POST /api/generate-recipe Integration Tests', () => {
   const originalEnv = process.env
+  const originalFetch = global.fetch
+  const mockFetch = vi.fn()
 
   beforeEach(() => {
     vi.clearAllMocks()
     process.env = { ...originalEnv }
+    delete process.env.OPENROUTER_API_KEY
     delete process.env.GEMINI_API_KEY
+    global.fetch = mockFetch
 
     // Default: rate limiter allows requests
     vi.mocked(rateLimit).mockResolvedValue({
@@ -44,14 +30,11 @@ describe('POST /api/generate-recipe Integration Tests', () => {
       remaining: 4,
       reset: Math.floor(Date.now() / 1000) + 60,
     })
-
-    mockGetGenerativeModel.mockReturnValue({
-      generateContent: mockGenerateContent,
-    })
   })
 
   afterEach(() => {
     process.env = originalEnv
+    global.fetch = originalFetch
   })
 
   function createRequest(body: unknown, headers: Record<string, string> = {}) {
@@ -93,8 +76,8 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     expect(json.error).toContain('select or scan at least one ingredient')
   })
 
-  it('successfully generates recipe via Gemini API with gemini-3.8-flash', async () => {
-    process.env.GEMINI_API_KEY = 'test-gemini-key'
+  it('successfully generates recipe via Tier 1 Primary (openai/gpt-4o-mini)', async () => {
+    process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
 
     const mockRecipeData = {
       title: 'Garlic Parmesan Scrambled Eggs',
@@ -115,10 +98,12 @@ describe('POST /api/generate-recipe Integration Tests', () => {
       chefTip: 'Take eggs off the heat just before they look finished.',
     }
 
-    mockGenerateContent.mockResolvedValueOnce({
-      response: {
-        text: () => JSON.stringify(mockRecipeData),
-      },
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        model: 'openai/gpt-4o-mini',
+        choices: [{ message: { content: JSON.stringify(mockRecipeData) } }],
+      }),
     })
 
     const req = createRequest({
@@ -131,19 +116,20 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     const json = await res.json()
 
     expect(res.status).toBe(200)
-    expect(json.source).toBe('gemini-ai')
+    expect(json.source).toBe('openrouter-primary')
     expect(json.recipe.title).toBe('Garlic Parmesan Scrambled Eggs')
     expect(json.recipe.servings).toBe(2)
-    expect(mockGetGenerativeModel).toHaveBeenCalledWith(
-      expect.objectContaining({
-        model: 'gemini-3.8-flash',
-        generationConfig: { responseMimeType: 'application/json' },
-      })
-    )
+
+    expect(mockFetch).toHaveBeenCalledTimes(1)
+    const [fetchUrl, fetchOptions] = mockFetch.mock.calls[0]
+    expect(fetchUrl).toBe('https://openrouter.ai/api/v1/chat/completions')
+    expect(fetchOptions.headers.Authorization).toBe('Bearer sk-or-v1-test-key')
+    const sentBody = JSON.parse(fetchOptions.body)
+    expect(sentBody.model).toBe('openai/gpt-4o-mini')
   })
 
-  it('parses Gemini responses wrapped in markdown code fences', async () => {
-    process.env.GEMINI_API_KEY = 'test-gemini-key'
+  it('parses responses wrapped in markdown code fences', async () => {
+    process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
 
     const mockRecipeData = {
       title: 'Crispy Skillet Chicken',
@@ -158,10 +144,12 @@ describe('POST /api/generate-recipe Integration Tests', () => {
       chefTip: 'Rest the chicken before slicing.',
     }
 
-    mockGenerateContent.mockResolvedValueOnce({
-      response: {
-        text: () => `\`\`\`json\n${JSON.stringify(mockRecipeData)}\n\`\`\``,
-      },
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        model: 'openai/gpt-4o-mini',
+        choices: [{ message: { content: `\`\`\`json\n${JSON.stringify(mockRecipeData)}\n\`\`\`` } }],
+      }),
     })
 
     const req = createRequest({ ingredients: ['chicken', 'olive oil'] })
@@ -169,16 +157,71 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     const json = await res.json()
 
     expect(res.status).toBe(200)
-    expect(json.source).toBe('gemini-ai')
+    expect(json.source).toBe('openrouter-primary')
     expect(json.recipe.title).toBe('Crispy Skillet Chicken')
   })
 
-  it('falls back to curated generator when Gemini API call fails', async () => {
-    process.env.GEMINI_API_KEY = 'test-gemini-key'
+  it('falls back to Tier 2 (openrouter/auto) when Tier 1 fails', async () => {
+    process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
 
-    mockGenerateContent.mockRejectedValueOnce(new Error('Gemini API quota exhausted'))
+    const mockBackupRecipe = {
+      title: 'Backup Garden Frittata',
+      category: 'Breakfast',
+      prepTime: '5 mins',
+      cookTime: '10 mins',
+      servings: 2,
+      difficulty: 'Easy',
+      description: 'Fluffy eggs baked with garden vegetables.',
+      ingredients: [{ item: 'Eggs', amount: '3' }],
+      instructions: ['Whisk and cook gently.'],
+      chefTip: 'Serve immediately.',
+    }
 
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    // Tier 1 fails (HTTP 500 error from upstream provider)
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      text: async () => 'Provider error',
+    })
+
+    // Tier 2 succeeds with openrouter/auto
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        model: 'openrouter/auto',
+        choices: [{ message: { content: JSON.stringify(mockBackupRecipe) } }],
+      }),
+    })
+
+    const req = createRequest({ ingredients: ['eggs', 'spinach'] })
+    const res = await POST(req)
+    const json = await res.json()
+
+    expect(res.status).toBe(200)
+    expect(json.source).toBe('openrouter-backup')
+    expect(json.recipe.title).toBe('Backup Garden Frittata')
+
+    expect(mockFetch).toHaveBeenCalledTimes(2)
+    const tier2Call = JSON.parse(mockFetch.mock.calls[1][1].body)
+    expect(tier2Call.model).toBe('openrouter/auto')
+  })
+
+  it('falls back to Tier 3 curated generator when both Tier 1 and Tier 2 fail', async () => {
+    process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
+
+    // Tier 1 fails
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 429,
+      text: async () => 'Rate limited',
+    })
+
+    // Tier 2 fails
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 503,
+      text: async () => 'Service unavailable',
+    })
 
     const req = createRequest({
       ingredients: ['chicken breast', 'rice', 'garlic'],
@@ -191,11 +234,9 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     expect(json.source).toBe('curated-generator')
     expect(json.recipe.title).toContain('chicken breast')
     expect(json.recipe.title).toContain('rice')
-
-    consoleSpy.mockRestore()
   })
 
-  it('uses curated generator when GEMINI_API_KEY is not configured', async () => {
+  it('uses Tier 3 curated generator when OPENROUTER_API_KEY is not configured', async () => {
     const req = createRequest({
       ingredients: ['tofu', 'noodles', 'soy sauce'],
     })
@@ -207,5 +248,6 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     expect(json.source).toBe('curated-generator')
     expect(json.recipe.title).toContain('tofu')
     expect(json.recipe.title).toContain('noodles')
+    expect(mockFetch).not.toHaveBeenCalled()
   })
 })

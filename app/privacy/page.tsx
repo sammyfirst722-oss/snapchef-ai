@@ -49,7 +49,7 @@ export default function PrivacyPage() {
             </p>
             <p className="mb-2">
               <strong>Processing:</strong> Captured photos are sent securely via HTTPS directly to our
-              vision analysis endpoint powered by Google Gemini Vision. The image is parsed in real time
+              vision analysis endpoint powered by OpenRouter AI. The image is parsed in real time
               strictly to detect food and ingredient names (e.g., milk, eggs, bell peppers).
             </p>
             <p>
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
             <h2 className="text-lg font-bold text-foreground mb-2">4. Third-Party Services</h2>
             <ul className="list-disc pl-5 space-y-1">
               <li>
-                <strong>Google Gemini API:</strong> Used for secure visual ingredient identification and
+                <strong>OpenRouter AI:</strong> Used for secure visual ingredient identification and
                 recipe synthesis.
               </li>
               <li>
