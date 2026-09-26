@@ -1,17 +1,20 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { Recipe } from '@/lib/recipes-data'
-import { Search, Clock, ChefHat, Sparkles, Camera } from 'lucide-react'
+import { Search, Clock, ChefHat, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface RecipesDirectoryProps {
   initialRecipes: Recipe[]
 }
 
+const PAGE_SIZE = 24
+
 export function RecipesDirectory({ initialRecipes }: RecipesDirectoryProps) {
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string>('All')
+  const [currentPage, setCurrentPage] = useState(1)
 
   const categories = useMemo(() => {
     const set = new Set<string>()
@@ -21,12 +24,18 @@ export function RecipesDirectory({ initialRecipes }: RecipesDirectoryProps) {
     return ['All', ...Array.from(set)]
   }, [initialRecipes])
 
+  // Reset to first page whenever search query or category filter changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [search, selectedCategory])
+
   const filteredRecipes = useMemo(() => {
     return initialRecipes.filter((r) => {
       const matchesCategory = selectedCategory === 'All' || r.category === selectedCategory
-      const query = search.toLowerCase()
+      const query = search.toLowerCase().trim()
+      if (!query) return matchesCategory
+
       const matchesSearch =
-        !search ||
         r.title.toLowerCase().includes(query) ||
         r.description.toLowerCase().includes(query) ||
         r.ingredients.some((ing) => ing.item.toLowerCase().includes(query)) ||
@@ -35,6 +44,19 @@ export function RecipesDirectory({ initialRecipes }: RecipesDirectoryProps) {
       return matchesCategory && matchesSearch
     })
   }, [initialRecipes, selectedCategory, search])
+
+  const totalPages = Math.max(1, Math.ceil(filteredRecipes.length / PAGE_SIZE))
+  const paginatedRecipes = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE
+    return filteredRecipes.slice(start, start + PAGE_SIZE)
+  }, [filteredRecipes, currentPage])
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage)
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 350, behavior: 'smooth' })
+    }
+  }
 
   return (
     <div className="space-y-8">
@@ -69,9 +91,22 @@ export function RecipesDirectory({ initialRecipes }: RecipesDirectoryProps) {
         </div>
       </div>
 
+      {/* Results Count Summary */}
+      <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 px-2 font-medium">
+        <span>
+          Showing {filteredRecipes.length > 0 ? (currentPage - 1) * PAGE_SIZE + 1 : 0}–
+          {Math.min(currentPage * PAGE_SIZE, filteredRecipes.length)} of {filteredRecipes.length} recipes
+        </span>
+        {totalPages > 1 && (
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+        )}
+      </div>
+
       {/* Recipe Cards Grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredRecipes.map((recipe) => (
+        {paginatedRecipes.map((recipe) => (
           <Link
             key={recipe.id}
             href={`/recipe/${recipe.id}`}
@@ -110,6 +145,59 @@ export function RecipesDirectory({ initialRecipes }: RecipesDirectoryProps) {
           </Link>
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 pt-6">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="flex items-center gap-1 px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-800 text-xs font-bold bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 disabled:opacity-30 disabled:pointer-events-none hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4" />
+            Previous
+          </button>
+
+          <div className="flex items-center gap-1">
+            {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+              // Sliding window of up to 5 page numbers centered on currentPage
+              let pageNum = i + 1
+              if (totalPages > 5) {
+                if (currentPage <= 3) {
+                  pageNum = i + 1
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i
+                } else {
+                  pageNum = currentPage - 2 + i
+                }
+              }
+
+              return (
+                <button
+                  key={pageNum}
+                  onClick={() => handlePageChange(pageNum)}
+                  className={`w-9 h-9 rounded-xl text-xs font-bold transition-all ${
+                    currentPage === pageNum
+                      ? 'bg-emerald-600 text-white shadow-sm'
+                      : 'bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-800 hover:border-emerald-500/40'
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              )
+            })}
+          </div>
+
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="flex items-center gap-1 px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-800 text-xs font-bold bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300 disabled:opacity-30 disabled:pointer-events-none hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          >
+            Next
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {filteredRecipes.length === 0 && (
         <div className="text-center py-16 space-y-4">

@@ -5,13 +5,13 @@ import { RecipesDirectory } from '@/components/recipes-directory'
 import { Camera, Sparkles, Utensils } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: '110+ Easy Recipes for Leftovers & Quick Dinners | SnapChef AI',
+  title: '500+ Easy Recipes for Leftovers & Quick Dinners | SnapChef AI',
   description:
-    'Browse 110+ quick, tested recipes for breakfast, lunch, and dinner. Scalable servings, step-by-step instructions, and instant fridge ingredient matching with AI camera vision.',
+    'Browse 500+ quick, tested recipes for breakfast, lunch, and dinner. Scalable servings, step-by-step instructions, and instant fridge ingredient matching with AI camera vision.',
   openGraph: {
-    title: '110+ Easy Recipes for Leftovers & Quick Dinners | SnapChef AI',
+    title: '500+ Easy Recipes for Leftovers & Quick Dinners | SnapChef AI',
     description:
-      'Browse tested recipes for any meal. Scale servings, check nutrition, or snap a photo of your fridge to find recipes with what you have.',
+      'Browse 500+ tested recipes for any meal. Scale servings, check nutrition, or snap a photo of your fridge to find recipes with what you have.',
   },
   alternates: {
     canonical: 'https://snapchef-ai-eight.vercel.app/recipes',
@@ -47,7 +47,7 @@ export default function RecipesPage() {
         <div className="text-center max-w-2xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-bold border border-emerald-500/20">
             <Sparkles className="w-3.5 h-3.5" />
-            110+ Tested Recipes
+            500+ Tested Recipes
           </div>
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-gray-900 dark:text-white">
             Delicious Meals From Ingredients You Already Have
