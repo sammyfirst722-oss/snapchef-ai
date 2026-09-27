@@ -14,6 +14,10 @@ import {
   clearFridgeItems,
   addFridgeItems,
   isUserPro,
+  setUserPro,
+  setUserEmail,
+  getUserEmail,
+  restoreProByEmail,
 } from '@/lib/fridge-store'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -190,6 +194,43 @@ export function SnapChefClient() {
     const handleFavChange = () => setFavoriteIds(getFavoriteRecipeIds())
     const handleLikeChange = () => setLikedIds(getLikedRecipeIds())
     const handleProChange = () => setIsPro(isUserPro())
+
+    // Check for VIP activation or Stripe payment redirect (?vip=sammy, ?email=..., ?upgraded=true)
+    try {
+      if (typeof window !== 'undefined' && window.location.search) {
+        const params = new URLSearchParams(window.location.search)
+        const isUpgraded = params.get('upgraded') === 'true'
+        const vipParam = params.get('vip')?.toLowerCase()
+        const proParam = params.get('pro')?.toLowerCase()
+        const emailParam = params.get('email')?.toLowerCase().trim()
+
+        const isSammyVip =
+          vipParam === 'sammy' ||
+          proParam === 'sammy' ||
+          emailParam === 'sammyfirst722@gmail.com' ||
+          proParam === 'sammyfirst722@gmail.com'
+
+        if (isSammyVip || isUpgraded) {
+          const emailToSave = emailParam || 'sammyfirst722@gmail.com'
+          setUserEmail(emailToSave)
+          setUserPro(true)
+          setIsPro(true)
+          toast.success('SnapChef Pro Activated! ⭐', {
+            description: `Unlimited AI camera fridge scans unlocked for ${emailToSave}.`,
+          })
+
+          // Clean URL without reloading page
+          const cleanUrl = new URL(window.location.href)
+          cleanUrl.searchParams.delete('vip')
+          cleanUrl.searchParams.delete('pro')
+          cleanUrl.searchParams.delete('email')
+          cleanUrl.searchParams.delete('upgraded')
+          window.history.replaceState({}, '', cleanUrl.pathname + (cleanUrl.search || ''))
+        }
+      }
+    } catch (err) {
+      console.warn('VIP param check error:', err)
+    }
 
     window.addEventListener('snapchef_fridge_changed', handleFridgeUpdate)
     window.addEventListener('pb_recipe_favorites_changed', handleFavChange)

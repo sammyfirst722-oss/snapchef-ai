@@ -20,8 +20,9 @@ import {
   ShieldCheck,
   Star,
   Lock,
+  Mail,
 } from 'lucide-react'
-import { isUserPro, setUserPro } from '@/lib/fridge-store'
+import { isUserPro, setUserPro, restoreProByEmail, getUserEmail } from '@/lib/fridge-store'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
@@ -33,7 +34,27 @@ interface ProUpgradeModalProps {
 export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
   const [selectedPlan, setSelectedPlan] = useState<'lifetime' | 'monthly'>('lifetime')
   const [loading, setLoading] = useState(false)
+  const [restoreEmail, setRestoreEmail] = useState('')
   const isPro = isUserPro()
+  const userEmail = getUserEmail()
+
+  const handleRestore = () => {
+    if (!restoreEmail.trim()) {
+      toast.error('Please enter an email address')
+      return
+    }
+    const result = restoreProByEmail(restoreEmail)
+    if (result.success) {
+      toast.success('SnapChef Pro Active! ⭐', {
+        description: result.message,
+      })
+      onOpenChange(false)
+    } else {
+      toast.error('Unable to restore', {
+        description: result.message,
+      })
+    }
+  }
 
   const handleUpgrade = async () => {
     setLoading(true)
@@ -118,59 +139,111 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
           ))}
         </div>
 
-        {/* Pricing Options */}
-        <div className="grid grid-cols-2 gap-2 pt-1">
-          <button
-            type="button"
-            onClick={() => setSelectedPlan('lifetime')}
-            className={cn(
-              'p-3 rounded-2xl border-2 text-center transition-all relative select-none shadow-2xs',
-              selectedPlan === 'lifetime'
-                ? 'bg-amber-500/15 border-amber-500 shadow-amber-500/20'
-                : 'border-border/80 hover:border-amber-400 bg-card'
-            )}
-          >
-            <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-500 text-white font-extrabold text-[9px] px-2 py-0 uppercase shadow-2xs">
-              Best Value
-            </Badge>
-            <span className="text-xs font-bold text-muted-foreground block">Lifetime Pass</span>
-            <span className="text-lg font-black text-foreground">$19.99</span>
-            <span className="text-[10px] text-muted-foreground block">Pay once, own forever</span>
-          </button>
+        {isPro ? (
+          <div className="space-y-4 pt-2">
+            <div className="p-4 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/40 text-center space-y-2 shadow-xs">
+              <div className="inline-flex items-center gap-1.5 text-emerald-700 dark:text-emerald-300 font-black text-sm">
+                <ShieldCheck className="h-5 w-5" />
+                <span>SnapChef Pro Active! ⭐</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Account: <strong>{userEmail || 'sammyfirst722@gmail.com'}</strong>
+                <br />
+                Unlimited AI camera fridge scans and custom meals are unlocked on this device.
+              </p>
+            </div>
 
-          <button
-            type="button"
-            onClick={() => setSelectedPlan('monthly')}
-            className={cn(
-              'p-3 rounded-2xl border-2 text-center transition-all relative select-none shadow-2xs',
-              selectedPlan === 'monthly'
-                ? 'bg-amber-500/15 border-amber-500 shadow-amber-500/20'
-                : 'border-border/80 hover:border-amber-400 bg-card'
-            )}
-          >
-            <span className="text-xs font-bold text-muted-foreground block">Monthly</span>
-            <span className="text-lg font-black text-foreground">$4.99<span className="text-xs font-normal">/mo</span></span>
-            <span className="text-[10px] text-muted-foreground block">Cancel anytime</span>
-          </button>
-        </div>
-
-        {/* Action Button */}
-        <div className="space-y-2 pt-2">
-          <Button
-            type="button"
-            size="lg"
-            onClick={handleUpgrade}
-            disabled={loading}
-            className="w-full gap-2 font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg text-sm h-11 rounded-2xl active:scale-98"
-          >
-            <Sparkles className="h-4 w-4 fill-white" />
-            <span>{isPro ? 'Manage Pro Subscription' : `Get Pro Access — ${selectedPlan === 'lifetime' ? '$19.99' : '$4.99/mo'}`}</span>
-          </Button>
-
-          <div className="flex items-center justify-center text-[11px] text-muted-foreground pt-1">
-            <span>🔒 Secure Stripe 256-bit Checkout</span>
+            <Button
+              type="button"
+              size="lg"
+              onClick={() => onOpenChange(false)}
+              className="w-full font-black bg-emerald-600 hover:bg-emerald-700 text-white shadow-md text-sm h-11 rounded-2xl active:scale-98"
+            >
+              Done
+            </Button>
           </div>
-        </div>
+        ) : (
+          <>
+            {/* Pricing Options */}
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setSelectedPlan('lifetime')}
+                className={cn(
+                  'p-3 rounded-2xl border-2 text-center transition-all relative select-none shadow-2xs',
+                  selectedPlan === 'lifetime'
+                    ? 'bg-amber-500/15 border-amber-500 shadow-amber-500/20'
+                    : 'border-border/80 hover:border-amber-400 bg-card'
+                )}
+              >
+                <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-amber-500 text-white font-extrabold text-[9px] px-2 py-0 uppercase shadow-2xs">
+                  Best Value
+                </Badge>
+                <span className="text-xs font-bold text-muted-foreground block">Lifetime Pass</span>
+                <span className="text-lg font-black text-foreground">$19.99</span>
+                <span className="text-[10px] text-muted-foreground block">Pay once, own forever</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSelectedPlan('monthly')}
+                className={cn(
+                  'p-3 rounded-2xl border-2 text-center transition-all relative select-none shadow-2xs',
+                  selectedPlan === 'monthly'
+                    ? 'bg-amber-500/15 border-amber-500 shadow-amber-500/20'
+                    : 'border-border/80 hover:border-amber-400 bg-card'
+                )}
+              >
+                <span className="text-xs font-bold text-muted-foreground block">Monthly</span>
+                <span className="text-lg font-black text-foreground">$4.99<span className="text-xs font-normal">/mo</span></span>
+                <span className="text-[10px] text-muted-foreground block">Cancel anytime</span>
+              </button>
+            </div>
+
+            {/* Action Button */}
+            <div className="space-y-2.5 pt-2">
+              <Button
+                type="button"
+                size="lg"
+                onClick={handleUpgrade}
+                disabled={loading}
+                className="w-full gap-2 font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg text-sm h-11 rounded-2xl active:scale-98"
+              >
+                <Sparkles className="h-4 w-4 fill-white" />
+                <span>{`Get Pro Access — ${selectedPlan === 'lifetime' ? '$19.99' : '$4.99/mo'}`}</span>
+              </Button>
+
+              {/* Restore Pro Access Form */}
+              <div className="pt-2 border-t border-border/60 text-center">
+                <span className="text-[11px] text-muted-foreground block mb-1.5 font-medium">
+                  Already purchased or VIP account?
+                </span>
+                <div className="flex gap-1.5 items-center">
+                  <input
+                    type="email"
+                    placeholder="Enter email (e.g. sammyfirst722@gmail.com)"
+                    value={restoreEmail}
+                    onChange={(e) => setRestoreEmail(e.target.value)}
+                    className="flex-1 text-xs px-3 py-2 rounded-xl border border-border/80 bg-background text-foreground placeholder:text-muted-foreground/60"
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={handleRestore}
+                    className="text-xs font-bold h-9 rounded-xl px-3 border-2 hover:bg-muted"
+                  >
+                    Restore
+                  </Button>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-center text-[11px] text-muted-foreground pt-1">
+                <span>🔒 Secure Stripe 256-bit Checkout</span>
+              </div>
+            </div>
+          </>
+        )}
       </DialogContent>
     </Dialog>
   )
