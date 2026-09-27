@@ -11,4 +11,5 @@
 - 2026-09-27: Always read full plans, summaries, and questions aloud via C:\Users\sammy\speak.ps1, not just brief opening intros (why: Sammy relies on hearing the full plan and question through his speakers).
 - 2026-09-27: Proactively protect Sammy's weekly AI limits and wallet before executing heavy work; offload bulk drafting to free models without waiting for him to ask (why: burning flagship tokens on boilerplate exhausts weekly limits and violates the fiduciary duty to Sammy).
 - 2026-09-27: Forecast negative outcomes with percentages and preemptive resolutions (>20% risk must be flagged in advance with a ready-to-use solution) (why: Sammy needs downside protection before committing to moves).
+- 2026-09-27: Autonomously supervise, spot-check, and expand the free worker fleet (keep workers up to date and proactively hire new worker bots for emerging tasks) (why: Sammy requires running this like a business with zero ongoing human overhead).
 
