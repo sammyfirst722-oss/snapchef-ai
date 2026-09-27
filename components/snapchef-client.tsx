@@ -45,6 +45,8 @@ import {
   Sun,
   UtensilsCrossed,
   SlidersHorizontal,
+  Volume2,
+  VolumeX,
 } from 'lucide-react'
 import { CameraScanner } from '@/components/camera-scanner'
 import { AiLeftoverGenerator } from '@/components/ai-leftover-generator'
@@ -54,6 +56,13 @@ import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 import { scaleIngredientAmount, getRecipeNutrition, calculateRecipeMatch } from '@/lib/recipe-utils'
 import { CookMode } from '@/components/cook-mode'
+import { speechManager, SPEECH_RATES, SpeechRate } from '@/lib/speech-utils'
+import {
+  Language,
+  UI_TRANSLATIONS,
+  translateIngredientName,
+  translateInstructionStep,
+} from '@/lib/translations/spanish'
 
 const QUICK_STAPLES = [
   { name: 'Eggs', key: 'egg', icon: '🥚' },
@@ -98,6 +107,74 @@ export function SnapChefClient() {
   const [isPro, setIsPro] = useState(false)
   const [servingMultiplier, setServingMultiplier] = useState(1)
   const [isCooking, setIsCooking] = useState(false)
+  const [recipeLanguage, setRecipeLanguage] = useState<Language>('en')
+  const [recipeSpeechRate, setRecipeSpeechRate] = useState<SpeechRate>(1.0)
+  const [isRecipeSpeaking, setIsRecipeSpeaking] = useState(false)
+  const [recipeSpeakingStep, setRecipeSpeakingStep] = useState<number | null>(null)
+
+  const stopRecipeSpeech = () => {
+    speechManager.stop()
+    setIsRecipeSpeaking(false)
+    setRecipeSpeakingStep(null)
+  }
+
+  const playRecipeSteps = (startIdx = 0, lang = recipeLanguage, rate = recipeSpeechRate) => {
+    if (!selectedRecipe || startIdx >= selectedRecipe.instructions.length) {
+      setIsRecipeSpeaking(false)
+      setRecipeSpeakingStep(null)
+      return
+    }
+
+    setRecipeSpeakingStep(startIdx)
+    setIsRecipeSpeaking(true)
+
+    const raw = selectedRecipe.instructions[startIdx]
+    const textToSpeak = lang === 'es' ? translateInstructionStep(raw, 'es') : raw
+    const stepPrefix = lang === 'es' ? `Paso ${startIdx + 1}. ` : `Step ${startIdx + 1}. `
+
+    speechManager.speak(`${stepPrefix}${textToSpeak}`, {
+      lang,
+      rate,
+      onStart: () => {
+        setIsRecipeSpeaking(true)
+        setRecipeSpeakingStep(startIdx)
+      },
+      onEnd: () => {
+        if (selectedRecipe && startIdx + 1 < selectedRecipe.instructions.length) {
+          playRecipeSteps(startIdx + 1, lang, rate)
+        } else {
+          setIsRecipeSpeaking(false)
+          setRecipeSpeakingStep(null)
+        }
+      },
+      onError: () => {
+        setIsRecipeSpeaking(false)
+        setRecipeSpeakingStep(null)
+      },
+    })
+  }
+
+  const toggleRecipeAudio = () => {
+    if (isRecipeSpeaking) {
+      stopRecipeSpeech()
+    } else {
+      playRecipeSteps(0)
+    }
+  }
+
+  const handleRecipeSpeedChange = (rate: SpeechRate) => {
+    setRecipeSpeechRate(rate)
+    if (isRecipeSpeaking && recipeSpeakingStep !== null) {
+      playRecipeSteps(recipeSpeakingStep, recipeLanguage, rate)
+    }
+  }
+
+  const handleRecipeLanguageToggle = (lang: Language) => {
+    setRecipeLanguage(lang)
+    if (isRecipeSpeaking && recipeSpeakingStep !== null) {
+      playRecipeSteps(recipeSpeakingStep, lang, recipeSpeechRate)
+    }
+  }
 
   const scannerRef = useRef<HTMLDivElement>(null)
   const recipesRef = useRef<HTMLDivElement>(null)
@@ -730,6 +807,7 @@ export function SnapChefClient() {
         open={selectedRecipe !== null && !isCooking}
         onOpenChange={(open) => {
           if (!open) {
+            stopRecipeSpeech()
             setSelectedRecipe(null)
             setTimeout(() => setServingMultiplier(1), 300) // Reset after animation
           }
@@ -740,13 +818,42 @@ export function SnapChefClient() {
             <div className="space-y-5">
               <DialogHeader className="text-left space-y-2">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <Badge variant="secondary" className="text-xs font-semibold">
                       {selectedRecipe.category}
                     </Badge>
                     <span className="text-xs text-muted-foreground">
-                      Difficulty: <strong>{selectedRecipe.difficulty}</strong>
+                      {recipeLanguage === 'es' ? 'Dificultad:' : 'Difficulty:'}{' '}
+                      <strong>{selectedRecipe.difficulty}</strong>
                     </span>
+
+                    {/* Language Switcher */}
+                    <div className="inline-flex items-center rounded-full bg-muted p-0.5 border border-border/80">
+                      <button
+                        type="button"
+                        onClick={() => handleRecipeLanguageToggle('en')}
+                        className={cn(
+                          'px-2 py-0.5 text-[10px] font-black rounded-full transition-all flex items-center gap-1',
+                          recipeLanguage === 'en'
+                            ? 'bg-emerald-600 text-white shadow-xs'
+                            : 'text-muted-foreground hover:text-foreground'
+                        )}
+                      >
+                        <span>🇺🇸</span> EN
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRecipeLanguageToggle('es')}
+                        className={cn(
+                          'px-2 py-0.5 text-[10px] font-black rounded-full transition-all flex items-center gap-1',
+                          recipeLanguage === 'es'
+                            ? 'bg-emerald-600 text-white shadow-xs'
+                            : 'text-muted-foreground hover:text-foreground'
+                        )}
+                      >
+                        <span>🇲🇽</span> ES
+                      </button>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-1.5">
@@ -902,7 +1009,9 @@ export function SnapChefClient() {
                                     >
                                       {inFridge ? '✓' : '•'}
                                     </span>
-                                    <span className="font-semibold text-foreground">{ing.item}</span>
+                                    <span className="font-semibold text-foreground">
+                                      {translateIngredientName(ing.item, recipeLanguage)}
+                                    </span>
                                     {inFridge && (
                                       <span className="text-[10px] text-emerald-700 dark:text-emerald-300 font-bold px-1.5 py-0.2 rounded bg-emerald-500/15">
                                         (In Fridge)
@@ -923,21 +1032,101 @@ export function SnapChefClient() {
                 </div>
               </div>
 
-              {/* Step-by-Step Instructions */}
+              {/* Step-by-Step Instructions & Audio Read-Aloud */}
               <div className="space-y-3 pt-2">
-                <h4 className="text-xs font-extrabold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                  <ChefHat className="h-4 w-4 text-emerald-600" />
-                  Cooking Instructions:
-                </h4>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h4 className="text-xs font-extrabold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                    <ChefHat className="h-4 w-4 text-emerald-600" />
+                    {recipeLanguage === 'es' ? 'Instrucciones de Cocina:' : 'Cooking Instructions:'}
+                  </h4>
+
+                  {/* Read Aloud Button */}
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={toggleRecipeAudio}
+                    className={cn(
+                      'h-8 px-3 rounded-xl text-xs font-black gap-1.5 transition-all shadow-xs active:scale-95',
+                      isRecipeSpeaking
+                        ? 'bg-rose-600 hover:bg-rose-700 text-white animate-pulse'
+                        : 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                    )}
+                  >
+                    {isRecipeSpeaking ? (
+                      <>
+                        <VolumeX className="h-3.5 w-3.5" />
+                        <span>{recipeLanguage === 'es' ? 'Detener' : 'Stop Audio'}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="h-3.5 w-3.5" />
+                        <span>{recipeLanguage === 'es' ? 'Escuchar Receta' : 'Read Instructions'}</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {/* Speed Controls (0.5x to 1.5x) */}
+                <div className="flex items-center justify-between bg-muted/40 px-3 py-1.5 rounded-xl border border-border/60 text-[11px]">
+                  <span className="font-bold text-muted-foreground">
+                    {recipeLanguage === 'es' ? 'Velocidad de voz:' : 'Audio Speed:'}
+                  </span>
+                  <div className="flex items-center gap-1">
+                    {SPEECH_RATES.map((rate) => (
+                      <button
+                        key={rate}
+                        type="button"
+                        onClick={() => handleRecipeSpeedChange(rate)}
+                        className={cn(
+                          'px-2 py-0.5 rounded-md font-mono font-bold text-[11px] transition-all',
+                          recipeSpeechRate === rate
+                            ? 'bg-foreground text-background shadow-xs font-black'
+                            : 'bg-background/80 hover:bg-background text-foreground/80 border border-border/50'
+                        )}
+                      >
+                        {rate}x
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <ol className="space-y-2.5">
-                  {selectedRecipe.instructions.map((step, idx) => (
-                    <li key={idx} className="flex gap-3 text-xs leading-relaxed">
-                      <span className="h-6 w-6 rounded-full bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center font-extrabold text-[11px] shrink-0 mt-0.5 shadow-xs">
-                        {idx + 1}
-                      </span>
-                      <span className="text-foreground font-medium">{step}</span>
-                    </li>
-                  ))}
+                  {selectedRecipe.instructions.map((step, idx) => {
+                    const displayedStep =
+                      recipeLanguage === 'es' ? translateInstructionStep(step, 'es') : step
+                    const isCurrent = isRecipeSpeaking && recipeSpeakingStep === idx
+
+                    return (
+                      <li
+                        key={idx}
+                        className={cn(
+                          'flex gap-3 text-xs leading-relaxed p-2 rounded-xl transition-all',
+                          isCurrent
+                            ? 'bg-emerald-500/15 border-2 border-emerald-500/40 shadow-xs'
+                            : 'hover:bg-muted/30'
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            'h-6 w-6 rounded-full flex items-center justify-center font-extrabold text-[11px] shrink-0 mt-0.5 shadow-xs transition-colors',
+                            isCurrent
+                              ? 'bg-emerald-600 text-white animate-bounce'
+                              : 'bg-gradient-to-tr from-emerald-600 to-teal-500 text-white'
+                          )}
+                        >
+                          {idx + 1}
+                        </span>
+                        <span
+                          className={cn(
+                            'font-medium',
+                            isCurrent ? 'text-emerald-950 dark:text-emerald-100 font-bold' : 'text-foreground'
+                          )}
+                        >
+                          {displayedStep}
+                        </span>
+                      </li>
+                    )
+                  })}
                 </ol>
               </div>
 
@@ -992,10 +1181,13 @@ export function SnapChefClient() {
                 <Button
                   size="lg"
                   className="w-full gap-2 text-sm font-black bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg h-12 rounded-2xl active:scale-98"
-                  onClick={() => setIsCooking(true)}
+                  onClick={() => {
+                    stopRecipeSpeech()
+                    setIsCooking(true)
+                  }}
                 >
                   <Flame className="h-4 w-4 fill-white" />
-                  <span>Start Cooking</span>
+                  <span>{recipeLanguage === 'es' ? 'Empezar a Cocinar' : 'Start Cooking'}</span>
                 </Button>
                 
                 <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2">
@@ -1080,6 +1272,7 @@ export function SnapChefClient() {
           recipe={selectedRecipe}
           onClose={() => setIsCooking(false)}
           servingMultiplier={servingMultiplier}
+          initialLanguage={recipeLanguage}
         />
       )}
     </div>

@@ -8,4 +8,5 @@
 - 2026-09-26: Always read reply summaries aloud using C:\Users\sammy\speak.ps1 (why: Sammy explicitly instructed to read all messages aloud going forward).
 - 2026-09-26: Never declare work done on code compilation alone; verify on the physical device and ensure state persistence and money-in-sleep loops are closed (why: SnapChef passed all automated tests but had dead buttons on Sammy's phone because of a domain mismatch).
 - 2026-09-26: Always include the version number in APK filenames when copying install builds to Google Drive (why: Sammy cannot tell which file is newest when downloading onto his phone).
+- 2026-09-27: Always read full plans, summaries, and questions aloud via C:\Users\sammy\speak.ps1, not just brief opening intros (why: Sammy relies on hearing the full plan and question through his speakers).
 
