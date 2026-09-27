@@ -1,5 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { scaleIngredientAmount, getRecipeNutrition, NUTRITION_ESTIMATES } from '@/lib/recipe-utils'
+import {
+  scaleIngredientAmount,
+  getRecipeNutrition,
+  NUTRITION_ESTIMATES,
+  isPantryStaple,
+  calculateRecipeMatch,
+} from '@/lib/recipe-utils'
 
 describe('lib/recipe-utils.ts Unit Tests', () => {
   describe('scaleIngredientAmount', () => {
@@ -159,4 +165,50 @@ describe('lib/recipe-utils.ts Unit Tests', () => {
       expect(nutrition.fat).toBe(spiceEstimate.fat)
     })
   })
+
+  describe('isPantryStaple and calculateRecipeMatch', () => {
+    it('identifies common pantry staples', () => {
+      expect(isPantryStaple('salt')).toBe(true)
+      expect(isPantryStaple('black pepper')).toBe(true)
+      expect(isPantryStaple('olive oil')).toBe(true)
+      expect(isPantryStaple('butter')).toBe(true)
+      expect(isPantryStaple('chicken')).toBe(false)
+      expect(isPantryStaple('cheddar cheese')).toBe(false)
+    })
+
+    it('calculates complete match when user has core ingredients even if pantry staple is not scanned', () => {
+      const ingredients = [
+        { item: 'Eggs', standardKey: 'eggs' },
+        { item: 'Cheddar Cheese', standardKey: 'cheese' },
+        { item: 'Butter', standardKey: 'butter' },
+        { item: 'Black Pepper', standardKey: 'pepper' },
+      ]
+
+      // User has eggs and cheese in fridge (butter and pepper are pantry staples)
+      const fridge = ['eggs', 'cheese']
+      const result = calculateRecipeMatch(ingredients, fridge, true)
+
+      expect(result.isCompleteMatch).toBe(true)
+      expect(result.matchedCount).toBe(2)
+      expect(result.stapleCount).toBe(2)
+    })
+
+    it('calculates almost match when only 1 key ingredient is missing', () => {
+      const ingredients = [
+        { item: 'Chicken Breast', standardKey: 'chicken' },
+        { item: 'Broccoli', standardKey: 'broccoli' },
+        { item: 'Rice', standardKey: 'rice' },
+        { item: 'Olive Oil', standardKey: 'olive oil' },
+      ]
+
+      // User has chicken and rice (missing broccoli, olive oil is staple)
+      const fridge = ['chicken', 'rice']
+      const result = calculateRecipeMatch(ingredients, fridge, true)
+
+      expect(result.isCompleteMatch).toBe(false)
+      expect(result.isAlmostMatch).toBe(true)
+      expect(result.missingIngredients).toContain('Broccoli')
+    })
+  })
 })
+
