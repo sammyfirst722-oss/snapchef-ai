@@ -52,7 +52,7 @@ import { ProUpgradeModal } from '@/components/pro-upgrade-modal'
 import { useTheme } from 'next-themes'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
-import { scaleIngredientAmount, getRecipeNutrition } from '@/lib/recipe-utils'
+import { scaleIngredientAmount, getRecipeNutrition, calculateRecipeMatch } from '@/lib/recipe-utils'
 import { CookMode } from '@/components/cook-mode'
 
 const QUICK_STAPLES = [
@@ -178,37 +178,20 @@ export function SnapChefClient() {
   // Filter and score recipes
   const processedRecipes = useMemo(() => {
     return RECIPES_DATA.map((recipe) => {
-      let matchedCount = 0
-      const matchedIngredients: string[] = []
-      const missingIngredients: string[] = []
-
-      recipe.ingredients.forEach((ing) => {
-        const k = ing.standardKey.toLowerCase()
-        const isMatched = fridgeItems.some(
-          (f) => k.includes(f) || f.includes(k) || ing.item.toLowerCase().includes(f)
-        )
-        if (isMatched) {
-          matchedCount++
-          matchedIngredients.push(ing.item)
-        } else {
-          missingIngredients.push(ing.item)
-        }
-      })
-
-      const totalRequired = recipe.ingredients.length
-      const matchScore = fridgeItems.length > 0 ? matchedCount / totalRequired : 0
-      const isCompleteMatch = fridgeItems.length > 0 && matchedCount === totalRequired
-      const isAlmostMatch = fridgeItems.length > 0 && totalRequired - matchedCount === 1
+      const match = calculateRecipeMatch(recipe.ingredients, fridgeItems, true)
 
       return {
         ...recipe,
-        matchedCount,
-        totalRequired,
-        matchScore,
-        isCompleteMatch,
-        isAlmostMatch,
-        matchedIngredients,
-        missingIngredients,
+        matchedCount: match.matchedCount,
+        totalRequired: match.totalRequired,
+        nonStapleRequired: match.nonStapleRequired,
+        nonStapleMatched: match.nonStapleMatched,
+        stapleCount: match.stapleCount,
+        matchScore: match.matchScore,
+        isCompleteMatch: match.isCompleteMatch,
+        isAlmostMatch: match.isAlmostMatch,
+        matchedIngredients: match.matchedIngredients,
+        missingIngredients: match.missingIngredients,
       }
     })
       .filter((recipe) => {
@@ -337,18 +320,28 @@ export function SnapChefClient() {
             </div>
 
             {fridgeItems.length > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  clearFridgeItems()
-                  setFridgeItems([])
-                  toast.info('Fridge cleared')
-                }}
-                className="h-8 text-xs text-muted-foreground hover:text-rose-500 self-start sm:self-auto font-bold"
-              >
-                Clear All
-              </Button>
+              <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+                <AiLeftoverGenerator
+                  buttonVariant="inline"
+                  onCookRecipe={(recipe) => {
+                    setSelectedRecipe(recipe)
+                    setIsCooking(true)
+                  }}
+                  onOpenProModal={() => setProModalOpen(true)}
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    clearFridgeItems()
+                    setFridgeItems([])
+                    toast.info('Fridge cleared')
+                  }}
+                  className="h-8 text-xs text-muted-foreground hover:text-rose-500 font-bold"
+                >
+                  Clear All
+                </Button>
+              </div>
             )}
           </div>
 
@@ -432,7 +425,14 @@ export function SnapChefClient() {
         </Card>
 
         {/* 3. AI Leftover Invent Button Banner */}
-        <AiLeftoverGenerator />
+        <AiLeftoverGenerator
+          buttonVariant="banner"
+          onCookRecipe={(recipe) => {
+            setSelectedRecipe(recipe)
+            setIsCooking(true)
+          }}
+          onOpenProModal={() => setProModalOpen(true)}
+        />
 
         {/* 4. Search & Category Filters Bar */}
         <div ref={recipesRef} className="space-y-3 pt-2">

@@ -103,3 +103,119 @@ export function getRecipeNutrition(recipe: any, multiplier: number = 1) {
     fat: Math.round(fat * baseMulti),
   }
 }
+
+export const DEFAULT_PANTRY_STAPLES = [
+  'salt',
+  'black pepper',
+  'pepper',
+  'water',
+  'cooking oil',
+  'olive oil',
+  'vegetable oil',
+  'canola oil',
+  'butter',
+  'sugar',
+]
+
+export function isPantryStaple(itemOrKey: string): boolean {
+  if (!itemOrKey) return false
+  const lower = itemOrKey.toLowerCase().trim()
+  return DEFAULT_PANTRY_STAPLES.some(
+    (staple) => lower === staple || lower.includes(staple) || staple.includes(lower)
+  )
+}
+
+export interface RecipeMatchResult {
+  matchedCount: number
+  totalRequired: number
+  nonStapleRequired: number
+  nonStapleMatched: number
+  stapleCount: number
+  matchScore: number
+  isCompleteMatch: boolean
+  isAlmostMatch: boolean
+  matchedIngredients: string[]
+  missingIngredients: string[]
+}
+
+export function calculateRecipeMatch(
+  ingredients: Array<{ item: string; standardKey: string }>,
+  fridgeItems: string[],
+  assumeStaples: boolean = true
+): RecipeMatchResult {
+  if (!ingredients || ingredients.length === 0) {
+    return {
+      matchedCount: 0,
+      totalRequired: 0,
+      nonStapleRequired: 0,
+      nonStapleMatched: 0,
+      stapleCount: 0,
+      matchScore: 0,
+      isCompleteMatch: false,
+      isAlmostMatch: false,
+      matchedIngredients: [],
+      missingIngredients: [],
+    }
+  }
+
+  let matchedCount = 0
+  let stapleCount = 0
+  let nonStapleRequired = 0
+  let nonStapleMatched = 0
+  const matchedIngredients: string[] = []
+  const missingIngredients: string[] = []
+
+  ingredients.forEach((ing) => {
+    const k = ing.standardKey ? ing.standardKey.toLowerCase() : ''
+    const itemName = ing.item ? ing.item.toLowerCase() : ''
+    const isMatched = fridgeItems.some(
+      (f) => (k && (k.includes(f) || f.includes(k))) || (itemName && itemName.includes(f))
+    )
+
+    const isStaple = isPantryStaple(k) || isPantryStaple(itemName)
+
+    if (isMatched) {
+      matchedCount++
+      matchedIngredients.push(ing.item)
+      if (!isStaple) {
+        nonStapleRequired++
+        nonStapleMatched++
+      }
+    } else if (assumeStaples && isStaple) {
+      stapleCount++
+      // Assumed pantry staple - does not count against the user as a missing barrier
+    } else {
+      missingIngredients.push(ing.item)
+      if (!isStaple) {
+        nonStapleRequired++
+      }
+    }
+  })
+
+  const totalRequired = ingredients.length
+  const effectiveRequired = nonStapleRequired > 0 ? nonStapleRequired : totalRequired
+  const effectiveMatched = nonStapleRequired > 0 ? nonStapleMatched : matchedCount
+
+  const isCompleteMatch = fridgeItems.length > 0 && effectiveMatched === effectiveRequired
+  const isAlmostMatch =
+    fridgeItems.length > 0 && !isCompleteMatch && effectiveRequired - effectiveMatched === 1
+
+  const matchScore =
+    fridgeItems.length > 0
+      ? (matchedCount + (assumeStaples ? stapleCount * 0.75 : 0)) / totalRequired
+      : 0
+
+  return {
+    matchedCount,
+    totalRequired,
+    nonStapleRequired,
+    nonStapleMatched,
+    stapleCount,
+    matchScore,
+    isCompleteMatch,
+    isAlmostMatch,
+    matchedIngredients,
+    missingIngredients,
+  }
+}
+
