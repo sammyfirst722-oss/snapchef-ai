@@ -5,6 +5,7 @@ import { SwRegister } from '@/components/sw-register'
 import './globals.css'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://snapchef-ai-eight.vercel.app'),
   title: 'SnapChef AI — Snap Your Fridge. Cook in 15 Mins.',
   description:
     'Turn whatever you have in your fridge into 15-minute gourmet meals. AI camera fridge scanner, 1,200+ easy recipes, and custom leftover chef.',

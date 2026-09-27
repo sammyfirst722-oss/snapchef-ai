@@ -2,8 +2,9 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { RECIPES_DATA } from '@/lib/recipes-data'
+import { getRelatedPairsForRecipe } from '@/lib/ingredient-pairs'
 import { RecipeScaler } from '@/components/recipe-scaler'
-import { ArrowLeft, Clock, ChefHat, Sparkles, Camera } from 'lucide-react'
+import { ArrowLeft, Clock, ChefHat, Sparkles, Camera, Utensils } from 'lucide-react'
 
 interface RecipePageProps {
   params: Promise<{ id: string }>
@@ -48,6 +49,8 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
   if (!recipe) {
     notFound()
   }
+
+  const relatedPairs = getRelatedPairsForRecipe(recipe, 6)
 
   // JSON-LD structured data for Google Rich Results
   const jsonLd = {
@@ -165,6 +168,31 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
             </Link>
           </div>
         </div>
+
+        {/* Two-Way Internal Links to Related Ingredient Collections */}
+        {relatedPairs.length > 0 && (
+          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 shadow-sm space-y-3">
+            <h3 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
+              <Utensils className="w-4 h-4 text-emerald-600" />
+              Related Ingredient Collections
+            </h3>
+            <p className="text-xs text-gray-500">
+              Explore more recipes made with ingredients found in this dish:
+            </p>
+            <div className="flex flex-wrap gap-2 pt-1">
+              {relatedPairs.map((p) => (
+                <Link
+                  key={p.slug}
+                  href={`/recipes-with/${p.slug}`}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-xs font-bold text-gray-700 dark:text-gray-300 hover:border-emerald-500 hover:text-emerald-600 transition-colors"
+                >
+                  <span>{p.title}</span>
+                  <span className="text-[10px] text-emerald-600 font-semibold">({p.count})</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   )
