@@ -7,6 +7,10 @@ import {
   clearFridgeItems,
   isUserPro,
   setUserPro,
+  getUserEmail,
+  setUserEmail,
+  restoreProByEmail,
+  VIP_PRO_EMAILS,
   getDailyScanCount,
   incrementScanCount,
   getDietPreferences,
@@ -80,6 +84,29 @@ describe('lib/fridge-store.ts Unit Tests', () => {
         throw new Error('Storage access denied')
       })
       expect(isUserPro()).toBe(false)
+    })
+
+    it('recognizes sammyfirst722@gmail.com as VIP Pro and restores permanently', () => {
+      expect(VIP_PRO_EMAILS).toContain('sammyfirst722@gmail.com')
+
+      // Before restore: not pro
+      expect(isUserPro()).toBe(false)
+
+      // Restore via email
+      const result = restoreProByEmail('sammyfirst722@gmail.com')
+      expect(result.success).toBe(true)
+      expect(result.isVip).toBe(true)
+      expect(isUserPro()).toBe(true)
+      expect(getUserEmail()).toBe('sammyfirst722@gmail.com')
+      expect(mockStorage['snapchef_pro_status_v1']).toBe('true')
+    })
+
+    it('rejects invalid or non-pro emails during restore', () => {
+      const invalid = restoreProByEmail('not-an-email')
+      expect(invalid.success).toBe(false)
+
+      const unknown = restoreProByEmail('randomuser@example.com')
+      expect(unknown.success).toBe(false)
     })
   })
 

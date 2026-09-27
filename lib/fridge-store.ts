@@ -61,10 +61,42 @@ export function clearFridgeItems() {
   saveFridgeItems([])
 }
 
+const USER_EMAIL_KEY = 'snapchef_user_email_v1'
+
+export const VIP_PRO_EMAILS = [
+  'sammyfirst722@gmail.com',
+  'sammyfirst722-oss@gmail.com',
+]
+
+export function getUserEmail(): string | null {
+  if (typeof window === 'undefined') return null
+  try {
+    return localStorage.getItem(USER_EMAIL_KEY)
+  } catch {
+    return null
+  }
+}
+
+export function setUserEmail(email: string) {
+  if (typeof window === 'undefined') return
+  try {
+    const clean = email.trim().toLowerCase()
+    localStorage.setItem(USER_EMAIL_KEY, clean)
+    window.dispatchEvent(new Event('snapchef_user_changed'))
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 // Pro Status
 export function isUserPro(): boolean {
   if (typeof window === 'undefined') return false
   try {
+    // If user email is VIP, automatically Pro
+    const email = localStorage.getItem(USER_EMAIL_KEY)?.toLowerCase().trim()
+    if (email && VIP_PRO_EMAILS.includes(email)) {
+      return true
+    }
     return localStorage.getItem(PRO_STATUS_KEY) === 'true'
   } catch {
     return false
@@ -78,6 +110,40 @@ export function setUserPro(isPro: boolean) {
     window.dispatchEvent(new Event('snapchef_pro_changed'))
   } catch (err) {
     console.error(err)
+  }
+}
+
+export function restoreProByEmail(email: string): {
+  success: boolean
+  message: string
+  isVip?: boolean
+} {
+  const clean = email.trim().toLowerCase()
+  if (!clean || !clean.includes('@')) {
+    return { success: false, message: 'Please enter a valid email address.' }
+  }
+
+  setUserEmail(clean)
+
+  if (VIP_PRO_EMAILS.includes(clean)) {
+    setUserPro(true)
+    return {
+      success: true,
+      message: `Welcome back, Sammy! Permanent VIP Pro status unlocked for ${clean}.`,
+      isVip: true,
+    }
+  }
+
+  if (isUserPro()) {
+    return {
+      success: true,
+      message: `SnapChef Pro is active for ${clean}. Unlimited scans available!`,
+    }
+  }
+
+  return {
+    success: false,
+    message: `No active Pro subscription found for ${clean}. Upgrade to unlock unlimited scans.`,
   }
 }
 
