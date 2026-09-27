@@ -102,7 +102,7 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
             },
             {
               icon: ShieldCheck,
-              title: '110+ Offline Cookbooks & Recipe Export',
+              title: '1,200+ Offline Cookbooks & Recipe Export',
               desc: 'Full offline access, custom shopping lists, and priority features.',
             },
           ].map((item, idx) => (

@@ -5,4 +5,7 @@
 - 2026-09-25: All apps use OpenRouter (OPENROUTER_API_KEY) with 3-tier fallback architecture — do not ask for or use Gemini API keys (why: OpenRouter prevents credit lockouts and unifies free and paid models).
 - 2026-09-25: Prompt Builder is deprioritized; focus engineering effort on SnapChef AI and SimplyBigNews (why: Sammy prioritizes products with highest immediate traction and revenue potential).
 - 2026-09-26: Always compress mobile camera uploads on the client with HTML5 canvas before sending to Vercel API routes (why: smartphone photos are 10MB-25MB and crash Vercel's strict 4.5MB serverless payload limit).
+- 2026-09-26: Always read reply summaries aloud using C:\Users\sammy\speak.ps1 (why: Sammy explicitly instructed to read all messages aloud going forward).
+- 2026-09-26: Never declare work done on code compilation alone; verify on the physical device and ensure state persistence and money-in-sleep loops are closed (why: SnapChef passed all automated tests but had dead buttons on Sammy's phone because of a domain mismatch).
+- 2026-09-26: Always include the version number in APK filenames when copying install builds to Google Drive (why: Sammy cannot tell which file is newest when downloading onto his phone).
 

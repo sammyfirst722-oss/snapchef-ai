@@ -7,7 +7,7 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'SnapChef AI — Snap Your Fridge. Cook in 15 Mins.',
   description:
-    'Turn whatever you have in your fridge into 15-minute gourmet meals. AI camera fridge scanner, 110+ easy recipes, and custom leftover chef.',
+    'Turn whatever you have in your fridge into 15-minute gourmet meals. AI camera fridge scanner, 1,200+ easy recipes, and custom leftover chef.',
   keywords: ['cooking', 'recipes', 'fridge scanner', 'AI chef', 'leftover recipes', '15 min meals'],
   manifest: '/manifest.json',
   icons: {

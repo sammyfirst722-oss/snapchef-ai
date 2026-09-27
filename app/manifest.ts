@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: 'SnapChef AI — Smart Fridge Scanner & Leftover Chef',
     short_name: 'SnapChef AI',
     description:
-      'Snap your fridge, detect fresh ingredients with AI camera vision, and cook 15-minute gourmet meals with 110+ easy recipes.',
+      'Snap your fridge, detect fresh ingredients with AI camera vision, and cook 15-minute gourmet meals with 1,200+ easy recipes.',
     id: '/',
     start_url: '/',
     scope: '/',

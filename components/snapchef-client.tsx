@@ -440,7 +440,7 @@ export function SnapChefClient() {
           <div className="relative max-w-md">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             <Input
-              placeholder="Search 110+ recipes by name or ingredient..."
+              placeholder="Search 1,200+ recipes by name or ingredient..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 h-11 text-xs md:text-sm rounded-2xl border-2 border-border/80 shadow-2xs"
@@ -508,7 +508,7 @@ export function SnapChefClient() {
             </div>
             <h3 className="font-extrabold text-base md:text-lg mb-1">No matching recipes found</h3>
             <p className="text-xs text-muted-foreground max-w-sm mb-4 leading-relaxed">
-              Try adding more staples to your fridge or clearing the search filter to browse all 110 recipes!
+              Try adding more staples to your fridge or clearing the search filter to browse all 1,200 recipes!
             </p>
             <Button
               size="sm"
@@ -697,7 +697,7 @@ export function SnapChefClient() {
             className="flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-emerald-600 active:scale-95"
           >
             <ChefHat className="h-5 w-5" />
-            <span className="text-[10px] font-bold">110 Meals</span>
+            <span className="text-[10px] font-bold">1,200 Meals</span>
           </button>
 
           <button
