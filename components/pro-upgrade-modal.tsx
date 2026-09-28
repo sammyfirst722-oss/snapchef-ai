@@ -60,14 +60,26 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
     setLoading(true)
 
     try {
-      // Check if Stripe is configured on server
+      const isAndroidApp =
+        typeof window !== 'undefined' &&
+        (document.referrer.includes('android-app://') ||
+          (window.matchMedia('(display-mode: standalone)').matches && navigator.userAgent.includes('Android')))
+
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: selectedPlan }),
+        body: JSON.stringify({ plan: selectedPlan, isTwa: isAndroidApp }),
       })
 
       const data = await res.json()
+
+      if (data.isAndroidApp || res.status === 403) {
+        toast.info('Google Play Notice', {
+          description: data.message || 'In-app purchases on Android must use Google Play. Please use the email restore option below or open snapchef-ai.vercel.app in your browser.',
+          duration: 6000,
+        })
+        return
+      }
 
       if (data.checkoutUrl) {
         // Redirect to Stripe checkout

@@ -1,9 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
+function isAndroidTwa(req: NextRequest, bodyIsTwa?: boolean): boolean {
+  if (bodyIsTwa) return true
+  const xRequestedWith = (req.headers.get('x-requested-with') || '').toLowerCase()
+  if (xRequestedWith.includes('snapchef') || xRequestedWith.includes('twa')) return true
+  const referer = (req.headers.get('referer') || '').toLowerCase()
+  if (referer.includes('android-app://')) return true
+  return false
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { plan = 'lifetime' } = await req.json()
+    const { plan = 'lifetime', isTwa = false } = await req.json().catch(() => ({}))
+
+    // Google Play Policy 3.1 Guard: Disallow external Stripe credit card checkout inside Android app
+    if (isAndroidTwa(req, isTwa)) {
+      return NextResponse.json(
+        {
+          error: 'google_play_billing_required',
+          message: 'In-app digital purchases on Android must use Google Play Store billing. Please restore your purchase with your email or use the website.',
+          isAndroidApp: true,
+        },
+        { status: 403 }
+      )
+    }
+
     const stripeKey = process.env.STRIPE_SECRET_KEY
 
     if (!stripeKey) {
