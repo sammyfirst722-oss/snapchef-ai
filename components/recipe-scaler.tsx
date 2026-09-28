@@ -3,15 +3,17 @@
 import React, { useState } from 'react'
 import { Ingredient, INGREDIENT_CATEGORY_COLORS } from '@/lib/recipes-data'
 import { scaleIngredientAmount, NUTRITION_ESTIMATES } from '@/lib/recipe-utils'
+import { GroceryAffiliate } from '@/components/grocery-affiliate'
 import { Users, CheckCircle2, Circle } from 'lucide-react'
 
 interface RecipeScalerProps {
   baseServings: number
   ingredients: Ingredient[]
   instructions: string[]
+  recipeTitle?: string
 }
 
-export function RecipeScaler({ baseServings, ingredients, instructions }: RecipeScalerProps) {
+export function RecipeScaler({ baseServings, ingredients, instructions, recipeTitle }: RecipeScalerProps) {
   const [servings, setServings] = useState<number>(baseServings)
   const [completedSteps, setCompletedSteps] = useState<Record<number, boolean>>({})
 
@@ -89,6 +91,9 @@ export function RecipeScaler({ baseServings, ingredients, instructions }: Recipe
           <div className="text-xs font-semibold text-gray-500">Fat</div>
         </div>
       </div>
+
+      {/* Grocery Delivery Affiliate CTA */}
+      <GroceryAffiliate ingredients={ingredients} recipeTitle={recipeTitle || 'this recipe'} />
 
       {/* Ingredients List */}
       <div>

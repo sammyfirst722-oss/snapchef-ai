@@ -144,6 +144,7 @@ export default async function RecipeDetailPage({ params }: RecipePageProps) {
             baseServings={recipe.servings}
             ingredients={recipe.ingredients}
             instructions={recipe.instructions}
+            recipeTitle={recipe.title}
           />
         </div>
 
