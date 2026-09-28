@@ -1,0 +1,21 @@
+{
+  "pair": "cauliflower-and-cheese",
+  "title": "Why cauliflower and cheese Works So Well Together",
+  "flavorProfile": "Cauliflower offers a subtly sweet, earthy, and slightly nutty base that balances the rich, creamy, and umami-packed depth of cheese. The combination creates a harmonious interplay where the vegetable's natural sweetness complements the saltiness and savoriness of the cheese, resulting in a satisfying savory-sweet-umami profile.",
+  "nutritionalSynergy": "Cauliflower is low in fat yet rich in fiber, vitamin C, vitamin K, folate, and choline, while cheese provides calcium, protein, B-vitamins (B12, B2), phosphorus, and healthy saturated fats. The fat content in cheese enhances the bioavailability of fat-soluble nutrients (vitamin A, D, E, K) present in cauliflower. Additionally, the amino acid profile of cheese works synergistically with the branched-chain amino acids in cauliflower, improving overall protein utilization and nutrient absorption.",
+  "prepTechniques": [
+    "Step 1: Cut cauliflower into uniform florets and roast or steam them until tender and slightly caramelized.",
+    "Step 2: Toss the cooked cauliflower with grated cheese (such as sharp cheddar, Gruyère, or Parmesan) and season with garlic powder, paprika, and black pepper.",
+    "Step 3: Bake at 400°F (200°C) for 15-20 minutes until the cheese melts and forms a golden crust."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store leftover cauliflower and cheese in an airtight container in the refrigerator for up to 3 days. To reheat, gently warm in the microwave covered with a damp paper towel or bake briefly at 350°F (175°C) to restore crispness."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes. You can replace cauliflower with other cruciferous vegetables like broccoli or Brussels sprouts, or use cauliflower rice instead. For cheese, try vegan alternatives such as cashew-based or soy-based cheeses, though the flavor profile will differ slightly."
+    }
+  ]
+}

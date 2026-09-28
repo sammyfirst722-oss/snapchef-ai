@@ -1,0 +1,21 @@
+{
+  "pair": "chicken-and-broccoli",
+  "title": "Why chicken and broccoli Works So Well Together",
+  "flavorProfile": "Chicken delivers mild, savory umami depth while broccoli contributes earthy bitterness and natural sweetness. When paired with garlic, ginger, or soy sauce, the combination achieves a balanced profile: salty-umami from the poultry, subtle sweetness from the cruciferous florets, and a fresh, slightly peppery finish that prevents palate fatigue.",
+  "nutritionalSynergy": "Chicken provides complete protein, B12, niacin, and selenium, while broccoli supplies vitamin C, K, folate, and sulforaphane. Vitamin C in broccoli enhances non-heme iron absorption from chicken, increasing bioavailability by up to 67%. The combination also supports collagen synthesis (vitamin C + amino acids) and offers synergistic antioxidant effects—broccoli's glucosinolates complement chicken's cysteine for detoxification support.",
+  "prepTechniques": [
+    "Cut chicken into uniform bite-sized pieces and marinate in soy sauce, rice vinegar, and cornstarch for 15 minutes to tenderize and lock in moisture.",
+    "Blanch broccoli florets in salted boiling water for 90 seconds, then shock in ice water to preserve bright color and crisp-tender texture.",
+    "Stir-fry chicken over high heat until golden, add garlic and ginger, then toss in broccoli with a sauce of oyster sauce, sesame oil, and a pinch of sugar for glaze."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Refrigerate in an airtight container within 2 hours; consume within 3–4 days. Freeze for up to 3 months, but note broccoli may soften upon thawing—reheat gently in a skillet to restore texture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes—swap chicken for tofu, shrimp, or turkey breast; replace broccoli with broccolini, green beans, or asparagus. Adjust cooking times accordingly: seafood cooks faster, while tofu benefits from extra browning."
+    }
+  ]
+}

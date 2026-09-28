@@ -1,0 +1,21 @@
+{
+  "pair": "cod-and-lemon",
+  "title": "Why cod and lemon Works So Well Together",
+  "flavorProfile": "The pairing creates a harmonious savory, sweet, umami balance. Cod provides a mild, naturally sweet, and flaky texture with a subtle umami depth, while lemon introduces bright, acidic notes that cut through the richness. The acidity amplifies the fish's inherent sweetness and elevates the umami profile, resulting in a well-rounded and vibrant flavor experience.",
+  "nutritionalSynergy": "The combination offers a scientific micronutrient absorption advantage. Cod is an excellent source of protein and selenium, while lemon is rich in Vitamin C. The ascorbic acid in lemon enhances the bioavailability of minerals like iron and selenium found in the cod. Additionally, the citric acid in lemon aids in the digestion of the cod's dense protein structure, improving overall gut absorption and protecting the omega-3 fatty acids from oxidative degradation.",
+  "prepTechniques": [
+    "Marinate the cod fillets in fresh lemon juice, olive oil, and herbs for 20-30 minutes to tenderize the protein and infuse citrus flavor.",
+    "Pan-sear or bake the cod at a high heat until the flesh flakes easily, allowing the lemon zest to caramelize and deepen its aromatic oils.",
+    "Finish the dish with a fresh squeeze of lemon juice and garnish with lemon wedges right before serving to preserve the bright, acidic notes."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store leftover cooked cod and lemon in an airtight container in the refrigerator for up to 3 days. Keep the lemon elements separate if possible to prevent the fish from becoming soggy, and reheat gently in a low oven to preserve the delicate texture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes, you can substitute cod with other mild, flaky white fish like halibut, tilapia, or sea bass. For lemon, you can use lime for a sharper citrus profile or white wine vinegar for a similar acidic tang, though the flavor profile will shift slightly."
+    }
+  ]
+}

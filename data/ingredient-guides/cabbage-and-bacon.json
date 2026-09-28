@@ -1,0 +1,15 @@
+{
+  "pair": "cabbage-and-bacon",
+  "title": "Why Cabbage and Bacon Works So Well Together",
+  "flavorProfile": "The combination of cabbage's mild, slightly sweet crunch with the salty, smoky richness of bacon creates a savory-sweet-umami balance that satisfies both palate and aroma.",
+  "nutritionalSynergy": "Cabbage provides vitamin C and polyphenols that can enhance the absorption of iron present in bacon, while the fat in bacon aids in the absorption of fat-soluble vitamins (A, D, E, K) from cabbage, improving overall micronutrient bioavailability.",
+  "prepTechniques": [
+    "Slice cabbage into thin shreds and toss with a splash of olive oil to preserve texture.",
+    "Cook bacon until crisp, then remove and reserve the rendered fat.",
+    "Sauté cabbage in the bacon fat, season with salt, pepper, and a pinch of sugar, then fold in the crumbled bacon."
+  ],
+  "faq": [
+    {"q": "How to store leftovers?", "a": "Cool the dish to room temperature, then transfer to an airtight container and refrigerate for up to 3 days. Reheat gently in a pan or microwave."},
+    {"q": "Can I substitute either ingredient?", "a": "Yes; for a vegetarian version, replace bacon with smoked tofu or tempeh, and use a plant-based oil. For a different flavor, try pancetta or turkey bacon."}
+  ]
+}

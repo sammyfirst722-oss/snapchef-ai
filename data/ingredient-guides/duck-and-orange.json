@@ -1,0 +1,22 @@
+{
+  "pair": "duck-and-orange",
+  "title": "Why duck and orange Works So Well Together",
+  "flavorProfile": "The rich, gamey savoriness of duck fat and dark meat provides a deep umami foundation, while the bright acidity and natural sweetness of orange cut through the fat, creating a balanced sweet‑sour‑savory triad. Citrus zest adds aromatic oils that lift the dish, and the slight bitterness of orange peel adds complexity, making each bite both luxurious and refreshing.",
+  "nutritionalSynergy": "Duck is high in heme iron and vitamin B12, both of which are better absorbed in the presence of vitamin C. Orange supplies abundant ascorbic acid, enhancing non‑heme iron uptake from any accompanying vegetables and improving the bioavailability of duck’s iron. Additionally, the flavonoids in orange (hesperidin, narirutin) act as antioxidants that may mitigate oxidative stress from the higher saturated fat content of duck, while the fat aids absorption of the fat‑soluble carotenoids (beta‑cryptoxanthin) present in orange.",
+  "prepTechniques": [
+    "Score the duck breast skin in a crosshatch pattern, season generously with salt, and place skin‑side down in a cold pan; render fat slowly over medium‑low heat until skin is crisp and golden, about 12‑15 minutes.",
+    "Deglaze the pan with fresh orange juice, zest, and a splash of orange liqueur (such as Grand Marnier), reducing by half to form a glossy sauce; finish with a knob of cold butter for richness.",
+    "Rest the duck 5 minutes, then slice against the grain; drizzle the orange reduction over the slices and garnish with supremed orange segments and micro‑herbs.",
+    "Optional: Roast whole duck at 180 °C (350 °F) with a cavity stuffed with orange quarters, garlic, and thyme; baste every 20 minutes with a honey‑orange glaze for a caramelized lacquer."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Cool the duck to room temperature within two hours, then store sliced meat and sauce separately in airtight containers. Refrigerate up to 3 days or freeze up to 2 months. Reheat gently in a low oven (120 °C/250 °F) covered with foil to retain moisture, and warm the sauce in a saucepan over low heat, adding a splash of orange juice if it thickens too much."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For duck, you can use chicken thighs, pork tenderloin, or a plant‑based seitan steak; adjust cooking times accordingly. For orange, blood orange, mandarin, or a mix of lemon juice and a touch of honey can mimic the sweet‑tart profile, though the unique floral notes of orange will be less pronounced."
+    }
+  ]
+}

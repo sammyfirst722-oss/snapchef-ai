@@ -1,0 +1,21 @@
+{
+  "pair": "chickpea-and-tahini",
+  "title": "Why chickpea and tahini Works So Well Together",
+  "flavorProfile": "Chickpeas contribute earthy, starchy sweetness and a mild nuttiness, while tahini adds bitter, roasted depth and savory richness. Together they create a balanced umami foundation where the legume's subtle sugar rounds out tahini's bitterness, producing a complex savory-sweet profile with lingering nutty finish.",
+  "nutritionalSynergy": "Chickpeas supply iron, zinc, and B-vitamins; tahini provides calcium, magnesium, and vitamin E. The monounsaturated and polyunsaturated fats in tahini significantly increase bioavailability of fat-soluble micronutrients (vitamins A, E, K) and enhance non-heme iron absorption from chickpeas when consumed with vitamin C sources. This combination also creates a complete amino acid profile, as chickpeas are low in methionine while tahini is rich in it.",
+  "prepTechniques": [
+    "Cook dried chickpeas with baking soda until skins slip easily, or rinse canned varieties thoroughly to remove metallic notes before blending",
+    "Toast tahini gently in a dry pan until golden and fragrant to deepen nutty aromatics, then cool slightly before incorporating",
+    "Emulsify with ice water and lemon juice using a food processor, adding tahini gradually to achieve silky, airy texture without graininess"
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store in airtight glass container with plastic wrap pressed directly onto surface; refrigerate up to 5 days or freeze up to 3 months. Drizzle olive oil on top to prevent oxidation."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For chickpeas: cannellini or white beans work but lack earthy depth; lentils alter texture significantly. For tahini: sunflower seed butter or almond butter substitute but change flavor profile entirely—tahini's bitterness is irreplaceable for authentic balance."
+    }
+  ]
+}

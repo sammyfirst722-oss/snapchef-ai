@@ -1,0 +1,21 @@
+{
+  "pair": "potato-and-rosemary",
+  "title": "Why potato and rosemary Works So Well Together",
+  "flavorProfile": "The starchy, mildly sweet base of potatoes provides a neutral canvas that absorbs rosemary’s piney, slightly bitter, and aromatic notes. When roasted or sautéed, Maillard browning creates savory umami depth, while the herb’s essential oils add a fresh, resinous brightness that balances the potato’s earthiness and enhances overall complexity.",
+  "nutritionalSynergy": "Potatoes supply vitamin C, potassium, and resistant starch, while rosemary contributes potent antioxidants such as carnosic acid and rosmarinic acid. These antioxidants can protect vitamin C from oxidative degradation, improving its bioavailability. Additionally, rosemary’s polyphenols may enhance iron absorption from the potato’s non‑heme iron by reducing phytate inhibition, and the herb’s fat‑soluble compounds are better assimilated when potatoes are cooked with a small amount of oil, boosting uptake of both nutrients.",
+  "prepTechniques": [
+    "Toss diced potatoes with olive oil, minced rosemary, salt, and pepper; spread on a baking sheet and roast at 425°F (220°C) for 25‑30 minutes until golden and crisp.",
+    "Infuse warm olive oil with fresh rosemary sprigs for 10 minutes, then drizzle over boiled or mashed potatoes for an aromatic finish.",
+    "Add finely chopped rosemary to the water when boiling potatoes for potato salad; the herb’s flavor penetrates the tubers, reducing the need for heavy dressing."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Cool the potato‑rosemary dish to room temperature, then transfer to an airtight container and refrigerate for up to 4 days. Reheat in a 350°F (175°C) oven or skillet to restore crispness; avoid microwaving if texture is important."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For potatoes, sweet potatoes or parsnips work similarly, offering a sweeter profile that still pairs with rosemary. For rosemary, thyme or sage can replace it in equal amounts, though they provide different herbal notes; use slightly less sage as it is more potent."
+    }
+  ]
+}

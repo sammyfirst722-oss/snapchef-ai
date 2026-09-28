@@ -1,0 +1,21 @@
+{
+  "pair": "peas-and-mint",
+  "title": "Why peas and mint Works So Well Together",
+  "flavorProfile": "The pairing balances sweet, fresh peas with bright, herbaceous mint, creating a savory-sweet-umami profile. Peas contribute a gentle sweetness and a hint of umami from their amino acids, while mint adds a cool, slightly sweet aroma and a touch of acidity that lifts the overall flavor, resulting in a harmonious, refreshing taste.",
+  "nutritionalSynergy": "Mint is rich in vitamin C, which enhances the absorption of non-heme iron found in peas. The antioxidant polyphenols in mint also help protect the carotenoids in peas, improving bioavailability of fat-soluble vitamins. Together they create a synergistic effect that boosts iron uptake and antioxidant activity.",
+  "prepTechniques": [
+    "Blanch fresh peas in boiling water for 2 minutes, then transfer to an ice bath to preserve color and texture.",
+    "Finely chiffonade fresh mint leaves, reserving a few whole leaves for garnish.",
+    "Toss the cooled peas with mint, a drizzle of extra-virgin olive oil, lemon zest, and a pinch of sea salt."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store the pea-mint mixture in an airtight container in the refrigerator for up to 3 days. For longer storage, freeze in a single layer on a baking sheet, then transfer to a freezer bag for up to 2 months."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "If fresh peas are unavailable, frozen peas work well after thawing. For mint, you can use fresh basil or a small amount of chopped parsley for a similar herbaceous note, though the flavor will differ."
+    }
+  ]
+}

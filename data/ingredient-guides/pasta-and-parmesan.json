@@ -1,0 +1,15 @@
+{
+  "pair": "pasta-and-parmesan",
+  "title": "Why pasta and parmesan Works So Well Together",
+  "flavorProfile": "The combination delivers a rich, savory umami base with salty, nutty notes from Parmesan, balanced by the mild sweetness and chewiness of al dente pasta. The cheese adds a buttery, slightly fruity depth while the pasta provides a comforting carbohydrate backbone, creating a harmonious sweet‑savory‑umami symphony.",
+  "nutritionalSynergy": "Parmesan supplies high‑quality casein protein, calcium, phosphorus and vitamin B12, while pasta contributes complex carbohydrates and magnesium. The protein‑carb pairing slows glucose release, supporting steady energy, and the calcium‑magnesium ratio enhances bone mineralisation. Additionally, the fat‑soluble vitamins (if present in fortified pasta) are better absorbed when consumed with the dairy matrix of Parmesan.",
+  "prepTechniques": [
+    "Cook the pasta al dente in heavily salted water, reserving 1‑2 cups of the starchy cooking water before draining.",
+    "In the same pan, melt a knob of butter (or olive oil) and stir in freshly grated Parmesan, allowing it to melt into a silky sauce; gradually add the reserved pasta water to create a cohesive coating.",
+    "Finish by tossing the pasta with the cheese sauce, adding optional aromatics like black pepper, fresh herbs, or a touch of lemon zest, and serving immediately for optimal flavor and texture."
+  ],
+  "faq": [
+    {"q": "How to store leftovers?", "a": "Transfer cooled pasta to an airtight container, add a thin layer of olive oil or a slice of bread to absorb excess moisture, and refrigerate for up to 3 days. Reheat with a splash of pasta water or a bit of butter to restore creaminess."},
+    {"q": "Can I substitute either ingredient?", "a": "For pasta, try other long noodles like spaghetti, linguine, or rice‑based pasta for gluten‑free options. Parmesan can be swapped with other hard cheeses such as Pecorino Romano, Asiago, or a blend of Grana Padano for similar salty, umami depth."}
+  ]
+}

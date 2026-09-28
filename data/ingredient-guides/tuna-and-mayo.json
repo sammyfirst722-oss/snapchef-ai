@@ -1,0 +1,21 @@
+{
+  "pair": "tuna-and-mayo",
+  "title": "Why Tuna and Mayo Works So Well Together",
+  "flavorProfile": "Tuna delivers a rich, briny umami punch with subtle sweetness from natural glycine and glutamate compounds, while mayo contributes creamy fat, mild acidity from vinegar or lemon, and a touch of sweetness from egg yolk and added sugars. Together, they create a balanced profile where the saltiness of tuna is mellowed by the cool creaminess of mayo, the fat in mayo enhances the savory depth of tuna, and the slight acidity cuts through the richness, resulting in a harmonious blend of savory, sweet, and tangy notes.",
+  "nutritionalSynergy": "Tuna is an excellent source of omega-3 fatty acids (EPA and DHA), high-quality protein, vitamin D, selenium, and B-complex vitamins like B12 and niacin. Mayo, made from egg yolks and oil, provides vitamin E, healthy monounsaturated fats, and small amounts of fat-soluble vitamins A, D, and K. When consumed together, the healthy fats in mayo enhance the absorption of fat-soluble nutrients in tuna such as vitamin D and carotenoids, while the protein from both ingredients supports muscle synthesis. The combination also improves satiety and stabilizes blood sugar due to the balanced macronutrient ratio of protein, fat, and minimal carbohydrates.",
+  "prepTechniques": [
+    "Drain canned tuna thoroughly and flake it using a fork to ensure even texture.",
+    "In a separate bowl, mix mayonnaise with optional seasonings like lemon juice, black pepper, or herbs to enhance flavor.",
+    "Gently fold the tuna into the mayo mixture until just combined to maintain texture and prevent overmixing."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store any leftover tuna and mayo mixture in an airtight container in the refrigerator for up to 2 days. Ensure it is cooled to room temperature before sealing to prevent condensation. Discard if left at room temperature for more than 2 hours."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes. Greek yogurt or mashed avocado can replace mayo for a lighter option, while canned salmon, sardines, or shredded chicken can substitute tuna. For vegan versions, use mashed chickpeas or tofu with vegan mayo."
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "pair": "beef-and-broccoli",
+  "title": "Why beef and broccoli Works So Well Together",
+  "flavorProfile": "The rich, savory umami of beef pairs with the mild, slightly sweet and earthy notes of broccoli. Soy-based sauces add saltiness and depth, while garlic and ginger contribute aromatic pungency. A touch of sugar or oyster sauce balances bitterness, creating a harmonious sweet-salty-umami profile with a pleasant textural contrast between tender meat and crisp-tender florets.",
+  "nutritionalSynergy": "Beef provides heme iron and zinc, which are more bioavailable when consumed with vitamin C from broccoli. Broccoli's sulforaphane and fiber support gut health, while beef's B12 and protein aid muscle repair. Together they enhance non-heme iron absorption from plant sources and deliver a complete amino acid profile plus antioxidants that reduce oxidative stress.",
+  "prepTechniques": [
+    "Slice beef against the grain into thin strips; marinate 15 minutes in soy sauce, cornstarch, and a splash of oil to tenderize and create a velvety coating.",
+    "Blanch broccoli florets 60–90 seconds in boiling salted water, then shock in ice water to lock in color and achieve crisp-tender texture.",
+    "Stir-fry beef in batches over high heat until browned, remove; stir-fry aromatics, return beef and broccoli, add sauce, toss until glossy and heated through."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Cool to room temperature within two hours, transfer to airtight containers, refrigerate up to 3 days or freeze up to 2 months. Reheat in a hot skillet with a splash of water to revive sauce consistency."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes. Swap beef for chicken, pork, tofu, or seitan; replace broccoli with broccolini, cauliflower, snap peas, or bok choy. Adjust cooking times: thinner proteins cook faster, denser vegetables may need longer blanching."
+    }
+  ]
+}

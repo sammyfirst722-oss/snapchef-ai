@@ -1,0 +1,21 @@
+{
+  "pair": "spinach-and-feta",
+  "title": "Why spinach and feta Works So Well Together",
+  "flavorProfile": "Spinach brings a mild, slightly sweet, and earthy vegetal flavor, while feta delivers a sharp, salty, and tangy punch. Together, they create a harmonious balance of savory and umami depth, where the creamy saltiness of the feta elevates the subtle sweetness of the spinach, resulting in a complex yet approachable taste profile.",
+  "nutritionalSynergy": "Spinach is rich in fat-soluble vitamins (A, K) and iron, but its absorption is often hindered by naturally occurring oxalic acid. Feta cheese provides dietary fats that significantly enhance the bioavailability of these fat-soluble vitamins. While the calcium in feta can slightly inhibit non-heme iron absorption by binding to oxalates, the overall synergy of healthy fats and fat-soluble micronutrients makes this pairing highly effective for maximizing vitamin uptake and overall nutritional value.",
+  "prepTechniques": [
+    "Wilt the spinach quickly in a hot pan with a drizzle of olive oil to preserve its vibrant color and reduce bitterness.",
+    "Crumble the feta over the cooked spinach just before serving to maintain its distinct, creamy texture and prevent it from melting into the greens.",
+    "Finish the dish with a squeeze of fresh lemon juice and a pinch of cracked black pepper to brighten the savory, umami notes of the pairing."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store leftovers in an airtight container in the refrigerator for up to 3 days. Note that the spinach will continue to release moisture and wilt, so consume promptly for the best texture. Avoid freezing, as the thawing process will severely degrade the texture of both ingredients."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes, you can substitute spinach with kale or Swiss chard for a heartier green. For the feta, goat cheese or ricotta salata are excellent alternatives that provide a similar salty, creamy profile without the distinct tanginess of sheep's milk feta."
+    }
+  ]
+}

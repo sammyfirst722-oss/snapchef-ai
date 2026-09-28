@@ -1,0 +1,21 @@
+{
+  "pair": "shrimp-and-garlic",
+  "title": "Why shrimp and garlic Works So Well Together",
+  "flavorProfile": "The sweet, briny flavor of shrimp pairs with the aromatic, slightly pungent notes of garlic, creating a balanced savory profile with subtle sweetness and deep umami.",
+  "nutritionalSynergy": "Garlic provides allicin and vitamin C, which enhance the bioavailability of selenium and zinc in shrimp, while the protein in shrimp supports the absorption of fat‑soluble compounds in garlic, resulting in synergistic micronutrient uptake.",
+  "prepTechniques": [
+    "Peel and devein shrimp, then pat dry to ensure a quick sear.",
+    "Mince garlic finely and let it rest for 5 minutes to activate allicin.",
+    "Sauté shrimp in butter or oil over medium‑high heat, adding garlic in the last 30 seconds to avoid burning."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Cool the cooked shrimp and garlic to room temperature within two hours, then store in an airtight container in the refrigerator for up to 2 days; reheat gently to preserve texture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes; for shrimp, use firm white fish such as cod or scallops, and for garlic, replace with shallots or a garlic‑infused oil, though the flavor balance will differ."
+    }
+  ]
+}

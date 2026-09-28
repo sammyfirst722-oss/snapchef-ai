@@ -1,0 +1,21 @@
+{
+  "pair": "banana-and-peanut-butter",
+  "title": "Why Banana and Peanut Butter Works So Well Together",
+  "flavorProfile": "The banana provides natural sweetness and a creamy, mellow base that balances the rich, nutty, and slightly savory depth of peanut butter. The saltiness in peanut butter enhances the banana's sweetness, while the banana's subtle earthiness complements the roasted notes in peanut butter. This pairing creates a harmonious blend of sweet, savory, and umami flavors, with contrasting textures that elevate both ingredients.",
+  "nutritionalSynergy": "Bananas are rich in vitamin B6, potassium, and natural sugars, which aid in the absorption of nutrients from peanut butter. Peanut butter contains healthy monounsaturated and polyunsaturated fats, protein, and vitamin E. When consumed together, the fats in peanut butter enhance the absorption of fat-soluble vitamins like vitamin E, while the potassium in bananas supports heart health and helps regulate blood pressure. The combination also provides sustained energy due to the balance of simple and complex carbohydrates, along with protein and healthy fats.",
+  "prepTechniques": [
+    "Slice the banana lengthwise or into rounds for even distribution.",
+    "Spread a layer of peanut butter on toast, a tortilla, or directly onto the banana slices.",
+    "Sprinkle with optional toppings like chia seeds, honey, or dark chocolate shavings for added texture and flavor."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "If you have leftover banana and peanut butter mixture, store it in an airtight container in the refrigerator for up to 1-2 days. To prevent the banana from browning, squeeze a bit of lemon juice over it before storing. For longer storage, freeze the mixture in a sealed bag for up to 2 months."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes, you can substitute banana with other fruits like apples or strawberries, though the texture and flavor will differ. For peanut butter, alternatives include almond butter, cashew butter, or sunflower seed butter for a nut-free option. Each substitute will alter the taste slightly but maintain a similar creamy and rich profile."
+    }
+  ]
+}

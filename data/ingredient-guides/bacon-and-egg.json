@@ -1,0 +1,21 @@
+{
+  "pair": "bacon-and-egg",
+  "title": "Why bacon and egg Works So Well Together",
+  "flavorProfile": "Bacon delivers smoky, salty umami with caramelized sweetness from Maillard reactions, while eggs provide rich, creamy umami and subtle sulfurous notes. The fat-soluble compounds in bacon enhance egg's mouthfeel, creating a balanced savory-sweet profile where salt amplifies sweetness and fat carries aroma.",
+  "nutritionalSynergy": "Bacon's saturated fat facilitates absorption of fat-soluble vitamins (A, D, E, K) from egg yolk, while eggs' lecithin emulsifies bacon fats for better digestion. Together they provide complete amino acid profiles - bacon offers cysteine and methionine, eggs provide lysine and tryptophan - creating optimal protein synthesis. The sodium in bacon also enhances flavor perception without additional salt.",
+  "prepTechniques": [
+    "Render bacon in cold pan over medium heat 8-10 minutes until crisp, reserving 1 tbsp fat",
+    "Crack eggs into bacon fat, cook 3-4 minutes until whites set but yolks remain runny",
+    "Rest bacon 2 minutes, slice, and plate alongside eggs to preserve texture"
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store cooked bacon and eggs separately in airtight containers for 3-4 days. Reheat bacon at 350°F for 5 minutes to restore crispness; eggs are best consumed fresh but can be gently reheated in low moisture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For bacon: turkey bacon, pancetta, or smoked tofu. For eggs: tofu scramble or chickpea flour omelet. Note that substitutions alter fat profiles and umami intensity - turkey bacon reduces sodium by 40%, tofu lacks choline."
+    }
+  ]
+}

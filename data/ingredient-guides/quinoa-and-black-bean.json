@@ -1,0 +1,21 @@
+{
+  "pair": "quinoa-and-black-bean",
+  "title": "Why quinoa and black bean Works So Well Together",
+  "flavorProfile": "Quinoa brings a mild, nutty sweetness and a light, fluffy texture, while black beans contribute deep earthy savoriness, a subtle bitterness, and a rich umami backbone. Together they create a balanced profile where the grain’s gentle sweetness tempers the bean’s robustness, and the beans’ umami enhances quinoa’s nutty notes, resulting in a harmonious savory‑sweet‑umami experience.",
+  "nutritionalSynergy": "Quinoa is a complete protein containing all nine essential amino acids, particularly high in lysine, whereas black beans are rich in lysine but lower in methionine. When combined, they complement each other’s amino acid profiles, boosting overall protein quality. Additionally, the vitamin C‑rich vegetables often paired with this duo (e.g., bell peppers, tomatoes) enhance non‑heme iron absorption from both quinoa and black beans, while the beans’ fiber slows carbohydrate digestion, moderating glycemic response and improving satiety.",
+  "prepTechniques": [
+    "Rinse quinoa thoroughly under cold water to remove saponins, then cook 1 part quinoa with 2 parts water or broth, bringing to a boil, reducing to a simmer, covering, and cooking 15 minutes until liquid is absorbed; fluff with a fork.",
+    "While quinoa cooks, sauté diced onion, garlic, and optional spices (cumin, smoked paprika) in olive oil until fragrant, then add rinsed and drained black beans, cooking 5‑7 minutes to heat through and meld flavors.",
+    "Combine the cooked quinoa with the seasoned black bean mixture, add fresh ingredients like chopped cilantro, lime juice, diced tomatoes, or avocado, toss gently, and adjust seasoning with salt and pepper before serving."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Cool the quinoa‑black bean mixture to room temperature, then transfer to an airtight container. Refrigerate for up to 4 days. For longer storage, freeze in portion‑sized bags or containers for up to 3 months; thaw overnight in the fridge and reheat gently in a skillet or microwave, adding a splash of water or broth to prevent drying."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes. For quinoa, you can use farro, bulgur, or brown rice for a similar texture, though protein completeness will vary. For black beans, pinto beans, kidney beans, or lentils work well; adjust cooking times accordingly as lentils cook faster and may become mushier if overcooked."
+    }
+  ]
+}

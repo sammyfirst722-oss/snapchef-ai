@@ -1,0 +1,21 @@
+{
+  "pair": "steak-and-butter",
+  "title": "Why Steak and Butter Works So Well Together",
+  "flavorProfile": "Steak delivers deep umami through glutamates and Maillard reaction compounds, while butter contributes lactones and browned milk solids that add nutty sweetness and richness. The fat in butter coats the palate, softening the salty savoriness of beef and creating a balanced profile where savory meets sweet-cream notes.",
+  "nutritionalSynergy": "The fat in butter enhances absorption of fat-soluble vitamins (A, D, E, K) from accompanying vegetables and increases bioavailability of steak's heme iron. Butter's butyrate supports gut health, while steak's complete amino acids and B12 combine with butter's fat-soluble vitamins for sustained energy and hormone production.",
+  "prepTechniques": [
+    "Bring steak to room temperature 30 minutes before cooking; season with salt to draw out moisture for better sear",
+    "Sear in cast-iron skillet with high-smoke-point butter or compound butter; baste continuously with foaming butter, garlic, and thyme",
+    "Rest steak 5-8 minutes, then finish with a cold pat of butter or herb-garlic butter melted over the top"
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Cool steak to room temperature within 2 hours, store in airtight container with any butter sauce separated, refrigerate up to 3-4 days. Reheat gently in skillet to preserve texture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For butter: use ghee, tallow, duck fat, or olive oil. For steak: substitute ribeye, strip, or filet; adjust cooking time based on thickness and fat content."
+    }
+  ]
+}

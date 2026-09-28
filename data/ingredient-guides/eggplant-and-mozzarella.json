@@ -1,0 +1,21 @@
+{
+  "pair": "eggplant-and-mozzarella",
+  "title": "Why eggplant and mozzarella Works So Well Together",
+  "flavorProfile": "Eggplant contributes earthy, slightly bitter, and meaty umami notes that deepen when caramelized, while mozzarella offers mild sweetness, creamy richness, and delicate milkiness. The combination balances bitter and sweet, with the dairy fat rounding out eggplant's aggressive edges and creating a savory-sweet umami harmony.",
+  "nutritionalSynergy": "Eggplant contains fat-soluble antioxidants like nasunin and chlorogenic acid. Mozzarella provides dietary fat and calcium, which enhance absorption of these polyphenols. The protein in mozzarella also slows gastric emptying, moderating glycemic impact from eggplant's carbohydrates. Together they deliver a micronutrient matrix where fat-soluble vitamins and antioxidants achieve higher bioavailability.",
+  "prepTechniques": [
+    "Salt eggplant slices and let drain 30 minutes to purge bitterness and moisture, then pat completely dry",
+    "Roast or grill at 425°F until deeply caramelized and tender, creating concentrated umami",
+    "Layer with fresh mozzarella and bake 10-12 minutes until cheese is melted with golden spots"
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store in an airtight container in the refrigerator for up to 3-4 days. Reheat in an oven or toaster oven at 350°F to preserve texture; avoid microwaving, which makes mozzarella rubbery."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For eggplant, use zucchini, portobello mushrooms, or cauliflower. For mozzarella, try burrata for creaminess, provolone for sharper melt, or vegan cashew mozzarella for dairy-free."
+    }
+  ]
+}

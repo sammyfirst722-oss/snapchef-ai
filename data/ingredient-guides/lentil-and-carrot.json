@@ -1,0 +1,21 @@
+{
+  "pair": "lentil-and-carrot",
+  "title": "Why lentil and carrot Works So Well Together",
+  "flavorProfile": "Lentils contribute earthy, nutty, savory depth with natural umami from glutamates, while carrots provide caramelized sweetness and subtle bitterness. The combination creates a balanced sweet-savory-umami triangle where the carrot's natural sugars mellow the lentil's earthiness, and the lentil's savoriness grounds the carrot's sweetness.",
+  "nutritionalSynergy": "Carrots supply vitamin C and beta-carotene, which significantly enhance the absorption of non-heme iron and zinc from lentils—up to 3-6x improvement in iron uptake. The soluble fiber from carrots slows glucose absorption from lentils, stabilizing blood sugar. Lentils provide complete protein pairing with carrots' vitamin A, supporting immune function and vision.",
+  "prepTechniques": [
+    "Sauté diced carrots in olive oil with onions until caramelized (8-10 min) to develop Maillard sugars",
+    "Simmer lentils in seasoned broth with aromatics until just tender (20-40 min depending on variety)",
+    "Combine and finish with acid (lemon juice or vinegar) to brighten the sweet-savory balance"
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store in airtight container in refrigerator for 3-4 days or freeze for up to 3 months. Add splash of water when reheating to prevent drying."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Lentils: swap with split peas or black beans (adjust cooking time). Carrots: substitute with sweet potato, butternut squash, or parsnip for similar sweetness and texture."
+    }
+  ]
+}

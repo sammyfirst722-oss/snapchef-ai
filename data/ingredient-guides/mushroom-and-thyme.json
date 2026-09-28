@@ -1,0 +1,21 @@
+{
+  "pair": "mushroom-and-thyme",
+  "title": "Why mushroom and thyme Works So Well Together",
+  "flavorProfile": "The earthy, umami depth of mushrooms meets the bright, slightly floral, piney notes of thyme, creating a savory-sweet balance where the mushroom's natural glutamates are lifted by thyme's thymol and carvacrol, resulting in a harmonious, aromatic richness that deepens without overwhelming.",
+  "nutritionalSynergy": "Mushrooms provide vitamin D2, selenium, and B‑vitamins, while thyme supplies vitamin C, iron, and potent phenolic antioxidants (thymol, carvacrol). When consumed together, the fat‑soluble vitamin D from mushrooms is better absorbed in the presence of thyme's mild essential oils, which act as natural emulsifiers, and the iron from thyme is more bioavailable due to the vitamin C‑like effect of mushroom‑derived ergothioneine, enhancing overall micronutrient uptake.",
+  "prepTechniques": [
+    "Clean mushrooms gently with a damp cloth; slice uniformly for even cooking.",
+    "Sauté mushrooms in olive oil over medium‑high heat until golden, then add fresh thyme leaves (or ½ tsp dried) in the last 2 minutes to preserve its aroma.",
+    "Finish with a splash of white wine or lemon juice and a pinch of salt; let the mixture rest 2 minutes before serving to allow flavors to meld."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Cool the mushroom‑thyme mixture to room temperature, then transfer to an airtight container and refrigerate for up to 3 days. Reheat gently in a skillet over low heat, adding a splash of broth or water to prevent drying."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For mushrooms, try cremini, shiitake, or portobello for similar umami; for thyme, use oregano, marjoram, or a pinch of sage, adjusting quantity as these herbs are more potent."
+    }
+  ]
+}

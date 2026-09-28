@@ -1,0 +1,15 @@
+{
+  "pair": "strawberry-and-balsamic",
+  "title": "Why strawberry and balsamic Works So Well Together",
+  "flavorProfile": "The pairing balances bright, fruity acidity from strawberries with the deep, tangy sweetness of balsamic vinegar, creating a savory‑sweet umami profile that enhances both ingredients.",
+  "nutritionalSynergy": "Strawberries supply vitamin C and polyphenols, while balsamic vinegar contributes acetic acid and additional polyphenols; together they may improve antioxidant absorption and support gut health by modulating pH.",
+  "prepTechniques": [
+    "Slice fresh strawberries and drizzle with aged balsamic reduction, then finish with a pinch of sea salt and cracked pepper.",
+    "Toss strawberry wedges with a splash of balsamic glaze and fresh basil, then roast briefly to caramelize.",
+    "Blend strawberries with balsamic vinegar, olive oil, and honey to create a vibrant salad dressing."
+  ],
+  "faq": [
+    {"q": "How to store leftovers?", "a": "Store any leftover strawberry‑balsamic mixture in an airtight container in the refrigerator for up to 3 days. For longer storage, freeze in ice cube trays."},
+    {"q": "Can I substitute either ingredient?", "a": "You can replace strawberries with other berries such as raspberries or blackberries, and balsamic vinegar can be swapped with red wine vinegar or a fruit‑infused vinegar, though the flavor profile will shift."}
+  ]
+}

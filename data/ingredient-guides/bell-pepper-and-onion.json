@@ -1,0 +1,21 @@
+{
+  "pair": "bell-pepper-and-onion",
+  "title": "Why bell pepper and onion Works So Well Together",
+  "flavorProfile": "The crisp sweetness of bell pepper complements the mild pungency of onion, creating a balanced savory base with subtle sweet notes and a hint of umami from caramelized edges.",
+  "nutritionalSynergy": "When consumed together, the vitamin C in bell peppers enhances the bioavailability of iron from onions, while the sulfur compounds in onions improve the absorption of carotenoids from peppers, synergistic micronutrient uptake.",
+  "prepTechniques": [
+    "Slice bell peppers and onions uniformly to ensure even cooking.",
+    "Sauté onions first over medium heat until translucent, then add bell peppers and continue cooking until softened and lightly caramelized.",
+    "Season with salt, pepper, and optional herbs, then incorporate into dishes such as stir‑fries, sauces, or roasted vegetable medleys."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Cool the cooked mixture to room temperature, then transfer to an airtight container and refrigerate for up to 3 days; for longer storage, freeze in portion‑size bags for up to 2 months."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes; red or yellow bell peppers can replace green peppers, and shallots or leeks can substitute onions, though flavor nuances will differ."
+    }
+  ]
+}

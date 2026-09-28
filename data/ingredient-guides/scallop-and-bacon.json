@@ -1,0 +1,23 @@
+{
+  "pair": "scallop-and-bacon",
+  "title": "Why scallop and bacon Works So Well Together",
+  "flavorProfile": "Scallops bring a delicate, briny sweetness and tender texture, while bacon contributes saltiness, smokiness, and rich umami from cured pork fat. The contrast between the scallop's clean oceanic flavor and bacon's intense savory depth creates a balanced bite where each enhances the other — fat carries flavor, salt amplifies sweetness, and smoke adds complexity without overwhelming the shellfish.",
+  "nutritionalSynergy": "Scallops are rich in lean protein, vitamin B12, magnesium, zinc, and selenium, but very low in fat. Bacon provides saturated and monounsaturated fats that facilitate absorption of fat-soluble vitamins (A, D, E, K) from accompanying ingredients, while also supplying additional B vitamins (B1, B3, B6, B12), selenium, and phosphorus. Together, they form a complete protein profile with complementary micronutrients; the dietary fat from bacon improves bioavailability of scallop-derived selenium and zinc, and the combined B-vitamin complex supports energy metabolism and neurological function.",
+  "prepTechniques": [
+    "Pat scallops thoroughly dry with paper towels; season lightly with salt and pepper.",
+    "Par-cook bacon strips in a cold pan over medium heat for 3–4 minutes until fat renders but bacon remains pliable — not crisp.",
+    "Wrap each scallop with a half-slice of par-cooked bacon, securing with a soaked toothpick.",
+    "Sear wrapped scallops in a hot cast-iron skillet with a touch of oil, 1.5–2 minutes per side, until bacon crisps and scallops develop a golden crust while staying translucent at center.",
+    "Optional: Deglaze pan with white wine or citrus juice, finish with butter and herbs for a pan sauce."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Cool to room temperature within 2 hours, then refrigerate in an airtight container for up to 2 days. Reheat gently in a 275°F oven or low skillet to avoid overcooking scallops; microwave makes bacon rubbery."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For scallops: large shrimp, sea bass chunks, or king oyster mushroom 'scallops' (vegan). For bacon: pancetta (less smoky), prosciutto (thinner, saltier), turkey bacon (leaner), or smoked tofu/tempeh (plant-based). Adjust cook times — pancetta/prosciutto need less rendering; mushrooms need pre-searing."
+    }
+  ]
+}

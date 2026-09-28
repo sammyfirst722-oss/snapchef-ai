@@ -1,0 +1,21 @@
+{
+  "pair": "blueberry-and-lemon",
+  "title": "Why blueberry and lemon Works So Well Together",
+  "flavorProfile": "The pairing achieves a harmonious balance of sweet, tart, and savory notes. Blueberries provide a deep, natural sweetness and subtle earthy undertones, while lemon introduces bright, high-acid tartness that cuts through the richness. This acidity elevates the blueberries' flavor, creating a savory depth that prevents the dish from becoming overly cloying, resulting in a well-rounded umami-adjacent brightness.",
+  "nutritionalSynergy": "Scientifically, this pairing enhances micronutrient absorption through vitamin C-mediated iron uptake. Blueberries contain non-heme iron, which is typically harder for the body to absorb. Lemon is exceptionally rich in ascorbic acid (vitamin C), which converts non-heme iron into a more absorbable form, significantly boosting iron bioavailability. Additionally, the citric acid improves the absorption of polyphenols and antioxidants present in both ingredients, maximizing their overall health benefits.",
+  "prepTechniques": [
+    "Macerate fresh blueberries with lemon zest and a touch of sugar to infuse the citrus oils into the fruit and draw out natural juices.",
+    "Create a lemon curd or reduction glaze to bind the components, ensuring the acidic notes are evenly distributed throughout the dish.",
+    "Deglaze the pan or finish the dish with a squeeze of fresh lemon juice just before serving to preserve the bright, volatile citrus aromatics."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Transfer leftovers to an airtight container and refrigerate immediately. Consume within 3 to 4 days. If the mixture contains a baked good or curd, keep it covered to prevent the lemon from drying out the other components."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes. You can substitute lemon with lime, yuzu, or citron for a different citrus profile. For blueberries, substitute with other dark berries like raspberries, blackberries, or cherries, adjusting sugar levels to account for their varying natural tartness."
+    }
+  ]
+}

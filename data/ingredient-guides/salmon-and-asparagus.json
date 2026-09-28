@@ -1,0 +1,21 @@
+{
+  "pair": "salmon-and-asparagus",
+  "title": "Why salmon and asparagus Works So Well Together",
+  "flavorProfile": "A sophisticated balance of rich, fatty umami from the salmon contrasted by the bright, earthy, and slightly bitter notes of the asparagus. The natural sweetness of roasted asparagus cuts through the oily texture of the fish, while lemon or garlic accents bridge the two profiles.",
+  "nutritionalSynergy": "Salmon is a high-density source of fat-soluble vitamins (A, D, E, and K). Asparagus provides essential dietary fiber and folate. The healthy monounsaturated and polyunsaturated fats in salmon significantly enhance the bioavailability and absorption of the Vitamin K found in asparagus.",
+  "prepTechniques": [
+    "Sheet Pan Roasting: Season both with olive oil, lemon, and garlic, then roast at 400°F (200°C) for 12-15 minutes for simultaneous doneness.",
+    "Pan-Searing: Sear salmon in a cast-iron skillet to develop a crust, then sauté asparagus in the rendered salmon fat for maximum flavor integration.",
+    "Poaching: Gently cook salmon in aromatics and steam asparagus alongside to maintain delicate textures and moisture."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store in an airtight container in the refrigerator for up to 2-3 days. Reheat gently in an oven or air fryer to prevent the salmon from becoming rubbery or the asparagus from becoming mushy."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes. For salmon, use trout or arctic char for similar fat content. For asparagus, use green beans or broccolini to maintain the crunchy, earthy vegetable component."
+    }
+  ]
+}

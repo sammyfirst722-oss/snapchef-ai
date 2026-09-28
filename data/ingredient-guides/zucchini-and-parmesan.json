@@ -1,0 +1,21 @@
+{
+  "pair": "zucchini-and-parmesan",
+  "title": "Why Zucchini and Parmesan Work So Well Together",
+  "flavorProfile": "Zucchini offers a mild, subtly sweet, and slightly vegetal flavor with high water content that creates a fresh, delicate base. Parmesan contributes intense umami, saltiness, and nutty complexity through aged proteins and tyrosine crystals. Together, they achieve a balanced profile where the gentle sweetness of zucchini tempers the sharp saltiness of parmesan, while the cheese amplifies the vegetable's earthy notes. The contrast in texture—tender zucchini against granular, crumbly parmesan—adds depth, making each bite both soothing and robust.",
+  "nutritionalSynergy": "Zucchini is rich in water-soluble vitamins like vitamin C and folate, along with potassium and dietary fiber. Parmesan provides fat-soluble nutrients such as vitamin A (from aged milk) and conjugated linoleic acid, plus high-quality protein and calcium. When consumed together, the healthy fats in parmesan enhance the absorption of fat-soluble vitamins from zucchini, while the fiber in zucchini supports digestive health and aids in the metabolism of proteins and fats from cheese. Additionally, the sodium in parmesan helps regulate fluid balance, complementing the high water content of zucchini for optimal hydration and nutrient uptake.",
+  "prepTechniques": [
+    "Spiralize or thinly slice zucchini into ribbons or rounds to maximize surface area for cheese adherence and ensure even cooking.",
+    "Sauté zucchini briefly in olive oil over medium heat until just tender but still crisp to preserve texture and prevent waterlogging.",
+    "Finish by tossing warm zucchini with freshly grated parmesan off the heat, allowing residual warmth to melt the cheese slightly without clumping."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Allow the dish to cool completely before transferring to an airtight container. Store in the refrigerator for up to 3 days. Reheat gently in a skillet or microwave to avoid making the zucchini mushy. For best results, add a sprinkle of fresh parmesan when reheating to refresh flavor and texture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes. For zucchini, yellow squash, cucumber (with seeds removed), or thinly sliced eggplant can work, though they may alter moisture levels. For parmesan, aged asiago, pecorino romano, or even nutritional yeast (for a vegan option) can provide similar umami and saltiness, though the flavor intensity and texture will vary."
+    }
+  ]
+}

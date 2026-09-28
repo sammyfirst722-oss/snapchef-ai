@@ -1,0 +1,21 @@
+{
+  "pair": "prosciutto-and-melon",
+  "title": "Why prosciutto and melon Works So Well Together",
+  "flavorProfile": "The pairing balances salty, savory prosciutto with sweet, juicy melon. Prosciutto delivers deep umami from cured pork fat and aged proteins, while ripe melon (cantaloupe or honeydew) contributes floral sweetness and high water content. The contrast creates a dynamic mouthfeel: silky fat coats the palate, then crisp melon cleanses it. Aromatic compounds — lactones in melon and Maillard-derived pyrazines in prosciutto — amplify each other, producing a perception of complexity greater than the sum of parts.",
+  "nutritionalSynergy": "Prosciutto provides heme iron, zinc, and vitamin B12; melon supplies vitamin C, beta-carotene, and potassium. Vitamin C from melon enhances non-heme iron absorption from any accompanying plant foods, while the fat in prosciutto aids absorption of fat-soluble beta-carotene (pro-vitamin A). Potassium from melon helps counterbalance sodium from the cured meat, supporting electrolyte balance. Together they deliver a complete amino-acid profile when paired with a grain or legume.",
+  "prepTechniques": [
+    "Select melon at peak ripeness: heavy for size, fragrant at stem end, slight give at blossom end; chill 1 hour before serving.",
+    "Slice prosciutto paper-thin (1–2 mm) using a sharp knife or slicer; let sit at room temperature 10 minutes to soften fat and release aroma.",
+    "Cut melon into 1-inch wedges or balls; drape each piece with a single prosciutto slice, securing with a toothpick if needed. Finish with cracked black pepper and a drizzle of aged balsamic or extra-virgin olive oil."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Separate components: wrap prosciutto tightly in parchment then plastic; refrigerate up to 3 days. Store cut melon in airtight container with a paper towel to absorb excess moisture; consume within 2 days. Reassemble just before serving to prevent sogginess."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For prosciutto: use jamón ibérico, speck, or thinly sliced coppa for similar salt-umami profile. For melon: substitute ripe peaches, figs, or Asian pear for sweetness and texture; avoid overly watery fruits like watermelon which dilute flavor contrast."
+    }
+  ]
+}

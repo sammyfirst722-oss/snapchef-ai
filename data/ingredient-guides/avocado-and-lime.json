@@ -1,0 +1,21 @@
+{
+  "pair": "avocado-and-lime",
+  "title": "Why avocado and lime Works So Well Together",
+  "flavorProfile": "Avocado offers a rich, buttery creaminess with subtle earthy undertones, while lime contributes bright, tangy citrus acidity. Together they create a harmonious balance of savory depth, natural sweetness, and vibrant umami complexity.",
+  "nutritionalSynergy": "Lime is packed with vitamin C (about 30% DV per 1/4 cup) which significantly enhances the absorption of non-heme iron from plant-based sources found in avocado and other ingredients. Additionally, the monounsaturated fats in avocado improve the bioavailability of fat-soluble nutrients like vitamin E and carotenoids when consumed alongside acidic components such as lime. The combination also provides a synergistic antioxidant effect—vitamin C in lime works with the polyphenols in avocado to combat oxidative stress.",
+  "prepTechniques": [
+    "Wash avocados thoroughly under cool running water and pat dry",
+    "Halve each avocado lengthwise, remove the pit, and gently scoop the flesh into a bowl",
+    "Squeeze fresh lime juice over the avocado, then fold in minced garlic, salt, and optional cilantro or chili flakes before serving"
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Transfer remaining avocado-lime mixture to an airtight container and refrigerate. Consume within 24 hours for best texture and flavor. If the surface begins to brown, it is normal due to oxidation; consume immediately."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes. For a similar flavor profile, you can use green apple instead of avocado for crunch, or lemon instead of lime for a different citrus note. However, the creamy texture and lipid content of avocado are essential for the full flavor synergy with lime."
+    }
+  ]
+}

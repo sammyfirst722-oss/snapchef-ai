@@ -1,0 +1,21 @@
+{
+  "pair": "pork-and-apple",
+  "title": "Why pork and apple Works So Well Together",
+  "flavorProfile": "The combination of pork and apple creates a harmonious balance of savory, sweet, and umami notes. The pork provides a rich, meaty depth and savory umami, while the apple adds a bright, crisp sweetness that cuts through the fat, resulting in a well-rounded flavor profile.",
+  "nutritionalSynergy": "Pork supplies high-quality protein, B vitamins, and heme iron, which is more readily absorbed than non-heme iron. Apples contribute vitamin C and polyphenols that enhance iron absorption and provide antioxidant benefits. Together they support muscle repair, immune function, and overall micronutrient utilization.",
+  "prepTechniques": [
+    "Select a firm, slightly tart apple such as Granny Smith and slice it into thin wedges.",
+    "Season pork chops or tenderloin with salt, pepper, and herbs, then sear in a hot pan until a golden crust forms.",
+    "Add the apple slices to the pan, deglaze with apple cider or broth, and simmer until the pork is cooked through and the apples are tender."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Transfer cooled leftovers to an airtight container and refrigerate for up to 3 days. Reheat gently in a skillet or oven to preserve texture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "You can replace pork with chicken or turkey for a lighter protein, or use a different apple variety like Honeycrisp or Fuji, but the flavor balance may shift."
+    }
+  ]
+}

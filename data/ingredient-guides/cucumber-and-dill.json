@@ -1,0 +1,21 @@
+{
+  "pair": "cucumber-and-dill",
+  "title": "Why cucumber and dill Works So Well Together",
+  "flavorProfile": "Cucumber offers a crisp, mildly sweet, watery base with subtle vegetal notes, while dill contributes bright, herbaceous, slightly citrusy and anise‑like flavors. Together they create a balanced profile where the cucumber’s refreshing sweetness tempers dill’s sharp herbal bite, and dill’s aromatic compounds lift the cucumber’s mildness, resulting in a savory‑sweet umami‑adjacent harmony that feels both light and satisfying.",
+  "nutritionalSynergy": "Cucumber is rich in vitamin K, potassium, and the antioxidant flavonoid fisetin, while dill provides vitamin C, calcium, and volatile oils like carvone and limonene. When consumed together, the vitamin C in dill enhances the absorption of non‑heme iron present in cucumber’s trace minerals, and the fat‑soluble vitamin K from cucumber is better utilized when paired with dill’s modest amount of dietary fat (often added via olive oil in dressings). The combination also supports electrolyte balance and antioxidant synergy, reducing oxidative stress more effectively than either ingredient alone.",
+  "prepTechniques": [
+    "Thinly slice or julienne the cucumber, then lightly salt and let sit for 10 minutes to draw out excess moisture; pat dry.",
+    "Finely chop fresh dill (stems included for extra flavor) and mix with a dressing of olive oil, lemon juice, a touch of honey, and cracked black pepper.",
+    "Toss the dried cucumber with the dill dressing, let marinate for 5–10 minutes to allow flavors to meld, then serve chilled as a salad, sandwich topping, or garnish."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store the dressed cucumber‑dill mixture in an airtight container in the refrigerator for up to 2 days. Keep the dressing separate if possible and combine just before serving to maintain crispness."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For cucumber, try zucchini or jicama for a similar crunch; for dill, use fennel fronds, tarragon, or a mix of parsley with a hint of lemon zest to mimic the herbal‑citrus note."
+    }
+  ]
+}

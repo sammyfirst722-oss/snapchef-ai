@@ -1,0 +1,21 @@
+{
+  "pair": "chicken-and-rice",
+  "title": "Why chicken and rice Works So Well Together",
+  "flavorProfile": "Chicken provides a mild, savory umami base with subtle sweetness from its natural glycogen, while rice offers a neutral, slightly nutty canvas that absorbs flavors and adds a gentle sweetness when cooked. Together they create a balanced profile where the chicken's depth is highlighted by the rice's soft texture, allowing seasonings, aromatics, and sauces to meld into a harmonious, comforting dish.",
+  "nutritionalSynergy": "When chicken (rich in high-quality protein, B vitamins, zinc, and iron) is paired with rice (a source of complex carbohydrates and modest amounts of magnesium and selenium), the carbohydrates from rice stimulate insulin release, which enhances the uptake of amino acids from chicken into muscle tissue. Additionally, the presence of dietary fiber in brown rice can slow glucose absorption, providing sustained energy while the protein helps stabilize blood sugar levels. The combination also improves the bioavailability of iron from chicken when consumed with a small amount of vitamin C–rich vegetables often added to the dish.",
+  "prepTechniques": [
+    "Season chicken pieces with salt, pepper, and desired herbs; sear in a hot pan until golden brown to develop flavor.",
+    "Add aromatics (garlic, onion, ginger) and toast rice briefly in the same pan to coat each grain with oil and flavor.",
+    "Pour in broth or water, bring to a simmer, cover, and cook until rice is tender and chicken is cooked through (about 18‑20 minutes for white rice, 35‑40 minutes for brown)."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Cool the dish to room temperature within 2 hours, then transfer to an airtight container. Refrigerate for up to 4 days or freeze for up to 3 months. Reheat gently with a splash of broth or water to prevent drying."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes. For chicken, use turkey, tofu, or tempeh for a similar protein profile. For rice, substitute quinoa, couscous, or cauliflower rice; adjust cooking times and liquid ratios accordingly."
+    }
+  ]
+}

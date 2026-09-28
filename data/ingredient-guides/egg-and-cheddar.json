@@ -1,0 +1,21 @@
+{
+  "pair": "egg-and-cheddar",
+  "title": "Why egg and cheddar Works So Well Together",
+  "flavorProfile": "Eggs deliver mild umami and creamy richness, while aged cheddar contributes sharp, salty depth and milky sweetness from lactose caramelization. The combination creates a savory-sweet-umami triangle: the egg's subtle sulfurous notes soften cheddar's sharpness, and the cheese's fat carries the egg's delicate aromatics, resulting in balanced, craveable savoriness.",
+  "nutritionalSynergy": "Egg yolks supply vitamin D and cysteine, which upregulate calcium transport proteins (calbindin) in the gut, boosting cheddar's calcium bioavailability by up to 30%. Cheddar's saturated fat matrix enhances absorption of egg-derived fat-soluble vitamins (A, D, E, K). Together they provide a complete amino acid profile with high leucine content, supporting muscle protein synthesis alongside cheddar's phosphorus for bone mineralization.",
+  "prepTechniques": [
+    "Low-and-slow scramble: Cook eggs over medium-low heat, folding gently to maintain curd softness before folding in grated cheddar off-heat to prevent grainy separation.",
+    "Temperature staging: Bring cheddar to room temperature 20 minutes before use; this ensures even melt without overheating eggs, which causes rubbery texture.",
+    "Acid balance: Add a pinch of baking soda or splash of milk if using extra-sharp cheddar to neutralize excess acidity and harmonize with egg's pH."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Refrigerate in airtight container within 2 hours; consume within 3–4 days. Reheat gently at 300°F (150°C) covered with a damp paper towel to retain moisture. Avoid microwaving at high power, which denatures egg proteins and causes cheese to seize."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For cheddar: Gruyère, Gouda, or Swiss offer similar meltability but alter flavor sharpness. For eggs: Silken tofu or chickpea flour batter work as vegan swaps, though they lack choline and vitamin B12. Note that substitutions change the micronutrient synergy profile."
+    }
+  ]
+}

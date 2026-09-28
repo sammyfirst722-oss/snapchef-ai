@@ -1,0 +1,21 @@
+{
+  "pair": "tomato-and-basil",
+  "title": "Why tomato and basil Works So Well Together",
+  "flavorProfile": "Tomato brings a bright acidity, natural sweetness, and deep umami richness, while basil contributes aromatic, slightly peppery, and sweet herbal notes. Together, they create a harmonious balance where the savory umami of the tomato is elevated by the sweet, fragrant oils in the basil, resulting in a well-rounded, vibrant flavor profile.",
+  "nutritionalSynergy": "When consumed together, the lycopene found in tomatoes—a potent antioxidant—is significantly better absorbed by the body due to the healthy fats often present in dishes featuring basil, such as olive oil. Additionally, basil provides vitamin K and manganese, while tomatoes offer vitamin C, which enhances the absorption of iron from basil. The combination creates a micronutrient-dense synergy that maximizes antioxidant uptake and supports overall cellular health.",
+  "prepTechniques": [
+    "Chiffonade the basil: Stack the leaves, roll them tightly, and slice into thin ribbons to release maximum aromatic oils without bruising.",
+    "Roast the tomatoes: Halve and roast with olive oil at high heat to concentrate the natural sugars and deepen the umami flavor.",
+    "Combine at the end: Toss the roasted tomatoes with fresh basil just before serving to preserve the basil's bright, volatile flavors."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Store leftover tomato and basil dishes in an airtight container in the refrigerator for up to 3 days. To prevent the basil from blackening, place a dry paper towel over the surface before sealing."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Yes, you can substitute basil with other tender herbs like mint, parsley, or arugula for a peppery kick. For tomatoes, roasted red peppers or sun-dried tomatoes can provide a similar sweet and umami-rich base."
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "pair": "tofu-and-soy-sauce",
+  "title": "Why tofu and soy sauce Works So Well Together",
+  "flavorProfile": "The pairing offers a deep savory umami from soy sauce complemented by the mild, slightly sweet, creamy character of tofu, creating a balanced sweet‑savory‑umami profile.",
+  "nutritionalSynergy": "Soy sauce contains amino acids and small peptides that can chelate iron and calcium, enhancing their absorption when consumed with tofu, which is rich in these minerals; additionally, the sodium may increase the bioavailability of certain B vitamins.",
+  "prepTechniques": [
+    "Press the tofu block with paper towels or a tofu press to remove excess water.",
+    "Cut the tofu into 1‑inch cubes and optionally coat with a thin layer of cornstarch.",
+    "Heat a skillet, add a splash of soy sauce, then sauté the tofu until golden, allowing the sauce to caramelize."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers?",
+      "a": "Transfer leftovers to an airtight container and refrigerate for up to 3 days. For longer storage, freeze in a freezer‑safe bag for up to 2 months."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "You can replace tofu with tempeh or seitan for a different texture, and soy sauce can be swapped with tamari, coconut aminos, or a mixture of miso paste and water, though the flavor will vary."
+    }
+  ]
+}
