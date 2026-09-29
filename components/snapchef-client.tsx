@@ -408,9 +408,9 @@ export function SnapChefClient() {
         </div>
 
         {/* 2. Active Fridge Inventory */}
-        <div className="space-y-3">
+        <div className="bg-muted/20 border border-border/40 rounded-2xl p-4 md:p-5 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-sm">In Your Fridge ({fridgeItems.length})</h3>
+            <h3 className="font-bold text-lg md:text-xl">In Your Fridge ({fridgeItems.length})</h3>
             {fridgeItems.length > 0 && (
               <div className="flex items-center gap-2">
                 <AiLeftoverGenerator
@@ -508,7 +508,10 @@ export function SnapChefClient() {
           </div>
         </div>
 
-        <div ref={recipesRef} className="space-y-3 pt-2">
+        {/* Recipes Container wrapper */}
+        <div className="bg-muted/20 border border-border/40 rounded-2xl p-4 md:p-5 shadow-sm space-y-4">
+          <h3 className="font-bold text-lg md:text-xl">Recipes</h3>
+          <div ref={recipesRef} className="space-y-3">
           {/* Search Input */}
           <div className="relative max-w-md">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
@@ -652,6 +655,7 @@ export function SnapChefClient() {
             })}
           </div>
         )}
+        </div>
       </main>
 
       {/* =================================================================== */}
