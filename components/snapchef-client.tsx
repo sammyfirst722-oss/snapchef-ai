@@ -195,41 +195,31 @@ export function SnapChefClient() {
     const handleLikeChange = () => setLikedIds(getLikedRecipeIds())
     const handleProChange = () => setIsPro(isUserPro())
 
-    // Check for VIP activation or Stripe payment redirect (?vip=sammy, ?email=..., ?upgraded=true)
+    // Check for Stripe payment redirect (?email=..., ?upgraded=true)
     try {
       if (typeof window !== 'undefined' && window.location.search) {
         const params = new URLSearchParams(window.location.search)
         const isUpgraded = params.get('upgraded') === 'true'
-        const vipParam = params.get('vip')?.toLowerCase()
-        const proParam = params.get('pro')?.toLowerCase()
         const emailParam = params.get('email')?.toLowerCase().trim()
 
-        const isSammyVip =
-          vipParam === 'sammy' ||
-          proParam === 'sammy' ||
-          emailParam === 'sammyfirst722@gmail.com' ||
-          proParam === 'sammyfirst722@gmail.com'
-
-        if (isSammyVip || isUpgraded) {
-          const emailToSave = emailParam || 'sammyfirst722@gmail.com'
-          setUserEmail(emailToSave)
+        if (isUpgraded) {
+          const emailToSave = emailParam || ''
+          if (emailToSave) setUserEmail(emailToSave)
           setUserPro(true)
           setIsPro(true)
           toast.success('SnapChef Pro Activated! ⭐', {
-            description: `Unlimited AI camera fridge scans unlocked for ${emailToSave}.`,
+            description: `Unlimited AI camera fridge scans unlocked.`,
           })
 
           // Clean URL without reloading page
           const cleanUrl = new URL(window.location.href)
-          cleanUrl.searchParams.delete('vip')
-          cleanUrl.searchParams.delete('pro')
           cleanUrl.searchParams.delete('email')
           cleanUrl.searchParams.delete('upgraded')
           window.history.replaceState({}, '', cleanUrl.pathname + (cleanUrl.search || ''))
         }
       }
     } catch (err) {
-      console.warn('VIP param check error:', err)
+      console.warn('Payment param check error:', err)
     }
 
     window.addEventListener('snapchef_fridge_changed', handleFridgeUpdate)
@@ -346,62 +336,57 @@ export function SnapChefClient() {
       {/* =================================================================== */}
       {/* APP TOP NAVIGATION HEADER                                          */}
       {/* =================================================================== */}
-      <header className="sticky top-0 z-40 w-full border-b-2 border-border/80 bg-background/95 backdrop-blur-md">
-        <div className="container max-w-screen-xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
+      <header className="sticky top-0 z-40 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl">
+        <div className="container max-w-screen-xl mx-auto px-4 h-14 flex items-center justify-between gap-3">
           {/* Logo & Brand */}
-          <div className="flex items-center gap-2.5">
-            <div className="h-10 w-10 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-amber-500 text-white flex items-center justify-center shadow-md border-2 border-emerald-400">
-              <ChefHat className="h-5 w-5" />
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center">
+              <ChefHat className="h-4 w-4" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-black text-lg md:text-xl tracking-tight bg-gradient-to-r from-foreground via-foreground to-emerald-600 bg-clip-text">
+                <span className="font-semibold text-lg tracking-tight text-foreground">
                   SnapChef
                 </span>
-                <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 font-extrabold text-[10px] px-1.5 py-0.2 border border-emerald-500/30">
+                <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
                   AI
                 </Badge>
               </div>
-              <p className="text-[10px] text-muted-foreground hidden sm:block font-medium">
-                Snap your fridge. Cook in 15 mins.
-              </p>
             </div>
           </div>
 
           {/* Right Header Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {/* Pro Upgrade / Badge Button */}
             {isPro ? (
-              <Badge className="bg-gradient-to-r from-amber-400 to-amber-500 text-amber-950 font-black border-2 border-amber-600 text-xs px-2.5 py-1 gap-1 shadow-sm">
-                <Zap className="h-3.5 w-3.5 fill-amber-950" />
-                <span>PRO ACTIVE</span>
-              </Badge>
+              <span className="text-xs font-medium text-emerald-600 flex items-center gap-1">
+                <Zap className="h-3 w-3 fill-emerald-600" />
+                Pro
+              </span>
             ) : (
               <Button
+                variant="ghost"
                 size="sm"
                 onClick={() => setProModalOpen(true)}
-                className="gap-1.5 font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs h-9 rounded-xl shadow-md border border-amber-400 active:scale-95"
+                className="text-xs font-medium text-emerald-600 hover:bg-emerald-500/10 h-8"
               >
-                <Zap className="h-3.5 w-3.5 fill-white" />
-                <span>Upgrade Pro</span>
+                Upgrade
               </Button>
             )}
 
             {/* Dark / Light Mode Toggle */}
             {mounted && (
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-9 w-9 border-2 border-border/80 rounded-xl"
+              <button
+                className="text-muted-foreground hover:text-foreground transition-colors"
                 onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                 title="Toggle theme"
               >
                 {theme === 'dark' ? (
-                  <Sun className="h-4 w-4 text-amber-400" />
+                  <Sun className="h-4 w-4" />
                 ) : (
-                  <Moon className="h-4 w-4 text-muted-foreground" />
+                  <Moon className="h-4 w-4" />
                 )}
-              </Button>
+              </button>
             )}
           </div>
         </div>
@@ -422,23 +407,12 @@ export function SnapChefClient() {
           />
         </div>
 
-        {/* 2. Active Fridge Inventory & Staples Box */}
-        <Card className="border-2 border-border/80 bg-card rounded-3xl p-5 shadow-sm space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-border/60 pb-3">
-            <div>
-              <h3 className="font-black text-sm md:text-base flex items-center gap-2">
-                <span>🧊 In Your Fridge</span>
-                <Badge variant="secondary" className="text-xs font-bold tabular-nums">
-                  {fridgeItems.length} Items
-                </Badge>
-              </h3>
-              <p className="text-xs text-muted-foreground">
-                Recipes below automatically update based on these ingredients
-              </p>
-            </div>
-
+        {/* 2. Active Fridge Inventory */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-sm">In Your Fridge ({fridgeItems.length})</h3>
             {fridgeItems.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+              <div className="flex items-center gap-2">
                 <AiLeftoverGenerator
                   buttonVariant="inline"
                   onCookRecipe={(recipe) => {
@@ -447,112 +421,93 @@ export function SnapChefClient() {
                   }}
                   onOpenProModal={() => setProModalOpen(true)}
                 />
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <button
                   onClick={() => {
                     clearFridgeItems()
                     setFridgeItems([])
                     toast.info('Fridge cleared')
                   }}
-                  className="h-8 text-xs text-muted-foreground hover:text-rose-500 font-bold"
+                  className="text-xs text-muted-foreground hover:text-foreground"
                 >
-                  Clear All
-                </Button>
+                  Clear
+                </button>
               </div>
             )}
           </div>
 
-          {/* Active Items Chips */}
-          {fridgeItems.length > 0 ? (
-            <div className="flex flex-wrap items-center gap-1.5">
-              {fridgeItems.map((item) => (
-                <Badge
-                  key={item}
-                  className="capitalize gap-1.5 pl-3 pr-1.5 py-1 text-xs border-2 border-emerald-500/30 bg-emerald-500/10 text-emerald-950 dark:text-emerald-100 font-bold rounded-xl"
+          <div className="flex flex-wrap items-center gap-2">
+            {fridgeItems.map((item) => (
+              <Badge
+                key={item}
+                variant="secondary"
+                className="capitalize pl-2.5 pr-1.5 py-1 text-xs font-medium rounded-lg flex items-center gap-1 bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800"
+              >
+                {item}
+                <button
+                  type="button"
+                  onClick={() => {
+                    toggleFridgeItem(item)
+                    setFridgeItems(getFridgeItems())
+                  }}
+                  className="hover:text-rose-500 transition-colors ml-1"
                 >
-                  <span>{item}</span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      toggleFridgeItem(item)
-                      setFridgeItems(getFridgeItems())
-                    }}
-                    className="hover:text-rose-600 rounded-full p-0.5"
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </Badge>
-              ))}
-            </div>
-          ) : (
-            <div className="py-2 text-center text-xs text-muted-foreground italic">
-              Your fridge is currently empty. Tap the camera above or quick staples below to get started!
-            </div>
-          )}
+                  <X className="h-3 w-3" />
+                </button>
+              </Badge>
+            ))}
 
-          {/* Quick Staple One-Tap Chips */}
-          <div className="space-y-2 pt-1 border-t-2 border-border/50">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground block">
-              Quick Add Common Staples:
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {QUICK_STAPLES.map((st) => {
-                const isActive = fridgeItems.includes(st.key)
-                return (
-                  <button
-                    key={st.key}
-                    type="button"
-                    onClick={() => {
-                      toggleFridgeItem(st.key)
-                      setFridgeItems(getFridgeItems())
-                    }}
-                    className={cn(
-                      'inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold transition-all border-2 select-none active:scale-95 shadow-2xs',
-                      isActive
-                        ? 'bg-emerald-500 text-white border-emerald-600 shadow-xs'
-                        : 'bg-muted/40 text-foreground border-border/70 hover:border-emerald-500/60'
-                    )}
-                  >
-                    <span>{st.icon}</span>
-                    <span>{st.name}</span>
-                    {isActive ? (
-                      <Check className="h-3 w-3 ml-0.5 stroke-[3]" />
-                    ) : (
-                      <Plus className="h-3 w-3 ml-0.5 text-muted-foreground" />
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Custom Item Form */}
-            <form onSubmit={handleAddCustomStaple} className="flex gap-2 pt-2">
-              <Input
-                placeholder="Type any other ingredient (e.g. mushrooms, soy sauce, noodles)..."
-                value={customItemInput}
-                onChange={(e) => setCustomItemInput(e.target.value)}
-                className="h-10 text-xs rounded-xl border-2 border-border/80"
-              />
-              <Button type="submit" size="sm" className="h-10 px-4 font-bold rounded-xl shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white">
-                <Plus className="h-4 w-4 mr-1" />
-                Add
-              </Button>
-            </form>
+            {/* Quick Add Dialog Trigger */}
+            <Dialog>
+              <DialogHeader className="hidden"><DialogTitle>Add Items</DialogTitle></DialogHeader>
+              <DialogContent className="max-w-md p-6 rounded-2xl border-0 shadow-xl bg-background">
+                <h3 className="font-semibold mb-4 text-center">Add Ingredients</h3>
+                <div className="flex flex-wrap justify-center gap-2 mb-6">
+                  {QUICK_STAPLES.map((st) => {
+                    const isActive = fridgeItems.includes(st.key)
+                    return (
+                      <button
+                        key={st.key}
+                        type="button"
+                        onClick={() => {
+                          toggleFridgeItem(st.key)
+                          setFridgeItems(getFridgeItems())
+                        }}
+                        className={cn(
+                          'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors border',
+                          isActive
+                            ? 'bg-emerald-600 text-white border-emerald-600'
+                            : 'bg-muted hover:bg-muted/80 text-foreground border-transparent'
+                        )}
+                      >
+                        {st.icon} {st.name}
+                      </button>
+                    )
+                  })}
+                </div>
+                <form onSubmit={handleAddCustomStaple} className="flex gap-2">
+                  <Input
+                    placeholder="Type anything (e.g. mushrooms)"
+                    value={customItemInput}
+                    onChange={(e) => setCustomItemInput(e.target.value)}
+                    className="h-10 text-sm rounded-xl border-border/60 bg-muted/50 focus-visible:ring-emerald-500"
+                  />
+                  <Button type="submit" className="h-10 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white">
+                    Add
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-6 px-2.5 py-0 text-xs font-medium rounded-lg border-dashed text-muted-foreground hover:text-foreground"
+              onClick={() => document.querySelector<HTMLButtonElement>('[data-state="closed"]')?.click()}
+            >
+              <Plus className="h-3 w-3 mr-1" /> Add Items
+            </Button>
           </div>
-        </Card>
+        </div>
 
-        {/* 3. AI Leftover Invent Button Banner */}
-        <AiLeftoverGenerator
-          buttonVariant="banner"
-          onCookRecipe={(recipe) => {
-            setSelectedRecipe(recipe)
-            setIsCooking(true)
-          }}
-          onOpenProModal={() => setProModalOpen(true)}
-        />
-
-        {/* 4. Search & Category Filters Bar */}
         <div ref={recipesRef} className="space-y-3 pt-2">
           {/* Search Input */}
           <div className="relative max-w-md">
@@ -641,151 +596,58 @@ export function SnapChefClient() {
             </Button>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="flex flex-col gap-3">
             {processedRecipes.map((recipe) => {
               const isFav = favoriteIds.includes(recipe.id)
               const isLiked = likedIds.includes(recipe.id)
               const currentLikes = recipe.likes + (likeDeltas[recipe.id] || 0)
 
               return (
-                <Card
+                <div
                   key={recipe.id}
                   onClick={() => setSelectedRecipe(recipe)}
-                  className="group border-2 border-border/80 hover:border-emerald-500/70 hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between overflow-hidden active:scale-[0.99] bg-card rounded-3xl"
+                  className="group flex gap-3 p-3 border border-border/40 hover:bg-muted/30 cursor-pointer transition-colors active:scale-[0.99] bg-card rounded-2xl"
                 >
-                  {/* Recipe Image with Overlays */}
-                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted/40">
+                  <div className="relative w-24 h-24 sm:w-32 sm:h-32 shrink-0 rounded-xl overflow-hidden bg-muted">
                     <img
                       src={recipe.imageUrl}
                       alt={recipe.title}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       loading="lazy"
-                      onError={(e) => {
-                        e.currentTarget.src =
-                          'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'
-                      }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-                    {/* Top Left: Category & Match Badge */}
-                    <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 items-start">
-                      <Badge variant="secondary" className="text-[10px] font-bold bg-background/90 backdrop-blur-xs shadow-xs text-foreground border border-border/60">
-                        {recipe.category}
-                      </Badge>
-                      {fridgeItems.length > 0 && (
-                        <span
-                          className={cn(
-                            'inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-black tabular-nums shadow-xs backdrop-blur-xs border',
-                            recipe.isCompleteMatch
-                              ? 'bg-emerald-500 text-white border-emerald-400'
-                              : recipe.isAlmostMatch
-                              ? 'bg-amber-500 text-white border-amber-400'
-                              : 'bg-background/90 text-foreground border-border/60'
-                          )}
-                        >
-                          {recipe.isCompleteMatch
-                            ? '✨ Ready to Cook!'
-                            : recipe.isAlmostMatch
-                            ? 'Missing 1 item'
-                            : `${recipe.matchedCount}/${recipe.totalRequired} in Fridge`}
+                    {recipe.isCompleteMatch && (
+                      <div className="absolute top-1 left-1 bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md">
+                        Match
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-col justify-between py-1 flex-1 min-w-0">
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <span className="text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
+                          {recipe.category}
                         </span>
-                      )}
+                        <button onClick={(e) => handleToggleFavorite(recipe.id, e)} className="text-muted-foreground hover:text-amber-500 transition-colors p-1 -mr-1">
+                          <Star className={cn('h-3.5 w-3.5', isFav && 'fill-amber-500 text-amber-500')} />
+                        </button>
+                      </div>
+                      <h3 className="font-semibold text-sm sm:text-base text-foreground line-clamp-1 group-hover:text-emerald-600 transition-colors">
+                        {recipe.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">
+                        {recipe.description}
+                      </p>
                     </div>
-
-                    {/* Top Right: Favorite & Like Buttons */}
-                    <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
-                      <button
-                        type="button"
-                        onClick={(e) => handleToggleFavorite(recipe.id, e)}
-                        title={isFav ? 'Remove favorite' : 'Add to favorites'}
-                        className={cn(
-                          'h-7 w-7 rounded-full flex items-center justify-center backdrop-blur-md transition-all active:scale-85 border shadow-sm',
-                          isFav
-                            ? 'bg-amber-500 text-white border-amber-400 shadow-amber-500/40'
-                            : 'bg-black/50 hover:bg-black/70 text-white border-white/20'
-                        )}
-                      >
-                        <Star className={cn('h-3.5 w-3.5', isFav && 'fill-white')} />
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={(e) => handleToggleLike(recipe.id, e)}
-                        title={isLiked ? 'Unlike' : 'Like'}
-                        className={cn(
-                          'h-7 px-2 rounded-full flex items-center gap-1 text-[11px] font-bold backdrop-blur-md transition-all active:scale-85 border shadow-sm tabular-nums',
-                          isLiked
-                            ? 'bg-rose-500 text-white border-rose-400 shadow-rose-500/40'
-                            : 'bg-black/50 hover:bg-black/70 text-white border-white/20'
-                        )}
-                      >
-                        <Heart className={cn('h-3.5 w-3.5', isLiked && 'fill-white text-white')} />
-                        <span>{currentLikes}</span>
-                      </button>
-                    </div>
-
-                    {/* Bottom Metadata */}
-                    <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-white text-[11px] font-medium drop-shadow-sm">
+                    <div className="flex items-center gap-3 text-[11px] text-muted-foreground mt-2">
                       <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3 text-amber-400" />
-                        {recipe.cookTime}
+                        <Clock className="h-3 w-3" /> {recipe.cookTime}
                       </span>
-                      <span className="flex items-center gap-1 text-white/90">
-                        <Users className="h-3 w-3" />
-                        {recipe.servings} Servings
+                      <span className="flex items-center gap-1">
+                        <Users className="h-3 w-3" /> {recipe.servings} Servings
                       </span>
                     </div>
                   </div>
-
-                  <CardHeader className="p-4 pb-2 space-y-1">
-                    <h3 className="font-bold text-sm md:text-base leading-snug group-hover:text-emerald-600 transition-colors line-clamp-1">
-                      {recipe.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                      {recipe.description}
-                    </p>
-                  </CardHeader>
-
-                  <CardContent className="p-4 pt-1 pb-3 flex-1">
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider block">
-                        Ingredients ({recipe.ingredients.length}):
-                      </span>
-                      <div className="flex flex-wrap gap-1 max-h-16 overflow-hidden">
-                        {recipe.ingredients.map((ing) => {
-                          const isMatched = fridgeItems.some(
-                            (f) =>
-                              ing.standardKey.toLowerCase().includes(f) ||
-                              f.includes(ing.standardKey.toLowerCase())
-                          )
-                          return (
-                            <span
-                              key={ing.item}
-                              className={cn(
-                                'inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-md border font-semibold',
-                                isMatched
-                                  ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30'
-                                  : 'bg-muted/40 text-muted-foreground border-border/50'
-                              )}
-                            >
-                              {isMatched && <Check className="h-2.5 w-2.5 text-emerald-600" />}
-                              {ing.item}
-                            </span>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </CardContent>
-
-                  <CardFooter className="p-3.5 pt-2 border-t-2 border-border/50 flex items-center justify-between text-xs text-muted-foreground bg-muted/10">
-                    <span className="text-[11px] font-medium">
-                      Difficulty: <strong className="text-foreground">{recipe.difficulty}</strong>
-                    </span>
-                    <span className="font-bold text-emerald-600 text-[11px] group-hover:translate-x-0.5 transition-transform">
-                      View Recipe →
-                    </span>
-                  </CardFooter>
-                </Card>
+                </div>
               )
             })}
           </div>
@@ -795,15 +657,15 @@ export function SnapChefClient() {
       {/* =================================================================== */}
       {/* MOBILE STICKY BOTTOM NAVIGATION BAR                                */}
       {/* =================================================================== */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-t-2 border-border/80 md:hidden shadow-lg">
-        <div className="grid grid-cols-4 h-16 items-center text-center">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-t border-border/40 md:hidden pb-[env(safe-area-inset-bottom)]">
+        <div className="grid grid-cols-4 h-14 items-center text-center">
           <button
             type="button"
             onClick={() => scannerRef.current?.scrollIntoView({ behavior: 'smooth' })}
             className="flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-emerald-600 active:scale-95"
           >
             <Camera className="h-5 w-5" />
-            <span className="text-[10px] font-bold">Scan</span>
+            <span className="text-[10px] font-medium">Scan</span>
           </button>
 
           <button
@@ -815,7 +677,7 @@ export function SnapChefClient() {
             className="flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-emerald-600 active:scale-95"
           >
             <ChefHat className="h-5 w-5" />
-            <span className="text-[10px] font-bold">1,200 Meals</span>
+            <span className="text-[10px] font-medium">Meals</span>
           </button>
 
           <button
@@ -826,17 +688,17 @@ export function SnapChefClient() {
             }}
             className="flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-amber-500 active:scale-95"
           >
-            <Star className="h-5 w-5 fill-amber-500 text-amber-500" />
-            <span className="text-[10px] font-bold">Favorites</span>
+            <Star className="h-5 w-5" />
+            <span className="text-[10px] font-medium">Favorites</span>
           </button>
 
           <button
             type="button"
             onClick={() => setProModalOpen(true)}
-            className="flex flex-col items-center justify-center gap-1 text-amber-500 active:scale-95 font-black"
+            className="flex flex-col items-center justify-center gap-1 text-emerald-600 active:scale-95"
           >
-            <Zap className="h-5 w-5 fill-amber-500" />
-            <span className="text-[10px] font-black">Pro</span>
+            <Zap className="h-5 w-5" />
+            <span className="text-[10px] font-medium">Pro</span>
           </button>
         </div>
       </nav>

@@ -228,7 +228,7 @@ export function AiLeftoverGenerator({
   return (
     <>
       {buttonVariant === 'banner' && (
-        <div className="p-4 md:p-5 rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-2 border-emerald-400/40">
+        <div className="p-4 md:p-5 rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-emerald-400/40">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <Badge className="bg-white/20 text-white font-black text-[10px] uppercase tracking-wider backdrop-blur-xs border-0">
@@ -279,11 +279,11 @@ export function AiLeftoverGenerator({
       )}
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto p-5 md:p-6 border-2 border-emerald-500/40 rounded-3xl">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto p-5 md:p-6 border border-emerald-500/40 rounded-3xl">
           <DialogHeader className="text-left space-y-2">
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <div className="h-9 w-9 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 text-emerald-600 flex items-center justify-center">
+                <div className="h-9 w-9 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 flex items-center justify-center">
                   <ChefHat className="h-5 w-5" />
                 </div>
                 <div>
@@ -324,7 +324,7 @@ export function AiLeftoverGenerator({
                   type="button"
                   onClick={() => setSelectedTag(t)}
                   className={cn(
-                    'text-xs font-bold px-3 py-1 rounded-xl transition-all border-2 select-none active:scale-95 shadow-2xs',
+                    'text-xs font-bold px-3 py-1 rounded-xl transition-all border select-none active:scale-95 shadow-2xs',
                     selectedTag === t
                       ? 'bg-emerald-600 text-white border-emerald-700 shadow-xs'
                       : 'bg-card text-muted-foreground border-border/80 hover:border-emerald-400'
@@ -365,7 +365,7 @@ export function AiLeftoverGenerator({
                 size="sm"
                 onClick={() => handleGenerate(true)}
                 disabled={loading}
-                className="gap-1.5 font-bold text-xs h-10 rounded-xl border-2 border-border/80 hover:border-emerald-500"
+                className="gap-1.5 font-bold text-xs h-10 rounded-xl border border-border/80 hover:border-emerald-500"
               >
                 <PlusCircle className="h-3.5 w-3.5 text-emerald-600" />
                 <span>+ Make 3 More (Endless)</span>
@@ -386,7 +386,7 @@ export function AiLeftoverGenerator({
                     type="button"
                     onClick={() => setActiveIndex(idx)}
                     className={cn(
-                      'shrink-0 text-left px-3 py-2 rounded-xl text-xs font-bold transition-all border-2 max-w-[160px] truncate',
+                      'shrink-0 text-left px-3 py-2 rounded-xl text-xs font-bold transition-all border max-w-[160px] truncate',
                       activeIndex === idx
                         ? 'bg-emerald-500/15 border-emerald-500 text-emerald-950 dark:text-emerald-100 shadow-2xs'
                         : 'bg-muted/40 border-border/70 text-muted-foreground hover:border-border'
@@ -424,7 +424,7 @@ export function AiLeftoverGenerator({
               </div>
 
               {/* Time & Servings bar */}
-              <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-muted/40 border-2 border-border/70 text-center text-xs">
+              <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-muted/40 border border-border/70 text-center text-xs">
                 <div>
                   <span className="text-[10px] text-muted-foreground block uppercase font-medium">Prep</span>
                   <span className="font-bold text-foreground">{currentRecipe.prepTime}</span>
@@ -444,7 +444,7 @@ export function AiLeftoverGenerator({
                 <h4 className="text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
                   Ingredients Needed:
                 </h4>
-                <ul className="divide-y-2 divide-border/60 rounded-2xl border-2 border-border/70 bg-card overflow-hidden text-xs shadow-2xs">
+                <ul className="divide-y-2 divide-border/60 rounded-2xl border border-border/70 bg-card overflow-hidden text-xs shadow-2xs">
                   {currentRecipe.ingredients.map((ing, idx) => (
                     <li key={idx} className="flex items-center justify-between p-2.5 px-3">
                       <div className="flex items-center gap-2">
@@ -481,7 +481,7 @@ export function AiLeftoverGenerator({
 
               {/* Chef Pro Tip Callout */}
               {currentRecipe.chefTip && (
-                <div className="p-3 rounded-2xl bg-amber-500/10 border-2 border-amber-500/30 flex gap-2.5 items-start text-xs">
+                <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex gap-2.5 items-start text-xs">
                   <Lightbulb className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
                   <div>
                     <span className="font-bold text-amber-950 dark:text-amber-200 block text-[11px] uppercase tracking-wide">
@@ -511,7 +511,7 @@ export function AiLeftoverGenerator({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-10 text-xs border-2 font-bold rounded-xl"
+                  className="h-10 text-xs border font-bold rounded-xl"
                   onClick={handleFavoriteToggle}
                   title="Save to favorites"
                 >
@@ -521,7 +521,7 @@ export function AiLeftoverGenerator({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="h-10 text-xs border-2 font-bold rounded-xl gap-1.5"
+                  className="h-10 text-xs border font-bold rounded-xl gap-1.5"
                   onClick={copyRecipe}
                 >
                   {copied ? (

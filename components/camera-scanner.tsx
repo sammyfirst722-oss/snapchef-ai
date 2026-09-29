@@ -230,7 +230,7 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
   const currentPreview = photos[activePhotoIndex] || photos[0]
 
   return (
-    <Card className="border-2 border-emerald-500/40 bg-gradient-to-b from-emerald-500/5 to-transparent overflow-hidden shadow-lg rounded-3xl">
+    <Card className="border border-emerald-500/40 bg-gradient-to-b from-emerald-500/5 to-transparent overflow-hidden shadow-lg rounded-3xl">
       <CardHeader className="p-5 pb-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
@@ -253,7 +253,7 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
           {/* Daily scan quota pill */}
           <div className="text-right shrink-0">
             {isPro ? (
-              <Badge className="bg-amber-400 text-amber-950 font-bold border-2 border-amber-500 text-[10px] gap-1 shadow-2xs">
+              <Badge className="bg-amber-400 text-amber-950 font-bold border border-amber-500 text-[10px] gap-1 shadow-2xs">
                 <Zap className="h-3 w-3 fill-amber-950" />
                 Unlimited Pro
               </Badge>
@@ -261,7 +261,7 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
               <button
                 type="button"
                 onClick={onOpenProModal}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border-2 border-border/80 bg-background hover:border-amber-400 text-muted-foreground hover:text-amber-600 transition-colors shadow-2xs"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold border border-border/80 bg-background hover:border-amber-400 text-muted-foreground hover:text-amber-600 transition-colors shadow-2xs"
               >
                 <span>{remainingScans}/3 Free Scans</span>
                 <span className="text-amber-500 font-extrabold">Upgrade ⭐</span>
@@ -294,8 +294,8 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
 
         {/* Viewfinder / Capture Area: When NO photos added */}
         {photos.length === 0 ? (
-          <div className="border-2 border-dashed border-emerald-500/50 rounded-2xl p-6 md:p-8 text-center bg-card/60 hover:bg-emerald-500/5 transition-colors flex flex-col items-center justify-center gap-3">
-            <div className="h-14 w-14 rounded-2xl bg-emerald-500/15 border-2 border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-xs">
+          <div className="border border-dashed border-emerald-500/50 rounded-2xl p-6 md:p-8 text-center bg-card/60 hover:bg-emerald-500/5 transition-colors flex flex-col items-center justify-center gap-3">
+            <div className="h-14 w-14 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shadow-xs">
               <ScanLine className="h-7 w-7 animate-pulse" />
             </div>
 
@@ -326,7 +326,7 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
                 size="sm"
                 variant="outline"
                 disabled={isCompressing}
-                className="flex-1 gap-2 font-bold border-2 border-border/80 hover:border-emerald-500 shadow-2xs active:scale-95 h-10"
+                className="flex-1 gap-2 font-bold border border-border/80 hover:border-emerald-500 shadow-2xs active:scale-95 h-10"
                 onClick={() => galleryInputRef.current?.click()}
               >
                 <Upload className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
@@ -342,7 +342,7 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
           /* Multi-Photo View & Scan Workspace */
           <div className="space-y-4">
             {/* Active Photo Preview */}
-            <div className="relative rounded-2xl overflow-hidden border-2 border-border/80 max-h-64 bg-black flex items-center justify-center shadow-md">
+            <div className="relative rounded-2xl overflow-hidden border border-border/80 max-h-64 bg-black flex items-center justify-center shadow-md">
               {currentPreview && (
                 <img
                   src={currentPreview.dataUrl}
@@ -392,7 +392,7 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
                   key={photo.id}
                   onClick={() => setActivePhotoIndex(idx)}
                   className={cn(
-                    'relative h-16 w-16 shrink-0 rounded-xl overflow-hidden border-2 cursor-pointer transition-all',
+                    'relative h-16 w-16 shrink-0 rounded-xl overflow-hidden border cursor-pointer transition-all',
                     idx === activePhotoIndex
                       ? 'border-emerald-500 ring-2 ring-emerald-500/30 shadow-md scale-102'
                       : 'border-border/80 opacity-70 hover:opacity-100'
@@ -426,7 +426,7 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
                     type="button"
                     onClick={() => cameraInputRef.current?.click()}
                     disabled={isCompressing}
-                    className="h-16 w-16 rounded-xl border-2 border-dashed border-emerald-500/60 bg-emerald-500/5 hover:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex flex-col items-center justify-center gap-1 transition-colors active:scale-95"
+                    className="h-16 w-16 rounded-xl border border-dashed border-emerald-500/60 bg-emerald-500/5 hover:bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex flex-col items-center justify-center gap-1 transition-colors active:scale-95"
                     title="Take another photo"
                   >
                     <Camera className="h-4 w-4" />
@@ -437,7 +437,7 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
                     type="button"
                     onClick={() => galleryInputRef.current?.click()}
                     disabled={isCompressing}
-                    className="h-16 w-16 rounded-xl border-2 border-dashed border-border/80 bg-card hover:border-emerald-500 text-muted-foreground hover:text-emerald-600 flex flex-col items-center justify-center gap-1 transition-colors active:scale-95"
+                    className="h-16 w-16 rounded-xl border border-dashed border-border/80 bg-card hover:border-emerald-500 text-muted-foreground hover:text-emerald-600 flex flex-col items-center justify-center gap-1 transition-colors active:scale-95"
                     title="Upload more photos"
                   >
                     <Upload className="h-4 w-4" />
@@ -485,7 +485,7 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
                         type="button"
                         onClick={() => toggleSelectedItem(item)}
                         className={cn(
-                          'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold capitalize transition-all border-2 active:scale-95 shadow-2xs',
+                          'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold capitalize transition-all border active:scale-95 shadow-2xs',
                           isSelected
                             ? 'bg-emerald-500 text-white border-emerald-600 shadow-emerald-500/20'
                             : 'bg-card text-muted-foreground border-border/80 hover:border-emerald-500/50'
@@ -509,9 +509,9 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
                     value={customItem}
                     onChange={(e) => setCustomItem(e.target.value)}
                     placeholder="Missed anything? Add item (e.g. soy sauce)..."
-                    className="flex-1 h-9 rounded-xl border-2 border-border/80 bg-background px-3 text-xs focus:outline-hidden focus:border-emerald-500"
+                    className="flex-1 h-9 rounded-xl border border-border/80 bg-background px-3 text-xs focus:outline-hidden focus:border-emerald-500"
                   />
-                  <Button type="submit" size="sm" variant="outline" className="h-9 px-3 border-2 font-bold text-xs">
+                  <Button type="submit" size="sm" variant="outline" className="h-9 px-3 border font-bold text-xs">
                     <Plus className="h-3.5 w-3.5 mr-1" />
                     Add
                   </Button>
@@ -535,7 +535,7 @@ export function CameraScanner({ onIngredientsAdded, onOpenProModal }: CameraScan
                     variant="outline"
                     size="icon"
                     onClick={resetAll}
-                    className="h-11 w-11 shrink-0 border-2 rounded-xl"
+                    className="h-11 w-11 shrink-0 border rounded-xl"
                     title="Scan new photos"
                   >
                     <RefreshCw className="h-4 w-4" />
