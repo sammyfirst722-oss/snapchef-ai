@@ -15,3 +15,4 @@
 - 2026-09-27: The Hierarchical Compound AI System (HCAS) stays at the core of our setup across all projects (why: Lead Architects direct and review while free local GPU workers execute, preserving flagship token limits and scaling passive income).
 
 
+- 2026-09-30: Never manually edit or rewrite more than 20 lines of code; ALWAYS delegate bulk UI changes and file rewrites to the local worker fleet in C:\Users\sammy\workers\ (why: saves flagship tokens and enforces HCAS architecture).
