@@ -27,6 +27,7 @@ import {
 } from 'lucide-react'
 import { getFridgeItems } from '@/lib/fridge-store'
 import { toggleFavoriteRecipe, getFavoriteRecipeIds } from '@/lib/recipes-store'
+import { getMatchingFoodImage } from '@/lib/food-image-matcher'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
@@ -206,8 +207,7 @@ export function AiLeftoverGenerator({
         })),
         instructions: currentRecipe.instructions,
         tags: ['ai-custom', 'fridge-leftover'],
-        imageUrl:
-          'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
+        imageUrl: getMatchingFoodImage(currentRecipe),
         likes: 100,
       }
       setOpen(false)
