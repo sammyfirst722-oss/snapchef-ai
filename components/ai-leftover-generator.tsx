@@ -28,6 +28,7 @@ import {
 import { getFridgeItems } from '@/lib/fridge-store'
 import { toggleFavoriteRecipe, getFavoriteRecipeIds } from '@/lib/recipes-store'
 import { getMatchingFoodImage } from '@/lib/food-image-matcher'
+import { GroceryAffiliate } from '@/components/grocery-affiliate'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
@@ -493,6 +494,9 @@ export function AiLeftoverGenerator({
                   </div>
                 </div>
               )}
+
+              {/* 1-Click Grocery Delivery Affiliate */}
+              <GroceryAffiliate ingredients={currentRecipe.ingredients} recipeTitle={currentRecipe.title} />
 
               {/* Action Buttons */}
               <div className="pt-2 flex flex-wrap items-center gap-2">

@@ -55,6 +55,7 @@ import {
 import { CameraScanner } from '@/components/camera-scanner'
 import { AiLeftoverGenerator } from '@/components/ai-leftover-generator'
 import { ProUpgradeModal } from '@/components/pro-upgrade-modal'
+import { GroceryAffiliate } from '@/components/grocery-affiliate'
 import { useTheme } from 'next-themes'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -1205,6 +1206,11 @@ export function SnapChefClient() {
                 <p className="text-[11px] text-center text-muted-foreground italic">
                   ✨ What your completed {selectedRecipe.title} looks like once prepared and plated hot!
                 </p>
+              </div>
+
+              {/* 1-Click Grocery Cart Delivery */}
+              <div className="pt-2">
+                <GroceryAffiliate ingredients={selectedRecipe.ingredients} recipeTitle={selectedRecipe.title} />
               </div>
 
               {/* Action Buttons */}
