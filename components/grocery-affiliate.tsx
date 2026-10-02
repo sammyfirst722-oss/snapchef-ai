@@ -10,9 +10,9 @@ interface GroceryAffiliateProps {
 
 export function GroceryAffiliate({ ingredients, recipeTitle }: GroceryAffiliateProps) {
   const topItems = ingredients.slice(0, 5).map((i) => i.item).join(', ')
-  const instacartUrl = `https://www.instacart.com/store/search?k=${encodeURIComponent(topItems || recipeTitle)}`
-  const walmartUrl = `https://www.walmart.com/search?q=${encodeURIComponent(topItems || recipeTitle)}`
-  const amazonUrl = `https://www.amazon.com/s?k=${encodeURIComponent(topItems || recipeTitle)}&i=grocery`
+  const instacartUrl = `https://www.instacart.com/store/search?k=${encodeURIComponent(topItems || recipeTitle)}&utm_source=instacart_affiliate&utm_medium=affiliate`
+  const walmartUrl = `https://www.walmart.com/search?q=${encodeURIComponent(topItems || recipeTitle)}&aff=sammyfirst`
+  const amazonUrl = `https://www.amazon.com/s?k=${encodeURIComponent(topItems || recipeTitle)}&i=grocery&tag=sammyfirst-20`
 
   return (
     <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-emerald-500/10 border border-amber-500/20 text-gray-900 dark:text-gray-100 space-y-3">
