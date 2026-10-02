@@ -5,9 +5,9 @@
     ],
     "target": {
       "namespace": "android_app",
-      "package_name": "app.vercel.snapchef_ai.twa",
+      "package_name": "app.vercel.snapchef.twa",
       "sha256_cert_fingerprints": [
-        "6C:6D:08:A9:FE:AF:21:20:11:7D:C8:17:1D:64:A4:CE:BD:4D:92:6B:38:B9:6E:85:D1:2A:DE:D7:69:63:46:26"
+        "64:EE:DC:D9:D3:B6:2C:80:45:76:0A:E8:BE:70:4E:CC:D0:39:8A:94:44:14:23:02:B3:6F:9B:2E:27:B6:49:02"
       ]
     }
   }
