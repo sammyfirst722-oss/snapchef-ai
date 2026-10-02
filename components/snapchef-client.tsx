@@ -56,6 +56,7 @@ import { CameraScanner } from '@/components/camera-scanner'
 import { AiLeftoverGenerator } from '@/components/ai-leftover-generator'
 import { ProUpgradeModal } from '@/components/pro-upgrade-modal'
 import { GroceryAffiliate } from '@/components/grocery-affiliate'
+import { NewsletterForm } from '@/components/newsletter-form'
 import { useTheme } from 'next-themes'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -781,6 +782,12 @@ export function SnapChefClient() {
             })}
           </div>
         )}
+
+
+        {/* 6. Newsletter Subscription */}
+        <div className="pt-8 pb-4">
+          <NewsletterForm />
+        </div>
       </main>
 
       {/* =================================================================== */}
