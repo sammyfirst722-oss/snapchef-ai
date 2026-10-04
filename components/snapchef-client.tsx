@@ -55,6 +55,7 @@ import {
 import { CameraScanner } from '@/components/camera-scanner'
 import { AiLeftoverGenerator } from '@/components/ai-leftover-generator'
 import { ProUpgradeModal } from '@/components/pro-upgrade-modal'
+import { MobileNav } from '@/components/mobile-nav'
 import { GroceryAffiliate } from '@/components/grocery-affiliate'
 import { NewsletterForm } from '@/components/newsletter-form'
 import { useTheme } from 'next-themes'
@@ -415,7 +416,7 @@ export function SnapChefClient() {
       {/* =================================================================== */}
       {/* MAIN CONTAINER                                                     */}
       {/* =================================================================== */}
-      <main className="container max-w-screen-xl mx-auto px-4 py-5 md:py-8 space-y-6">
+      <main className="container max-w-screen-xl mx-auto px-4 py-5 md:py-8 pb-28 md:pb-8 space-y-6">
         {/* 1. Camera Scanner Section */}
         <div ref={scannerRef}>
           <CameraScanner
@@ -1322,6 +1323,27 @@ export function SnapChefClient() {
 
       {/* Pro Upgrade Modal */}
       <ProUpgradeModal open={proModalOpen} onOpenChange={setProModalOpen} />
+
+      {/* Mobile Floating App Dock */}
+      <MobileNav
+        activeTab={selectedCategory === 'Favorites' ? 'saved' : 'fridge'}
+        onTabChange={(tab) => {
+          if (tab === 'fridge') {
+            scannerRef.current?.scrollIntoView({ behavior: 'smooth' })
+          } else if (tab === 'recipes') {
+            setSelectedCategory('All Meals')
+            recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
+          } else if (tab === 'saved') {
+            setSelectedCategory('Favorites')
+            recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
+          }
+        }}
+        onScanClick={() => {
+          scannerRef.current?.scrollIntoView({ behavior: 'smooth' })
+        }}
+        onOpenProModal={() => setProModalOpen(true)}
+        savedCount={favoriteIds.length}
+      />
 
       {/* Cook Mode Fullscreen Overlay */}
       {isCooking && selectedRecipe && (
