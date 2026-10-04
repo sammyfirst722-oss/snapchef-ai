@@ -66,6 +66,8 @@ const USER_EMAIL_KEY = 'snapchef_user_email_v1'
 export const VIP_PRO_EMAILS = [
   'sammyfirst722@gmail.com',
   'sammyfirst722-oss@gmail.com',
+  'sammyfirstplaystore@gmail.com',
+  'faqurdone@gmail.com',
 ]
 
 export function getUserEmail(): string | null {
@@ -129,7 +131,7 @@ export function restoreProByEmail(email: string): {
     setUserPro(true)
     return {
       success: true,
-      message: `Welcome back, Sammy! Permanent VIP Pro status unlocked for ${clean}.`,
+      message: `VIP Pro status unlocked for ${clean}. Unlimited scans and full features active!`,
       isVip: true,
     }
   }

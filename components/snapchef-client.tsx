@@ -219,6 +219,19 @@ export function SnapChefClient() {
           cleanUrl.searchParams.delete('upgraded')
           window.history.replaceState({}, '', cleanUrl.pathname + (cleanUrl.search || ''))
         }
+
+        const vipParam = params.get('vip')?.toLowerCase().trim() || params.get('tester')?.toLowerCase().trim()
+        if (vipParam) {
+          const res = restoreProByEmail(vipParam)
+          if (res.success) {
+            setIsPro(true)
+            toast.success('SnapChef Pro Active! ⭐', { description: res.message })
+            const cleanUrl = new URL(window.location.href)
+            cleanUrl.searchParams.delete('vip')
+            cleanUrl.searchParams.delete('tester')
+            window.history.replaceState({}, '', cleanUrl.pathname + (cleanUrl.search || ''))
+          }
+        }
       }
     } catch (err) {
       console.warn('Payment param check error:', err)
