@@ -102,7 +102,7 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md p-6 border-2 border-amber-500/60 rounded-3xl bg-gradient-to-b from-amber-500/10 via-background to-background">
+      <DialogContent className="max-w-md p-6 border-2 border-amber-500/60 rounded-3xl bg-gradient-to-b from-amber-500/10 via-background to-background max-h-[90vh] overflow-y-auto">
         <DialogHeader className="text-center space-y-2">
           <div className="mx-auto h-14 w-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center shadow-lg border-2 border-amber-400">
             <Zap className="h-7 w-7 fill-white" />
