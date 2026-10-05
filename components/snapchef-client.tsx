@@ -118,7 +118,7 @@ export function SnapChefClient() {
   const [recipeSpeechRate, setRecipeSpeechRate] = useState<SpeechRate>(1.0)
   const [isRecipeSpeaking, setIsRecipeSpeaking] = useState(false)
   const [recipeSpeakingStep, setRecipeSpeakingStep] = useState<number | null>(null)
-  const [activeTab, setActiveTab] = useState<'fridge' | 'recipes' | 'saved'>('fridge')
+  const [activeTab, setActiveTab] = useState<'scan' | 'fridge' | 'recipes' | 'saved'>('scan')
 
   const stopRecipeSpeech = () => {
     speechManager.stop()
@@ -434,22 +434,38 @@ export function SnapChefClient() {
       {/* MAIN CONTAINER                                                     */}
       {/* =================================================================== */}
       <main className="container max-w-screen-xl mx-auto px-4 py-5 md:py-8 pb-28 md:pb-8 space-y-6">
-        {activeTab === 'fridge' && (
+        {activeTab === 'scan' && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* 1. Camera Scanner Section */}
             <div ref={scannerRef}>
-          <CameraScanner
-            onIngredientsAdded={() => {
-              setFridgeItems(getFridgeItems())
-              recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
-            }}
-            onOpenProModal={() => setProModalOpen(true)}
-          />
-        </div>
+              <CameraScanner
+                onIngredientsAdded={() => {
+                  setFridgeItems(getFridgeItems())
+                  setActiveTab('recipes')
+                  window.scrollTo({ top: 0, behavior: 'instant' })
+                }}
+                onOpenProModal={() => setProModalOpen(true)}
+              />
+            </div>
+          </div>
+        )}
 
-        {/* 2. Active Fridge Inventory & Staples Box */}
-        <Card className="border-2 border-border/80 bg-card rounded-3xl p-5 shadow-sm space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-border/60 pb-3">
+        {activeTab === 'fridge' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* 2. Active Fridge Inventory & Staples Box */}
+            <Card className="relative overflow-hidden border-2 border-border/80 bg-card rounded-3xl p-5 shadow-lg space-y-4 min-h-[50vh]">
+              {/* Photorealistic Fridge Background */}
+              <div 
+                className="absolute inset-0 z-0 opacity-40 dark:opacity-30 pointer-events-none mix-blend-luminosity"
+                style={{
+                  backgroundImage: "url('/fridge-bg.jpg')",
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              />
+              <div className="absolute inset-0 z-0 bg-background/70 backdrop-blur-md pointer-events-none" />
+              
+              <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-border/60 pb-3">
             <div>
               <h3 className="font-black text-sm md:text-base flex items-center gap-2">
                 <span>🧊 In Your Fridge</span>
@@ -567,20 +583,21 @@ export function SnapChefClient() {
           </div>
         </Card>
 
-        {/* 3. AI Leftover Invent Button Banner */}
-        <AiLeftoverGenerator
-          buttonVariant="banner"
-          onCookRecipe={(recipe) => {
-            setSelectedRecipe(recipe)
-            setIsCooking(true)
-          }}
-          onOpenProModal={() => setProModalOpen(true)}
-        />
+        {/* AI Leftover Invent Button Banner has been moved to Recipes tab */}
           </div>
         )}
 
         {(activeTab === 'recipes' || activeTab === 'saved') && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <AiLeftoverGenerator
+              buttonVariant="banner"
+              onCookRecipe={(recipe) => {
+                setSelectedRecipe(recipe)
+                setIsCooking(true)
+              }}
+              onOpenProModal={() => setProModalOpen(true)}
+            />
+
             {/* 4. Search & Category Filters Bar */}
             <div ref={recipesRef} className="space-y-3 pt-2">
           {/* Search Input */}
@@ -1303,7 +1320,7 @@ export function SnapChefClient() {
         activeTab={activeTab}
         onTabChange={(tab) => {
           const update = () => {
-            setActiveTab(tab as 'fridge' | 'recipes' | 'saved')
+            setActiveTab(tab as 'scan' | 'fridge' | 'recipes' | 'saved')
             if (tab === 'recipes') {
               if (selectedCategory === 'Favorites') setSelectedCategory('All Meals')
             } else if (tab === 'saved') {
@@ -1319,7 +1336,7 @@ export function SnapChefClient() {
         }}
         onScanClick={() => {
           const update = () => {
-            setActiveTab('fridge')
+            setActiveTab('scan')
             window.scrollTo({ top: 0, behavior: 'instant' })
           }
           if (typeof document !== 'undefined' && 'startViewTransition' in document) {
