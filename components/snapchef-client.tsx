@@ -118,6 +118,7 @@ export function SnapChefClient() {
   const [recipeSpeechRate, setRecipeSpeechRate] = useState<SpeechRate>(1.0)
   const [isRecipeSpeaking, setIsRecipeSpeaking] = useState(false)
   const [recipeSpeakingStep, setRecipeSpeakingStep] = useState<number | null>(null)
+  const [activeTab, setActiveTab] = useState<'fridge' | 'recipes' | 'saved'>('fridge')
 
   const stopRecipeSpeech = () => {
     speechManager.stop()
@@ -126,10 +127,18 @@ export function SnapChefClient() {
   }
 
   const handleCategoryClick = (cat: string) => {
-    if (typeof document !== 'undefined' && 'startViewTransition' in document) {
-      (document as any).startViewTransition(() => setSelectedCategory(cat))
-    } else {
+    const update = () => {
       setSelectedCategory(cat)
+      if (cat === 'Favorites') {
+        setActiveTab('saved')
+      } else {
+        setActiveTab('recipes')
+      }
+    }
+    if (typeof document !== 'undefined' && 'startViewTransition' in document) {
+      (document as any).startViewTransition(update)
+    } else {
+      update()
     }
   }
 
@@ -425,8 +434,10 @@ export function SnapChefClient() {
       {/* MAIN CONTAINER                                                     */}
       {/* =================================================================== */}
       <main className="container max-w-screen-xl mx-auto px-4 py-5 md:py-8 pb-28 md:pb-8 space-y-6">
-        {/* 1. Camera Scanner Section */}
-        <div ref={scannerRef}>
+        {activeTab === 'fridge' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* 1. Camera Scanner Section */}
+            <div ref={scannerRef}>
           <CameraScanner
             onIngredientsAdded={() => {
               setFridgeItems(getFridgeItems())
@@ -565,9 +576,13 @@ export function SnapChefClient() {
           }}
           onOpenProModal={() => setProModalOpen(true)}
         />
+          </div>
+        )}
 
-        {/* 4. Search & Category Filters Bar */}
-        <div ref={recipesRef} className="space-y-3 pt-2">
+        {(activeTab === 'recipes' || activeTab === 'saved') && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* 4. Search & Category Filters Bar */}
+            <div ref={recipesRef} className="space-y-3 pt-2">
           {/* Search Input */}
           <div className="relative max-w-md">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
@@ -804,7 +819,8 @@ export function SnapChefClient() {
             })}
           </div>
         )}
-
+          </div>
+        )}
 
         {/* 6. Newsletter Subscription */}
         <div className="pt-8 pb-4">
@@ -1284,18 +1300,16 @@ export function SnapChefClient() {
 
       {/* Mobile Floating App Dock */}
       <MobileNav
-        activeTab={selectedCategory === 'Favorites' ? 'saved' : 'fridge'}
+        activeTab={activeTab}
         onTabChange={(tab) => {
           const update = () => {
-            if (tab === 'fridge') {
-              scannerRef.current?.scrollIntoView({ behavior: 'smooth' })
-            } else if (tab === 'recipes') {
-              setSelectedCategory('All Meals')
-              recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
+            setActiveTab(tab as 'fridge' | 'recipes' | 'saved')
+            if (tab === 'recipes') {
+              if (selectedCategory === 'Favorites') setSelectedCategory('All Meals')
             } else if (tab === 'saved') {
               setSelectedCategory('Favorites')
-              recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
             }
+            window.scrollTo({ top: 0, behavior: 'instant' })
           }
           if (typeof document !== 'undefined' && 'startViewTransition' in document) {
             (document as any).startViewTransition(update)
@@ -1304,7 +1318,15 @@ export function SnapChefClient() {
           }
         }}
         onScanClick={() => {
-          scannerRef.current?.scrollIntoView({ behavior: 'smooth' })
+          const update = () => {
+            setActiveTab('fridge')
+            window.scrollTo({ top: 0, behavior: 'instant' })
+          }
+          if (typeof document !== 'undefined' && 'startViewTransition' in document) {
+            (document as any).startViewTransition(update)
+          } else {
+            update()
+          }
         }}
         onOpenProModal={() => setProModalOpen(true)}
         savedCount={favoriteIds.length}
