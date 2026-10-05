@@ -2,6 +2,7 @@
 
 import { BookOpen, Camera, Heart, Refrigerator, Zap } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useHaptics } from '@/hooks/use-haptics'
 
 interface MobileNavProps {
   activeTab?: string
@@ -18,13 +19,15 @@ export function MobileNav({
   onOpenProModal,
   savedCount = 0,
 }: MobileNavProps) {
+  const haptic = useHaptics()
+
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-background/95 backdrop-blur-xl border-t-2 border-border/80 px-2 py-1 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] shadow-xl shadow-black/10">
       <div className="flex items-center justify-around max-w-md mx-auto">
         {/* Fridge Tab */}
         <button
           type="button"
-          onClick={() => onTabChange?.('fridge')}
+          onClick={() => { haptic('light'); onTabChange?.('fridge'); }}
           className={cn(
             'flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all active:scale-90',
             activeTab === 'fridge'
@@ -39,7 +42,7 @@ export function MobileNav({
         {/* Recipes Tab */}
         <button
           type="button"
-          onClick={() => onTabChange?.('recipes')}
+          onClick={() => { haptic('light'); onTabChange?.('recipes'); }}
           className={cn(
             'flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all active:scale-90',
             activeTab === 'recipes'
@@ -54,7 +57,7 @@ export function MobileNav({
         {/* Center Camera Scan Action */}
         <button
           type="button"
-          onClick={onScanClick}
+          onClick={() => { haptic('heavy'); onScanClick(); }}
           className="flex flex-col items-center justify-center -mt-5 group select-none"
           aria-label="Scan Fridge"
         >
@@ -67,7 +70,7 @@ export function MobileNav({
         {/* Saved Favorites Tab */}
         <button
           type="button"
-          onClick={() => onTabChange?.('saved')}
+          onClick={() => { haptic('light'); onTabChange?.('saved'); }}
           className={cn(
             'flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all active:scale-90 relative',
             activeTab === 'saved'
@@ -87,7 +90,7 @@ export function MobileNav({
         {/* Pro VIP Tab */}
         <button
           type="button"
-          onClick={onOpenProModal}
+          onClick={() => { haptic('medium'); onOpenProModal(); }}
           className="flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all active:scale-90 text-amber-500 hover:text-amber-600"
         >
           <Zap className="h-5 w-5 mb-0.5 fill-amber-500" />

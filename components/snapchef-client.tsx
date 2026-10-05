@@ -125,6 +125,14 @@ export function SnapChefClient() {
     setRecipeSpeakingStep(null)
   }
 
+  const handleCategoryClick = (cat: string) => {
+    if (typeof document !== 'undefined' && 'startViewTransition' in document) {
+      (document as any).startViewTransition(() => setSelectedCategory(cat))
+    } else {
+      setSelectedCategory(cat)
+    }
+  }
+
   const playRecipeSteps = (startIdx = 0, lang = recipeLanguage, rate = recipeSpeechRate) => {
     if (!selectedRecipe || startIdx >= selectedRecipe.instructions.length) {
       setIsRecipeSpeaking(false)
@@ -588,7 +596,7 @@ export function SnapChefClient() {
                   <button
                     key={cat}
                     type="button"
-                    onClick={() => setSelectedCategory(cat)}
+                    onClick={() => handleCategoryClick(cat)}
                     className={cn(
                       'shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border-2 select-none active:scale-95 shadow-2xs',
                       isActive
@@ -609,7 +617,7 @@ export function SnapChefClient() {
                 <button
                   key={cat}
                   type="button"
-                  onClick={() => setSelectedCategory(cat)}
+                  onClick={() => handleCategoryClick(cat)}
                   className={cn(
                     'shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all border-2 select-none active:scale-95 shadow-2xs',
                     isActive
@@ -803,56 +811,6 @@ export function SnapChefClient() {
           <NewsletterForm />
         </div>
       </main>
-
-      {/* =================================================================== */}
-      {/* MOBILE STICKY BOTTOM NAVIGATION BAR                                */}
-      {/* =================================================================== */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-t-2 border-border/80 md:hidden shadow-lg">
-        <div className="grid grid-cols-4 h-16 items-center text-center">
-          <button
-            type="button"
-            onClick={() => scannerRef.current?.scrollIntoView({ behavior: 'smooth' })}
-            className="flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-emerald-600 active:scale-95"
-          >
-            <Camera className="h-5 w-5" />
-            <span className="text-[10px] font-bold">Scan</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedCategory('All Meals')
-              recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
-            }}
-            className="flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-emerald-600 active:scale-95"
-          >
-            <ChefHat className="h-5 w-5" />
-            <span className="text-[10px] font-bold">1,200 Meals</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedCategory('Favorites')
-              recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
-            }}
-            className="flex flex-col items-center justify-center gap-1 text-muted-foreground hover:text-amber-500 active:scale-95"
-          >
-            <Star className="h-5 w-5 fill-amber-500 text-amber-500" />
-            <span className="text-[10px] font-bold">Favorites</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setProModalOpen(true)}
-            className="flex flex-col items-center justify-center gap-1 text-amber-500 active:scale-95 font-black"
-          >
-            <Zap className="h-5 w-5 fill-amber-500" />
-            <span className="text-[10px] font-black">Pro</span>
-          </button>
-        </div>
-      </nav>
-
       {/* =================================================================== */}
       {/* FULL RECIPE DETAIL DIALOG                                          */}
       {/* =================================================================== */}
@@ -1328,14 +1286,21 @@ export function SnapChefClient() {
       <MobileNav
         activeTab={selectedCategory === 'Favorites' ? 'saved' : 'fridge'}
         onTabChange={(tab) => {
-          if (tab === 'fridge') {
-            scannerRef.current?.scrollIntoView({ behavior: 'smooth' })
-          } else if (tab === 'recipes') {
-            setSelectedCategory('All Meals')
-            recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
-          } else if (tab === 'saved') {
-            setSelectedCategory('Favorites')
-            recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
+          const update = () => {
+            if (tab === 'fridge') {
+              scannerRef.current?.scrollIntoView({ behavior: 'smooth' })
+            } else if (tab === 'recipes') {
+              setSelectedCategory('All Meals')
+              recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
+            } else if (tab === 'saved') {
+              setSelectedCategory('Favorites')
+              recipesRef.current?.scrollIntoView({ behavior: 'smooth' })
+            }
+          }
+          if (typeof document !== 'undefined' && 'startViewTransition' in document) {
+            (document as any).startViewTransition(update)
+          } else {
+            update()
           }
         }}
         onScanClick={() => {

@@ -7,11 +7,9 @@ Repo: `C:\Users\sammy\snapchef-ai` · Live: https://snapchef-ai-sammy.vercel.app
 - Android TWA: `C:\Users\sammy\snapchef-twa` (package `app.vercel.snapchef_ai.twa`).
 
 ## Brand
-- Theme: Emerald Green `#10b981` / `oklch(0.62 0.14 160)`. Never purple or indigo — don't change `--primary`, `--ring`, or `--sidebar-primary` in `app/globals.css` away from it.
+- Theme: Emerald Green `#10b981` / `oklch(0.62 0.14 160)`.
 
 ## UX
-- Never add `select-none` to body; users must be able to copy recipes.
-- Never disable pinch-to-zoom (`userScalable: false`).
 - Core features to protect in every change:
   - Hands-free cook mode (`components/cook-mode.tsx`): full-screen steps, screen wake lock, auto-detected step timers with audio alerts, collapsible ingredient drawer.
   - Serving scaler (`scaleIngredientAmount` in `lib/recipe-utils.ts`): handles whole numbers, fractions (`1/2`), mixed numbers (`1 1/2`), and ranges (`2-3`).
