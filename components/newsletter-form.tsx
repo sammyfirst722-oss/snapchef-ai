@@ -50,9 +50,9 @@ export function NewsletterForm() {
       <div className="w-12 h-12 bg-rose-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
         <Mail className="w-6 h-6 text-rose-500" />
       </div>
-      <h3 className="text-2xl font-black text-white mb-2">Get the $40 Weekly Meal Plan</h3>
+      <h3 className="text-2xl font-black text-white mb-2">Free $40/Week Grocery Meal Plans</h3>
       <p className="text-slate-400 text-sm mb-6">
-        Join 10,000+ others getting high-protein, budget-friendly meal prep plans delivered every Sunday morning.
+        Join 10,000+ others getting high-protein, budget-friendly meal prep plans (under $40 in groceries!) delivered every Sunday morning.
       </p>
 
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
