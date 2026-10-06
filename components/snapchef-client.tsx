@@ -51,6 +51,7 @@ import {
   SlidersHorizontal,
   Volume2,
   VolumeX,
+  ArrowRight,
 } from 'lucide-react'
 import { CameraScanner } from '@/components/camera-scanner'
 import { AiLeftoverGenerator } from '@/components/ai-leftover-generator'
@@ -453,137 +454,176 @@ export function SnapChefClient() {
         {activeTab === 'fridge' && (
           <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             {/* 2. Active Fridge Inventory & Staples Box */}
-            <Card className="relative overflow-hidden border-2 border-border/80 bg-card rounded-3xl p-5 shadow-lg space-y-4 min-h-[50vh]">
+            <div className="relative overflow-hidden border-2 border-emerald-500/40 rounded-3xl p-5 md:p-6 shadow-2xl space-y-4">
               {/* Photorealistic Fridge Background */}
               <div 
-                className="absolute inset-0 z-0 opacity-40 dark:opacity-30 pointer-events-none mix-blend-luminosity"
+                className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none"
                 style={{
                   backgroundImage: "url('/fridge-bg.jpg')",
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
                 }}
               />
-              <div className="absolute inset-0 z-0 bg-background/70 backdrop-blur-md pointer-events-none" />
+              {/* Elegant dark glass scrim so the fridge interior is fully visible while all text and controls pop */}
+              <div className="absolute inset-0 z-0 bg-black/65 dark:bg-black/75 pointer-events-none" />
               
-              <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-border/60 pb-3">
-            <div>
-              <h3 className="font-black text-sm md:text-base flex items-center gap-2">
-                <span>🧊 In Your Fridge</span>
-                <Badge variant="secondary" className="text-xs font-bold tabular-nums">
-                  {fridgeItems.length} Items
-                </Badge>
-              </h3>
-              <p className="text-xs text-muted-foreground">
-                Recipes below automatically update based on these ingredients
-              </p>
-            </div>
+              {/* All controls wrapped inside relative z-10 */}
+              <div className="relative z-10 space-y-4 text-white">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-white/20 pb-3">
+                  <div>
+                    <h3 className="font-black text-base md:text-lg flex items-center gap-2 text-white">
+                      <span>🧊 In Your Fridge</span>
+                      <Badge className="text-xs font-bold tabular-nums bg-emerald-500 text-white border-0">
+                        {fridgeItems.length} Items
+                      </Badge>
+                    </h3>
+                    <p className="text-xs text-slate-300">
+                      {fridgeItems.length > 0 
+                        ? `${fridgeItems.length} stocked ingredients ready to cook`
+                        : 'Your fridge is currently empty'}
+                    </p>
+                  </div>
 
-            {fridgeItems.length > 0 && (
-              <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
-                <AiLeftoverGenerator
-                  buttonVariant="inline"
-                  onCookRecipe={(recipe) => {
-                    setSelectedRecipe(recipe)
-                    setIsCooking(true)
-                  }}
-                  onOpenProModal={() => setProModalOpen(true)}
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    clearFridgeItems()
-                    setFridgeItems([])
-                    toast.info('Fridge cleared')
-                  }}
-                  className="h-8 text-xs text-muted-foreground hover:text-rose-500 font-bold"
-                >
-                  Clear All
-                </Button>
+                  <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        const update = () => {
+                          setActiveTab('scan')
+                          window.scrollTo({ top: 0, behavior: 'instant' })
+                        }
+                        if (typeof document !== 'undefined' && 'startViewTransition' in document) {
+                          (document as any).startViewTransition(update)
+                        } else {
+                          update()
+                        }
+                      }}
+                      className="h-8 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl gap-1 shadow-md border border-emerald-400 active:scale-95"
+                    >
+                      <Camera className="h-3.5 w-3.5" />
+                      <span>Snap Camera</span>
+                    </Button>
+                    {fridgeItems.length > 0 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          clearFridgeItems()
+                          setFridgeItems([])
+                          toast.info('Fridge cleared')
+                        }}
+                        className="h-8 text-xs text-slate-300 hover:text-rose-400 font-bold hover:bg-white/10"
+                      >
+                        Clear All
+                      </Button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Big Button To Cook With These Items */}
+                {fridgeItems.length > 0 && (
+                  <Button
+                    onClick={() => {
+                      const update = () => {
+                        setActiveTab('recipes')
+                        window.scrollTo({ top: 0, behavior: 'instant' })
+                      }
+                      if (typeof document !== 'undefined' && 'startViewTransition' in document) {
+                        (document as any).startViewTransition(update)
+                      } else {
+                        update()
+                      }
+                    }}
+                    className="w-full h-12 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-600 text-white font-black text-sm shadow-xl shadow-emerald-900/40 flex items-center justify-center gap-2 active:scale-[0.98] transition-all border border-emerald-400/50"
+                  >
+                    <span>🍳 Cook With These Ingredients ({processedRecipes.length} Meals)</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                )}
+
+                {/* Active Items Chips */}
+                {fridgeItems.length > 0 ? (
+                  <div className="space-y-1.5 pt-1">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-300 block">
+                      Stocked Ingredients ({fridgeItems.length}):
+                    </span>
+                    <div className="flex flex-wrap items-center gap-1.5 max-h-56 overflow-y-auto pr-1">
+                      {fridgeItems.map((item) => (
+                        <Badge
+                          key={item}
+                          className="capitalize gap-1.5 pl-3 pr-1.5 py-1 text-xs border border-white/20 bg-black/60 backdrop-blur-md text-white font-bold rounded-xl shadow-sm hover:border-emerald-400"
+                        >
+                          <span>{item}</span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              toggleFridgeItem(item)
+                              setFridgeItems(getFridgeItems())
+                            }}
+                            className="hover:text-rose-400 rounded-full p-0.5"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="py-6 text-center text-xs text-slate-300 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 space-y-2">
+                    <p className="font-bold text-white text-sm">Your fridge is empty</p>
+                    <p>Snap a photo of your shelves or tap the quick staples below to add what you have!</p>
+                  </div>
+                )}
+
+                {/* Quick Staple One-Tap Chips */}
+                <div className="space-y-2 pt-2 border-t-2 border-white/20">
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-300 block">
+                    Quick Add Common Staples:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {QUICK_STAPLES.map((st) => {
+                      const isActive = fridgeItems.includes(st.key)
+                      return (
+                        <button
+                          key={st.key}
+                          type="button"
+                          onClick={() => {
+                            toggleFridgeItem(st.key)
+                            setFridgeItems(getFridgeItems())
+                          }}
+                          className={cn(
+                            'inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all border select-none active:scale-95 shadow-sm',
+                            isActive
+                              ? 'bg-emerald-500 text-white border-emerald-400 shadow-emerald-500/30'
+                              : 'bg-black/60 hover:bg-black/80 backdrop-blur-md text-slate-100 border-white/20 hover:border-emerald-400'
+                          )}
+                        >
+                          <span>{st.icon}</span>
+                          <span>{st.name}</span>
+                          {isActive ? (
+                            <Check className="h-3 w-3 ml-0.5 stroke-[3]" />
+                          ) : (
+                            <Plus className="h-3 w-3 ml-0.5 text-slate-400" />
+                          )}
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  {/* Custom Item Form */}
+                  <form onSubmit={handleAddCustomStaple} className="flex gap-2 pt-2">
+                    <Input
+                      placeholder="Type any other ingredient (e.g. mushrooms, soy sauce, noodles)..."
+                      value={customItemInput}
+                      onChange={(e) => setCustomItemInput(e.target.value)}
+                      className="h-10 text-xs rounded-xl border border-white/20 bg-black/60 backdrop-blur-md text-white placeholder:text-slate-400 focus:border-emerald-400"
+                    />
+                    <Button type="submit" size="sm" className="h-10 px-4 font-bold rounded-xl shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md border border-emerald-400 active:scale-95">
+                      <Plus className="h-4 w-4 mr-1" />
+                      Add
+                    </Button>
+                  </form>
+                </div>
               </div>
-            )}
-          </div>
-
-          {/* Active Items Chips */}
-          {fridgeItems.length > 0 ? (
-            <div className="flex flex-wrap items-center gap-1.5">
-              {fridgeItems.map((item) => (
-                <Badge
-                  key={item}
-                  className="capitalize gap-1.5 pl-3 pr-1.5 py-1 text-xs border-2 border-emerald-500/30 bg-emerald-500/10 text-emerald-950 dark:text-emerald-100 font-bold rounded-xl"
-                >
-                  <span>{item}</span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      toggleFridgeItem(item)
-                      setFridgeItems(getFridgeItems())
-                    }}
-                    className="hover:text-rose-600 rounded-full p-0.5"
-                  >
-                    <X className="h-3 w-3" />
-                  </button>
-                </Badge>
-              ))}
             </div>
-          ) : (
-            <div className="py-2 text-center text-xs text-muted-foreground italic">
-              Your fridge is currently empty. Tap the camera above or quick staples below to get started!
-            </div>
-          )}
-
-          {/* Quick Staple One-Tap Chips */}
-          <div className="space-y-2 pt-1 border-t-2 border-border/50">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-muted-foreground block">
-              Quick Add Common Staples:
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {QUICK_STAPLES.map((st) => {
-                const isActive = fridgeItems.includes(st.key)
-                return (
-                  <button
-                    key={st.key}
-                    type="button"
-                    onClick={() => {
-                      toggleFridgeItem(st.key)
-                      setFridgeItems(getFridgeItems())
-                    }}
-                    className={cn(
-                      'inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold transition-all border-2 select-none active:scale-95 shadow-2xs',
-                      isActive
-                        ? 'bg-emerald-500 text-white border-emerald-600 shadow-xs'
-                        : 'bg-muted/40 text-foreground border-border/70 hover:border-emerald-500/60'
-                    )}
-                  >
-                    <span>{st.icon}</span>
-                    <span>{st.name}</span>
-                    {isActive ? (
-                      <Check className="h-3 w-3 ml-0.5 stroke-[3]" />
-                    ) : (
-                      <Plus className="h-3 w-3 ml-0.5 text-muted-foreground" />
-                    )}
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Custom Item Form */}
-            <form onSubmit={handleAddCustomStaple} className="flex gap-2 pt-2">
-              <Input
-                placeholder="Type any other ingredient (e.g. mushrooms, soy sauce, noodles)..."
-                value={customItemInput}
-                onChange={(e) => setCustomItemInput(e.target.value)}
-                className="h-10 text-xs rounded-xl border-2 border-border/80"
-              />
-              <Button type="submit" size="sm" className="h-10 px-4 font-bold rounded-xl shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white">
-                <Plus className="h-4 w-4 mr-1" />
-                Add
-              </Button>
-            </form>
-          </div>
-        </Card>
-
-        {/* AI Leftover Invent Button Banner has been moved to Recipes tab */}
           </div>
         )}
 

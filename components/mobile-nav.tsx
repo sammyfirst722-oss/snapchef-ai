@@ -61,10 +61,16 @@ export function MobileNav({
           className="flex flex-col items-center justify-center -mt-5 group select-none"
           aria-label="Scan Fridge"
         >
-          <div className="h-13 w-13 rounded-full bg-gradient-to-tr from-emerald-600 via-emerald-500 to-amber-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/40 ring-4 ring-background transition-transform active:scale-95 group-hover:scale-105 border-2 border-white/20">
+          <div className={cn(
+            "h-13 w-13 rounded-full bg-gradient-to-tr from-emerald-600 via-emerald-500 to-amber-400 text-white flex items-center justify-center shadow-lg shadow-emerald-500/40 transition-transform active:scale-95 group-hover:scale-105 border-2 border-white/20",
+            activeTab === 'scan' ? 'ring-4 ring-emerald-500 scale-105' : 'ring-4 ring-background'
+          )}>
             <Camera className="h-6 w-6 drop-shadow-xs" />
           </div>
-          <span className="text-[10px] font-black text-emerald-600 dark:text-emerald-400 mt-1">Scan</span>
+          <span className={cn(
+            "text-[10px] font-black mt-1",
+            activeTab === 'scan' ? 'text-emerald-500 font-black underline' : 'text-emerald-600 dark:text-emerald-400'
+          )}>Scan</span>
         </button>
 
         {/* Saved Favorites Tab */}
