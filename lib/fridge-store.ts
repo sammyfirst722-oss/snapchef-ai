@@ -51,8 +51,12 @@ export function toggleFridgeItem(item: string) {
   const clean = item.trim().toLowerCase()
   if (!clean) return
   const current = getFridgeItems()
-  const updated = current.includes(clean)
-    ? current.filter((i) => i !== clean)
+  const existingIndex = current.findIndex((i) => {
+    const ci = i.trim().toLowerCase()
+    return ci === clean || ci === `${clean}s` || `${ci}s` === clean || ci === `${clean}es` || `${ci}es` === clean
+  })
+  const updated = existingIndex >= 0
+    ? current.filter((_, idx) => idx !== existingIndex)
     : [...current, clean]
   saveFridgeItems(updated)
 }

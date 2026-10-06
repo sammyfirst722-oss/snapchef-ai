@@ -2,6 +2,9 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { RECIPES_DATA, Recipe, INGREDIENT_CATEGORY_COLORS } from '@/lib/recipes-data'
+import { THREE_INGREDIENT_RECIPES } from '@/lib/three-ingredient-recipes'
+
+const ALL_RECIPES: Recipe[] = [...THREE_INGREDIENT_RECIPES, ...RECIPES_DATA]
 import {
   getFavoriteRecipeIds,
   toggleFavoriteRecipe,
@@ -78,17 +81,21 @@ const QUICK_STAPLES = [
   { name: 'Cheese', key: 'cheese', icon: '🧀' },
   { name: 'Garlic', key: 'garlic', icon: '🧄' },
   { name: 'Butter', key: 'butter', icon: '🧈' },
+  { name: 'Bread', key: 'bread', icon: '🍞' },
+  { name: 'Potato', key: 'potato', icon: '🥔' },
   { name: 'Pasta', key: 'pasta', icon: '🍝' },
   { name: 'Rice', key: 'rice', icon: '🍚' },
   { name: 'Ground Beef', key: 'ground beef', icon: '🥩' },
   { name: 'Bacon', key: 'bacon', icon: '🥓' },
   { name: 'Tomato', key: 'tomato', icon: '🍅' },
   { name: 'Spinach', key: 'spinach', icon: '🥬' },
+  { name: 'Onion', key: 'onion', icon: '🧅' },
   { name: 'Milk', key: 'milk', icon: '🥛' },
 ]
 
 const MEAL_CATEGORIES = [
   'All Meals',
+  '3-Ingredient',
   'Favorites',
   '15-Min Meals',
   'Dinner',
@@ -319,7 +326,7 @@ export function SnapChefClient() {
 
   // Filter and score recipes
   const processedRecipes = useMemo(() => {
-    return RECIPES_DATA.map((recipe) => {
+    return ALL_RECIPES.map((recipe) => {
       const match = calculateRecipeMatch(recipe.ingredients, fridgeItems, true)
 
       return {
@@ -339,6 +346,8 @@ export function SnapChefClient() {
       .filter((recipe) => {
         if (selectedCategory === 'Favorites') {
           if (!favoriteIds.includes(recipe.id)) return false
+        } else if (selectedCategory === '3-Ingredient') {
+          if (recipe.ingredients.length > 4 && !recipe.id.startsWith('rec-3ing')) return false
         } else if (selectedCategory !== 'All Meals' && recipe.category !== selectedCategory) {
           return false
         }
@@ -452,9 +461,53 @@ export function SnapChefClient() {
         )}
 
         {activeTab === 'fridge' && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+            {/* 1. Grand High-Class Header Across The Top (Above The Box) */}
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-8 rounded-full bg-emerald-500" />
+                <span className="text-xs sm:text-sm font-extrabold tracking-widest uppercase text-emerald-600 dark:text-emerald-400">
+                  Kitchen Inventory & Provisions
+                </span>
+              </div>
+
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-2 border-b-2 border-border/70">
+                <div>
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-black tracking-tight text-foreground drop-shadow-xs">
+                    In Your Fridge
+                  </h1>
+                  <p className="text-sm sm:text-base text-muted-foreground mt-1 max-w-xl font-medium">
+                    Stock what you have on hand. SnapChef matches quick 3-ingredient dishes and 15-minute chef recipes instantly.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3 shrink-0">
+                  <Badge className="px-4 py-2 text-sm sm:text-base font-extrabold bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-2 border-emerald-500/40 rounded-2xl shadow-xs">
+                    🧊 {fridgeItems.length} {fridgeItems.length === 1 ? 'Ingredient' : 'Ingredients'}
+                  </Badge>
+                  <Button
+                    onClick={() => {
+                      const update = () => {
+                        setActiveTab('scan')
+                        window.scrollTo({ top: 0, behavior: 'instant' })
+                      }
+                      if (typeof document !== 'undefined' && 'startViewTransition' in document) {
+                        (document as any).startViewTransition(update)
+                      } else {
+                        update()
+                      }
+                    }}
+                    className="h-12 px-5 text-sm sm:text-base font-extrabold bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl gap-2 shadow-md border-2 border-emerald-400 active:scale-95"
+                  >
+                    <Camera className="h-5 w-5" />
+                    <span>Scan Camera</span>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
             {/* 2. Active Fridge Inventory & Staples Box */}
-            <div className="relative overflow-hidden border-2 border-emerald-500/40 rounded-3xl p-5 md:p-6 shadow-2xl space-y-4">
+            <div className="relative overflow-hidden border-2 border-emerald-500/50 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
               {/* Photorealistic Fridge Background */}
               <div 
                 className="absolute inset-0 z-0 bg-cover bg-center pointer-events-none"
@@ -466,56 +519,36 @@ export function SnapChefClient() {
               <div className="absolute inset-0 z-0 bg-black/65 dark:bg-black/75 pointer-events-none" />
               
               {/* All controls wrapped inside relative z-10 */}
-              <div className="relative z-10 space-y-4 text-white">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-white/20 pb-3">
-                  <div>
-                    <h3 className="font-black text-base md:text-lg flex items-center gap-2 text-white">
-                      <span>🧊 In Your Fridge</span>
-                      <Badge className="text-xs font-bold tabular-nums bg-emerald-500 text-white border-0">
-                        {fridgeItems.length} Items
-                      </Badge>
-                    </h3>
-                    <p className="text-xs text-slate-300">
-                      {fridgeItems.length > 0 
-                        ? `${fridgeItems.length} stocked ingredients ready to cook`
-                        : 'Your fridge is currently empty'}
-                    </p>
+              <div className="relative z-10 space-y-6 text-white">
+                <div className="flex items-center justify-between gap-3 border-b-2 border-white/20 pb-4">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl sm:text-3xl">🥦</span>
+                    <div>
+                      <h2 className="text-lg sm:text-xl font-black text-white tracking-wide">
+                        Stocked Shelves & Ingredients
+                      </h2>
+                      <p className="text-xs sm:text-sm text-slate-300">
+                        {fridgeItems.length > 0 
+                          ? `${fridgeItems.length} stocked ingredients ready to cook`
+                          : 'Your fridge is currently empty — tap staples below to stock it'}
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+                  {fridgeItems.length > 0 && (
                     <Button
+                      variant="ghost"
                       size="sm"
                       onClick={() => {
-                        const update = () => {
-                          setActiveTab('scan')
-                          window.scrollTo({ top: 0, behavior: 'instant' })
-                        }
-                        if (typeof document !== 'undefined' && 'startViewTransition' in document) {
-                          (document as any).startViewTransition(update)
-                        } else {
-                          update()
-                        }
+                        clearFridgeItems()
+                        setFridgeItems([])
+                        toast.info('Fridge cleared')
                       }}
-                      className="h-8 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl gap-1 shadow-md border border-emerald-400 active:scale-95"
+                      className="h-10 px-4 text-xs sm:text-sm text-slate-200 hover:text-rose-400 font-extrabold hover:bg-white/10 rounded-xl border border-white/20"
                     >
-                      <Camera className="h-3.5 w-3.5" />
-                      <span>Snap Camera</span>
+                      Clear All
                     </Button>
-                    {fridgeItems.length > 0 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => {
-                          clearFridgeItems()
-                          setFridgeItems([])
-                          toast.info('Fridge cleared')
-                        }}
-                        className="h-8 text-xs text-slate-300 hover:text-rose-400 font-bold hover:bg-white/10"
-                      >
-                        Clear All
-                      </Button>
-                    )}
-                  </div>
+                  )}
                 </div>
 
                 {/* Big Button To Cook With These Items */}
@@ -532,24 +565,24 @@ export function SnapChefClient() {
                         update()
                       }
                     }}
-                    className="w-full h-12 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-600 text-white font-black text-sm shadow-xl shadow-emerald-900/40 flex items-center justify-center gap-2 active:scale-[0.98] transition-all border border-emerald-400/50"
+                    className="w-full h-14 sm:h-16 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 hover:from-emerald-600 hover:to-teal-600 text-white font-black text-base sm:text-lg shadow-xl shadow-emerald-950/50 flex items-center justify-center gap-3 active:scale-[0.98] transition-all border-2 border-emerald-300/60"
                   >
-                    <span>🍳 Cook With These Ingredients ({processedRecipes.length} Meals)</span>
-                    <ArrowRight className="h-4 w-4" />
+                    <span>🍳 Cook With These Ingredients ({processedRecipes.length} Meals Ready)</span>
+                    <ArrowRight className="h-5 w-5 sm:h-6 sm:w-6" />
                   </Button>
                 )}
 
                 {/* Active Items Chips */}
                 {fridgeItems.length > 0 ? (
-                  <div className="space-y-1.5 pt-1">
-                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-300 block">
+                  <div className="space-y-3">
+                    <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-200 block">
                       Stocked Ingredients ({fridgeItems.length}):
                     </span>
-                    <div className="flex flex-wrap items-center gap-1.5 max-h-56 overflow-y-auto pr-1">
+                    <div className="flex flex-wrap items-center gap-2 max-h-64 overflow-y-auto pr-1">
                       {fridgeItems.map((item) => (
                         <Badge
                           key={item}
-                          className="capitalize gap-1.5 pl-3 pr-1.5 py-1 text-xs border border-white/20 bg-black/60 backdrop-blur-md text-white font-bold rounded-xl shadow-sm hover:border-emerald-400"
+                          className="capitalize gap-2 pl-4 pr-2 py-2 text-sm sm:text-base border-2 border-white/30 bg-black/70 backdrop-blur-md text-white font-extrabold rounded-2xl shadow-md hover:border-emerald-400 hover:bg-black/85 transition-all"
                         >
                           <span>{item}</span>
                           <button
@@ -558,29 +591,35 @@ export function SnapChefClient() {
                               toggleFridgeItem(item)
                               setFridgeItems(getFridgeItems())
                             }}
-                            className="hover:text-rose-400 rounded-full p-0.5"
+                            className="hover:text-rose-400 hover:bg-white/20 rounded-full p-1 transition-colors"
                           >
-                            <X className="h-3 w-3" />
+                            <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                           </button>
                         </Badge>
                       ))}
                     </div>
                   </div>
                 ) : (
-                  <div className="py-6 text-center text-xs text-slate-300 bg-black/40 backdrop-blur-md rounded-2xl border border-white/10 space-y-2">
-                    <p className="font-bold text-white text-sm">Your fridge is empty</p>
-                    <p>Snap a photo of your shelves or tap the quick staples below to add what you have!</p>
+                  <div className="py-8 text-center text-slate-300 bg-black/50 backdrop-blur-md rounded-2xl border-2 border-white/15 space-y-2 px-4">
+                    <p className="font-extrabold text-white text-base sm:text-lg">Your fridge is empty</p>
+                    <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto">
+                      Snap a photo of your shelves or tap the quick staples below to add what you have!
+                    </p>
                   </div>
                 )}
 
                 {/* Quick Staple One-Tap Chips */}
-                <div className="space-y-2 pt-2 border-t-2 border-white/20">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-300 block">
+                <div className="space-y-3 pt-3 border-t-2 border-white/20">
+                  <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-slate-200 block">
                     Quick Add Common Staples:
                   </span>
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-2">
                     {QUICK_STAPLES.map((st) => {
-                      const isActive = fridgeItems.includes(st.key)
+                      const isActive = fridgeItems.some((f) => {
+                        const lf = f.toLowerCase().trim()
+                        const lk = st.key.toLowerCase().trim()
+                        return lf === lk || lf === `${lk}s` || `${lf}s` === lk || lf.includes(lk) || lk.includes(lf)
+                      })
                       return (
                         <button
                           key={st.key}
@@ -590,18 +629,18 @@ export function SnapChefClient() {
                             setFridgeItems(getFridgeItems())
                           }}
                           className={cn(
-                            'inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all border select-none active:scale-95 shadow-sm',
+                            'inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-2xl text-xs sm:text-sm font-extrabold transition-all border-2 select-none active:scale-95 shadow-md',
                             isActive
-                              ? 'bg-emerald-500 text-white border-emerald-400 shadow-emerald-500/30'
-                              : 'bg-black/60 hover:bg-black/80 backdrop-blur-md text-slate-100 border-white/20 hover:border-emerald-400'
+                              ? 'bg-emerald-500 text-white border-emerald-300 shadow-emerald-500/40 ring-2 ring-emerald-300/40'
+                              : 'bg-black/70 hover:bg-black/90 backdrop-blur-md text-slate-100 border-white/25 hover:border-emerald-400'
                           )}
                         >
-                          <span>{st.icon}</span>
+                          <span className="text-base sm:text-lg">{st.icon}</span>
                           <span>{st.name}</span>
                           {isActive ? (
-                            <Check className="h-3 w-3 ml-0.5 stroke-[3]" />
+                            <Check className="h-4 w-4 ml-0.5 stroke-[3]" />
                           ) : (
-                            <Plus className="h-3 w-3 ml-0.5 text-slate-400" />
+                            <Plus className="h-4 w-4 ml-0.5 text-slate-400" />
                           )}
                         </button>
                       )
@@ -609,21 +648,173 @@ export function SnapChefClient() {
                   </div>
 
                   {/* Custom Item Form */}
-                  <form onSubmit={handleAddCustomStaple} className="flex gap-2 pt-2">
+                  <form onSubmit={handleAddCustomStaple} className="flex gap-2.5 pt-3">
                     <Input
                       placeholder="Type any other ingredient (e.g. mushrooms, soy sauce, noodles)..."
                       value={customItemInput}
                       onChange={(e) => setCustomItemInput(e.target.value)}
-                      className="h-10 text-xs rounded-xl border border-white/20 bg-black/60 backdrop-blur-md text-white placeholder:text-slate-400 focus:border-emerald-400"
+                      className="h-12 sm:h-13 text-sm sm:text-base rounded-2xl border-2 border-white/30 bg-black/75 backdrop-blur-md text-white placeholder:text-slate-400 px-4 focus:border-emerald-400"
                     />
-                    <Button type="submit" size="sm" className="h-10 px-4 font-bold rounded-xl shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md border border-emerald-400 active:scale-95">
-                      <Plus className="h-4 w-4 mr-1" />
+                    <Button
+                      type="submit"
+                      size="sm"
+                      className="h-12 sm:h-13 px-6 sm:px-7 font-black text-sm sm:text-base rounded-2xl shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg border-2 border-emerald-400 active:scale-95"
+                    >
+                      <Plus className="h-5 w-5 mr-1" />
                       Add
                     </Button>
                   </form>
                 </div>
               </div>
             </div>
+
+            {/* 3. Meals Ready To Cook Preview Grid Directly Below Box */}
+            {fridgeItems.length > 0 && (
+              <div className="space-y-4 pt-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-2xl sm:text-3xl font-serif font-black tracking-tight text-foreground flex items-center gap-2">
+                      <span>🍳 Ready To Cook Now</span>
+                      <Badge className="bg-emerald-500 text-white font-extrabold text-xs">
+                        {processedRecipes.length} Matches
+                      </Badge>
+                    </h2>
+                    <p className="text-xs sm:text-sm text-muted-foreground font-medium">
+                      Dishes you can make with your {fridgeItems.length} ingredients — pantry essentials (oil, salt, pepper) are assumed ready!
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setActiveTab('recipes')
+                      window.scrollTo({ top: 0, behavior: 'instant' })
+                    }}
+                    className="h-11 px-5 rounded-2xl font-black border-2 border-emerald-500/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/10 text-xs sm:text-sm shrink-0 gap-1.5"
+                  >
+                    <span>View All ({processedRecipes.length})</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {processedRecipes.slice(0, 6).map((recipe) => {
+                    const isFav = favoriteIds.includes(recipe.id)
+                    const isLiked = likedIds.includes(recipe.id)
+                    const currentLikes = recipe.likes + (likeDeltas[recipe.id] || 0)
+
+                    return (
+                      <Card
+                        key={recipe.id}
+                        onClick={() => setSelectedRecipe(recipe)}
+                        className="group border-2 border-border/80 hover:border-emerald-500/70 hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between overflow-hidden active:scale-[0.99] bg-card rounded-3xl"
+                      >
+                        <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted/40">
+                          <img
+                            src={recipe.imageUrl}
+                            alt={recipe.title}
+                            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            loading="lazy"
+                            onError={(e) => {
+                              e.currentTarget.src =
+                                'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80'
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+                          <div className="absolute top-2.5 left-2.5 flex flex-col gap-1 items-start">
+                            <Badge variant="secondary" className="text-[10px] font-bold bg-background/90 backdrop-blur-xs shadow-xs text-foreground border border-border/60">
+                              {recipe.category}
+                            </Badge>
+                            <span
+                              className={cn(
+                                'inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-black tabular-nums shadow-xs backdrop-blur-xs border',
+                                recipe.isCompleteMatch
+                                  ? 'bg-emerald-500 text-white border-emerald-400'
+                                  : recipe.isAlmostMatch
+                                  ? 'bg-amber-500 text-white border-amber-400'
+                                  : 'bg-background/90 text-foreground border-border/60'
+                              )}
+                            >
+                              {recipe.isCompleteMatch
+                                ? '✨ Ready to Cook!'
+                                : recipe.isAlmostMatch
+                                ? 'Missing 1 item'
+                                : `${recipe.matchedCount}/${recipe.totalRequired} in Fridge`}
+                            </span>
+                          </div>
+
+                          <div className="absolute top-2.5 right-2.5 flex items-center gap-1.5 z-10">
+                            <button
+                              type="button"
+                              onClick={(e) => handleToggleFavorite(recipe.id, e)}
+                              title={isFav ? 'Remove favorite' : 'Add to favorites'}
+                              className={cn(
+                                'h-7 w-7 rounded-full flex items-center justify-center backdrop-blur-md transition-all active:scale-85 border shadow-sm',
+                                isFav
+                                  ? 'bg-amber-500 text-white border-amber-400 shadow-amber-500/40'
+                                  : 'bg-black/50 hover:bg-black/70 text-white border-white/20'
+                              )}
+                            >
+                              <Star className={cn('h-3.5 w-3.5', isFav && 'fill-white')} />
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={(e) => handleToggleLike(recipe.id, e)}
+                              title={isLiked ? 'Unlike' : 'Like'}
+                              className={cn(
+                                'h-7 px-2 rounded-full flex items-center gap-1 text-[11px] font-bold backdrop-blur-md transition-all active:scale-85 border shadow-sm tabular-nums',
+                                isLiked
+                                  ? 'bg-rose-500 text-white border-rose-400 shadow-rose-500/40'
+                                  : 'bg-black/50 hover:bg-black/70 text-white border-white/20'
+                              )}
+                            >
+                              <Heart className={cn('h-3.5 w-3.5', isLiked && 'fill-white text-white')} />
+                              <span>{currentLikes}</span>
+                            </button>
+                          </div>
+
+                          <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-white text-[11px] font-medium drop-shadow-sm">
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-3 w-3 text-amber-400" />
+                              {recipe.cookTime}
+                            </span>
+                            <span className="flex items-center gap-1 text-white/90">
+                              <Users className="h-3 w-3" />
+                              {recipe.servings} servings
+                            </span>
+                          </div>
+                        </div>
+
+                        <CardHeader className="p-4 pb-2">
+                          <h3 className="font-extrabold text-base tracking-tight leading-snug group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors line-clamp-1">
+                            {recipe.title}
+                          </h3>
+                          <p className="text-xs text-muted-foreground line-clamp-2 mt-1">
+                            {recipe.description}
+                          </p>
+                        </CardHeader>
+
+                        <CardFooter className="p-4 pt-1 flex items-center justify-between gap-2 border-t border-border/40 mt-2">
+                          <Button
+                            size="sm"
+                            className="w-full h-9 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs text-xs"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setSelectedRecipe(recipe)
+                            }}
+                          >
+                            <span>View Recipe</span>
+                            <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                          </Button>
+                        </CardFooter>
+                      </Card>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

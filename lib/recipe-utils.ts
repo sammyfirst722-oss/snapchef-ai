@@ -106,16 +106,52 @@ export function getRecipeNutrition(recipe: any, multiplier: number = 1) {
 
 export const DEFAULT_PANTRY_STAPLES = [
   'salt',
+  'kosher salt',
+  'sea salt',
   'black pepper',
   'pepper',
+  'white pepper',
+  'cracked pepper',
   'water',
+  'ice',
   'cooking oil',
   'olive oil',
   'vegetable oil',
   'canola oil',
+  'oil',
   'butter',
   'sugar',
+  'brown sugar',
+  'garlic powder',
+  'onion powder',
+  'paprika',
+  'oregano',
+  'cumin',
+  'chili powder',
+  'red pepper flakes',
+  'cayenne',
+  'flour',
+  'cornstarch',
+  'baking powder',
+  'baking soda',
+  'soy sauce',
+  'vinegar',
 ]
+
+const INGREDIENT_SYNONYMS: Record<string, string[]> = {
+  cheese: ['cheddar', 'mozzarella', 'parmesan', 'swiss', 'provolone', 'feta', 'jack', 'monterey', 'gouda', 'ricotta', 'cheese'],
+  pasta: ['spaghetti', 'macaroni', 'penne', 'fettuccine', 'noodle', 'noodles', 'short pasta', 'rigatoni', 'linguine', 'pasta'],
+  bread: ['toast', 'tortilla', 'bun', 'bagel', 'pita', 'sourdough', 'roll', 'wrap', 'bread'],
+  beef: ['ground beef', 'steak', 'roast beef', 'beef', 'hamburger'],
+  chicken: ['chicken breast', 'chicken thighs', 'chicken', 'poultry'],
+  rice: ['white rice', 'brown rice', 'jasmine rice', 'basmati', 'rice'],
+  milk: ['dairy', 'cream', 'heavy cream', 'half and half', 'milk'],
+  onion: ['red onion', 'yellow onion', 'white onion', 'shallot', 'scallion', 'green onion', 'onion', 'onions'],
+  tomato: ['tomatoes', 'cherry tomatoes', 'roma tomatoes', 'canned tomatoes', 'tomato'],
+  potato: ['potatoes', 'russet', 'sweet potato', 'potato'],
+  garlic: ['garlic clove', 'clove garlic', 'minced garlic', 'garlic'],
+  eggs: ['egg', 'eggs', 'egg white', 'egg yolk'],
+}
 
 export function isPantryStaple(itemOrKey: string): boolean {
   if (!itemOrKey) return false
@@ -123,6 +159,38 @@ export function isPantryStaple(itemOrKey: string): boolean {
   return DEFAULT_PANTRY_STAPLES.some(
     (staple) => lower === staple || lower.includes(staple) || staple.includes(lower)
   )
+}
+
+function stemWord(w: string): string {
+  return w.toLowerCase().trim().replace(/ies$/, 'y').replace(/es$/, '').replace(/s$/, '')
+}
+
+function doesIngredientMatch(ingKey: string, ingItem: string, fridgeItem: string): boolean {
+  const f = fridgeItem.toLowerCase().trim()
+  const fStem = stemWord(f)
+  const k = ingKey.toLowerCase().trim()
+  const kStem = stemWord(k)
+  const item = ingItem.toLowerCase().trim()
+  const itemStem = stemWord(item)
+
+  // Direct stem or substring match
+  if (k && (k.includes(f) || f.includes(k) || kStem === fStem || kStem.includes(fStem) || fStem.includes(kStem))) {
+    return true
+  }
+  if (item && (item.includes(f) || f.includes(item) || itemStem === fStem || itemStem.includes(fStem) || fStem.includes(itemStem))) {
+    return true
+  }
+
+  // Synonym matching (e.g. user has "cheese" and recipe requires "cheddar")
+  for (const [group, members] of Object.entries(INGREDIENT_SYNONYMS)) {
+    const fridgeMatchesGroup = fStem === group || f.includes(group) || members.some((m) => f.includes(m) || m.includes(f))
+    if (fridgeMatchesGroup) {
+      const recipeMatchesGroup = kStem === group || k.includes(group) || item.includes(group) || members.some((m) => k.includes(m) || item.includes(m))
+      if (recipeMatchesGroup) return true
+    }
+  }
+
+  return false
 }
 
 export interface RecipeMatchResult {
@@ -166,12 +234,9 @@ export function calculateRecipeMatch(
   const missingIngredients: string[] = []
 
   ingredients.forEach((ing) => {
-    const k = ing.standardKey ? ing.standardKey.toLowerCase() : ''
-    const itemName = ing.item ? ing.item.toLowerCase() : ''
-    const isMatched = fridgeItems.some(
-      (f) => (k && (k.includes(f) || f.includes(k))) || (itemName && itemName.includes(f))
-    )
-
+    const k = ing.standardKey || ''
+    const itemName = ing.item || ''
+    const isMatched = fridgeItems.some((f) => doesIngredientMatch(k, itemName, f))
     const isStaple = isPantryStaple(k) || isPantryStaple(itemName)
 
     if (isMatched) {
@@ -183,7 +248,7 @@ export function calculateRecipeMatch(
       }
     } else if (assumeStaples && isStaple) {
       stapleCount++
-      // Assumed pantry staple - does not count against the user as a missing barrier
+      // Assumed pantry staple - salt, pepper, oil etc. are optional / assumed available
     } else {
       missingIngredients.push(ing.item)
       if (!isStaple) {
@@ -196,9 +261,14 @@ export function calculateRecipeMatch(
   const effectiveRequired = nonStapleRequired > 0 ? nonStapleRequired : totalRequired
   const effectiveMatched = nonStapleRequired > 0 ? nonStapleMatched : matchedCount
 
-  const isCompleteMatch = fridgeItems.length > 0 && effectiveMatched === effectiveRequired
+  // Complete match if all key ingredients are matched (with staples optional)
+  const isCompleteMatch = fridgeItems.length > 0 && (
+    (effectiveRequired > 0 && effectiveMatched === effectiveRequired) ||
+    (totalRequired <= 4 && effectiveRequired - effectiveMatched <= 0)
+  )
+
   const isAlmostMatch =
-    fridgeItems.length > 0 && !isCompleteMatch && effectiveRequired - effectiveMatched === 1
+    fridgeItems.length > 0 && !isCompleteMatch && (effectiveRequired - effectiveMatched === 1)
 
   const matchScore =
     fridgeItems.length > 0
