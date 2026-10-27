@@ -40,7 +40,15 @@ function getIngredientGuide(slug: string): IngredientGuide | null {
     const filePath = path.join(process.cwd(), 'data', 'ingredient-guides', `${slug}.json`)
     if (fs.existsSync(filePath)) {
       const raw = fs.readFileSync(filePath, 'utf-8')
-      return JSON.parse(raw) as IngredientGuide
+      const data = JSON.parse(raw)
+      return {
+        pair: data.pair || slug,
+        title: data.title || '',
+        flavorProfile: data.flavorProfile || '',
+        nutritionalSynergy: data.nutritionalSynergy || '',
+        prepTechniques: Array.isArray(data.prepTechniques) ? data.prepTechniques.filter((t: any) => typeof t === 'string') : [],
+        faq: Array.isArray(data.faq) ? data.faq.filter((item: any) => item && typeof item.q === 'string' && typeof item.a === 'string') : []
+      }
     }
   } catch {
     // Graceful fallback if file read fails

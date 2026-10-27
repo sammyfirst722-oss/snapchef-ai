@@ -1,0 +1,21 @@
+{
+  "pair": "chicken-and-onion",
+  "title": "Why Chicken and Onion Works So Well Together",
+  "flavorProfile": "Chicken and onion create a deeply satisfying sweet, savory, fatty, and umami-rich profile. The chicken provides rich protein and mellow fat, while the onion brings sweetness, acidity, and sulfurous aromatic complexity when cooked low and slow or caramelized. Together they balance fat-soluble flavors and enhance overall savoriness, a combination supported by 352 community recipes. The onion's natural sugars round out the chicken's savory notes, while the chicken's fat helps carry onion aroma across the palate.",
+  "nutritionalSynergy": "Chicken is a complete protein source rich in B vitamins, selenium, and phosphorus, while onion contains quercetin, allicin, and prebiotic fructans that support antioxidant and digestive health. Combining them does not magically increase mineral bioavailability, but the flavorful pairing can improve dietary adherence and add complementary nutrients. Onion may enhance cardiovascular and anti-inflammatory benefits when part of a varied diet, and chicken provides essential amino acids for muscle maintenance.",
+  "prepTechniques": [
+    "Caramelize onions low and slow before adding chicken, or deglaze with stock to build deep sweetness without burning.",
+    "Sear chicken to golden temperature first, then cook onions in the rendered chicken fat while managing heat to avoid tough protein or bitter onion.",
+    "Finish by slicing chicken against the grain, adding final caramelized onions, and resting before plating for optimal texture and aroma."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Chicken and Onion?",
+      "a": "Refrigerate within two hours in a shallow airtight container for up to three to four days. Cool before sealing. Freeze in portioned bags for up to two to three months, thaw overnight in the refrigerator, and reheat until the chicken reaches 165°F or 74°C."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For chicken, use turkey, tofu, or shrimp. For onion, use shallots, leeks, or garlic, adjusting quantities to maintain flavor balance. Keep cooking techniques suited to the substitute for best results."
+    }
+  ]
+}

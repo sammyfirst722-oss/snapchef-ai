@@ -1,0 +1,21 @@
+{
+  "pair": "chicken-and-ginger",
+  "title": "Why Chicken and Ginger Works So Well Together",
+  "flavorProfile": "Chicken provides a mild, slightly sweet, and protein-rich base that balances ginger’s sharp, peppery heat, subtle citrusy undertones, and earthy aroma. The ginger’s natural acidity cuts through the chicken’s fat, creating a harmonious sweet‑savory profile with a lingering warmth that enhances umami from the chicken’s natural glutamates. Together they form a layered taste experience: the tender chicken delivers savory depth, while ginger adds brightness, a gentle bite, and a fragrant, almost floral note that lifts the dish.",
+  "nutritionalSynergy": "Combining chicken, a lean source of high‑quality protein, with ginger, rich in gingerol, boosts the bioavailability of key nutrients. Ginger’s anti‑inflammatory compounds enhance iron absorption from chicken, while its antioxidant properties help protect muscle proteins from oxidative damage. The duo also supports digestion: ginger stimulates gastric acid secretion, improving protein breakdown, and the protein from chicken provides essential amino acids for muscle repair. Together they offer a balanced macro‑micro profile, supporting lean muscle maintenance, immune function, and metabolic health.",
+  "prepTechniques": [
+    "Marinate the chicken in a mixture of ginger‑infused oil, soy sauce, and a touch of honey; this tenderizes the meat while infusing it with aromatic oils that cling to the surface for a caramelized crust.",
+    "Sear the chicken pieces at high heat for 2–3 minutes per side, then reduce the flame to medium and simmer with sliced ginger and aromatics; this technique preserves the ginger’s heat without burning it, ensuring a gentle, even flavor distribution.",
+    "Finish the dish by deglazing the pan with a splash of citrus juice or a dash of vinegar, then whisk in a small amount of butter to create a glossy, silky glaze that coats the chicken and enhances the ginger’s bright notes."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Chicken and Ginger?",
+      "a": "Cool the dish to room temperature, then refrigerate in an airtight container for up to 3 days. For longer storage, freeze in portioned containers for up to 3 months. Reheat gently over low heat, adding a splash of water or broth to prevent drying."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For the chicken, use turkey breast or lean pork for a similar protein profile. If ginger is unavailable, fresh galangal or a small amount of ground ginger can mimic the heat and aroma. Adjust the quantity to taste, as galangal is slightly more pungent."
+    }
+  ]
+}

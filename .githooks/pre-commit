@@ -9,4 +9,8 @@ if [ -n "$bad" ]; then
   echo "Remove them from the commit (git restore --staged <file>) and add them to .gitignore."
   exit 1
 fi
+# Also scan the staged code itself for keys and tokens (skipped if the scanner isn't on this machine)
+if [ -f "$HOME/bin/gitleaks-guard.sh" ]; then
+  sh "$HOME/bin/gitleaks-guard.sh" || exit 1
+fi
 exit 0

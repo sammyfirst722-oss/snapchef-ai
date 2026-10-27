@@ -1,0 +1,21 @@
+{
+  "pair": "chicken-and-dijon-mustard",
+  "title": "Why Chicken and Dijon-mustard Works So Well Together",
+  "flavorProfile": "The bright, peppery bite of Dijon mustard cuts through the mild, slightly sweet flavor of chicken, creating a harmonious contrast. The mustard’s acidity brightens the meat’s natural savory profile, while its subtle heat adds depth. The fat from the chicken’s skin or added butter coats the palate, allowing the mustard’s sharpness to linger. Together, they balance sweet, savory, acidic, and umami notes, producing a complex yet approachable taste.",
+  "nutritionalSynergy": "Chicken provides high-quality protein, B vitamins, and essential minerals like selenium and zinc. Dijon mustard, made from mustard seeds, contains glucosinolates that support detoxification and offer antioxidant benefits. The combination enhances iron absorption from the mustard’s phytates, while the protein’s amino acids improve overall nutrient utilization. Together, they support muscle repair, immune function, and metabolic health.",
+  "prepTechniques": [
+    "Sear the chicken breast or thighs in a hot skillet to lock in juices and develop a golden crust that complements the mustard’s sharpness.",
+    "Whisk Dijon mustard with a splash of white wine vinegar and a touch of honey to create a balanced glaze; apply during the last 5 minutes of cooking to avoid burning the sugars.",
+    "Plate the dish with a drizzle of mustard reduction and a sprinkle of fresh herbs to add visual appeal and a burst of aroma that enhances the dining experience."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Chicken and Dijon-mustard?",
+      "a": "Cool the dish to room temperature, then refrigerate in an airtight container for up to 3 days. For longer storage, freeze in portions; thaw in the refrigerator overnight and reheat gently on the stovetop or in the oven, adding a splash of broth to keep the chicken moist."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For the chicken, use turkey or pork tenderloin for a different protein profile. If avoiding mustard, try a tangy horseradish sauce or a light lemon‑yogurt dressing; for a milder mustard, replace Dijon with whole‑grain or brown mustard, adjusting the heat level accordingly."
+    }
+  ]
+}

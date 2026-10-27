@@ -1,0 +1,21 @@
+{
+  "pair": "butter-and-garlic",
+  "title": "Why Butter and Garlic Works So Well Together",
+  "flavorProfile": "Butter contributes a rich, creamy mouthfeel and a subtle sweetness that tempers garlic’s sharp, pungent bite. The fat in butter acts as a carrier for garlic’s sulfur compounds, smoothing the heat and allowing the aromatic allicin to unfold slowly, creating a balanced sweet‑savory‑umami profile. When browned, butter adds nutty, caramelized notes that complement garlic’s lingering depth, while a pinch of acidity (lemon juice or wine) can brighten the duo, preventing it from feeling overly heavy.",
+  "nutritionalSynergy": "Butter supplies fat‑soluble vitamins A, D, E, and K, which enhance the absorption of garlic’s organosulfur compounds such as allicin. The fat matrix also improves bioavailability of phytonutrients like quercetin found in garlic. Together they support cardiovascular health: butter’s short‑chain fatty acids can modulate cholesterol, while garlic’s allicin has been shown to lower blood pressure and reduce platelet aggregation. The combination also provides a modest source of calcium, selenium, and manganese, contributing to bone health and antioxidant defenses.",
+  "prepTechniques": [
+    "Melt butter over low heat before adding minced garlic; this gentle start prevents the garlic from burning and releases its aromatics evenly, yielding a silky base for sauces or sautés.",
+    "Cook the garlic just until it turns golden‑brown (30‑45 seconds) then increase the heat briefly to brown the butter; the Maillard reaction creates nutty brown butter (beurre noisette) that deepens flavor without turning the garlic bitter.",
+    "Finish dishes with a splash of fresh lemon juice or a sprinkle of chopped herbs just before plating; the acidity cuts through the richness while the herbs add color and a fresh contrast to the buttery‑garlic foundation."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Butter and Garlic?",
+      "a": "Cool the mixture to room temperature within two hours, then transfer to an airtight container. Refrigerate for up to 5 days or freeze in portioned ice‑cube trays for up to 3 months. Reheat gently over low heat to preserve flavor and prevent the butter from separating."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For a dairy‑free version, replace butter with clarified ghee or high‑quality olive oil; both carry fat for flavor extraction, though the nutty profile will shift. If garlic is unavailable, try shallots or roasted leeks for a milder, sweet onion‑like note, but the characteristic pungency will be reduced."
+    }
+  ]
+}

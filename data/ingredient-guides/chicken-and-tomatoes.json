@@ -1,0 +1,21 @@
+{
+  "pair": "chicken-and-tomatoes",
+  "title": "Why Chicken and Tomatoes Works So Well Together",
+  "flavorProfile": "Chicken provides mild, lean protein with subtle fat and umami, while tomatoes deliver bright acidity, natural sweetness, and deep umami notes. The interplay creates a balanced profile: tomato acidity cuts through chicken fat, while chicken fat carries and mellows tomato acidity. Roasting or caramelizing tomatoes enhances their sweetness and umami, which complements the savory depth of chicken. Adding herbs, garlic, or olive oil bridges both ingredients, creating a cohesive sweet-savory-fat-umami-acidity equilibrium.",
+  "nutritionalSynergy": "Chicken is rich in high-quality protein, B vitamins (especially B6 and niacin), and selenium. Tomatoes provide lycopene, vitamin C, potassium, and antioxidants. The healthy fats from chicken skin or cooking oil significantly increase the bioavailability of lycopene, a fat-soluble carotenoid. Together, the protein and micronutrients support muscle maintenance, immune function, and anti-inflammatory benefits. The combination also aids in steady blood sugar response due to the protein-fat-acid balance.",
+  "prepTechniques": [
+    "Sear chicken first, then simmer with tomatoes to lock in juices and create a natural pan sauce.",
+    "Add tomatoes after the chicken is partially cooked to prevent overcooking the chicken while allowing tomatoes to break down into a silky sauce.",
+    "Finish with fresh basil, a drizzle of good olive oil, and a pinch of sea salt just before plating to brighten acidity and enhance aroma."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Chicken and Tomatoes?",
+      "a": "Cool to room temperature within 2 hours, then transfer to an airtight container and refrigerate for up to 4 days. For longer storage, freeze in portioned containers for up to 3 months; thaw overnight in refrigerator and reheat gently to preserve texture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For chicken, use turkey breast, duck, or firm tofu for a vegetarian option; adjust cooking time as tofu cooks faster. For tomatoes, use roasted red peppers, tomatillos, or a splash of balsamic vinegar + sugar to mimic acidity and sweetness; canned crushed tomatoes work well in a pinch."
+    }
+  ]
+}

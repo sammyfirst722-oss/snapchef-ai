@@ -8,8 +8,8 @@
  *   Tier 3: Local hardcoded generator / smart detector (last resort, 100% offline reliable)
  */
 
-export const OPENROUTER_FREE_RECIPE_MODEL = 'openrouter/auto'
-export const OPENROUTER_FREE_VISION_MODEL = 'stealth/space-bunny-alpha'
+export const OPENROUTER_FREE_RECIPE_MODEL = 'openrouter/free'
+export const OPENROUTER_FREE_VISION_MODEL = 'nvidia/nemotron-3.5-super-vl:free'
 export const OPENROUTER_PAID_BACKUP_MODEL = 'openai/gpt-4o-mini'
 
 // Semantic aliases

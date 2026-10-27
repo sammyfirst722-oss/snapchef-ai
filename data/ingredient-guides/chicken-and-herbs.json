@@ -1,0 +1,21 @@
+{
+  "pair": "chicken-and-herbs",
+  "title": "Why Chicken and Herbs Works So Well Together",
+  "flavorProfile": "Chicken provides a mild, protein‑rich canvas with subtle umami and a hint of natural fat, while fresh herbs contribute bright, aromatic compounds—linalool in basil, eucalyptol in rosemary, and menthol in mint—that introduce sweet, peppery, and slightly citrus notes. The herbaceous acidity cuts through the richness of the meat, creating a balanced sweet‑savory‑umami profile that feels both comforting and refreshing.",
+  "nutritionalSynergy": "The lean protein in chicken supplies essential amino acids and B‑vitamins, while herbs are dense in polyphenols, flavonoids, and minerals such as iron, calcium, and magnesium. Certain herb compounds (e.g., rosemary’s carnosic acid) enhance iron absorption from the meat, and the vitamin C in parsley boosts overall micronutrient bioavailability. Together they support muscle repair, antioxidant defenses, and cardiovascular health without adding excess calories.",
+  "prepTechniques": [
+    "Pat the chicken dry, season with salt, then rub a mixture of minced herbs and a touch of olive oil; this creates a protective layer that locks moisture and releases aromatic oils during searing.",
+    "Sear the chicken skin‑side first over medium‑high heat to render fat and develop Maillard browning, then finish in a lower‑heat oven with a sprig of thyme or sage to infuse flavor without burning delicate herb volatiles.",
+    "Rest the cooked bird for 5‑10 minutes, then finish with a drizzle of herb‑infused vinaigrette and a garnish of micro‑herbs; this preserves aroma, adds a bright acidity, and creates a visually appealing plate."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Chicken and Herbs?",
+      "a": "Cool the dish to room temperature within two hours, then transfer to an airtight container. Refrigerate for up to 3 days or freeze for up to 2 months; reheat gently on low heat or in a steam‑bath to prevent drying out."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Swap chicken with turkey breast or lean pork for a similar protein base. Replace fresh herbs with dried equivalents at one‑third the amount, or use herb blends like Herbes de Provence, lemon zest, or cilantro for a different but complementary flavor profile."
+    }
+  ]
+}

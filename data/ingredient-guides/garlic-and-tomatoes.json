@@ -1,0 +1,21 @@
+{
+  "pair": "garlic-and-tomatoes",
+  "title": "Why Garlic and Tomatoes Works So Well Together",
+  "flavorProfile": "This pairing is a masterclass in balancing acidity and savory depth. Tomatoes provide a bright, tangy acidity and natural sweetness (from fructose and glucose) that cuts through the pungent, sulfurous heat of raw garlic. When cooked, the Maillard reaction in garlic creates nutty, savory notes that complement the umami-rich glutamates in tomatoes. The fat-soluble compounds in garlic (like allicin derivatives) bind with the lipids in olive oil, creating a cohesive, rounded flavor profile where the sharpness of the garlic is mellowed by the tomato's acidity, resulting in a complex, savory-sweet base that enhances rather than overwhelms.",
+  "nutritionalSynergy": "The combination of garlic and tomatoes significantly enhances the bioavailability of lycopene, a powerful antioxidant found in tomatoes. Lycopene is fat-soluble, and the presence of garlic, often cooked in oil, facilitates its absorption. Furthermore, garlic contains allicin and other sulfur compounds that have been shown to work synergistically with lycopene to reduce oxidative stress and inflammation. This duo also boosts the intake of vitamin C from tomatoes, which aids in iron absorption, while the prebiotic fibers in garlic support gut health, creating a holistic cardiovascular and immune-boosting effect.",
+  "prepTechniques": [
+    "Sweat the garlic in olive oil over low heat for 30-60 seconds until fragrant but not browned to avoid bitterness, then add the tomatoes to release their juices without scorching.",
+    "For a deeper flavor, roast whole garlic cloves and halved tomatoes at 400°F (200°C) for 25 minutes to caramelize the natural sugars, then crush them together for a rich, sweet-savory paste.",
+    "Finish the dish with a drizzle of high-quality extra virgin olive oil and a pinch of flaky sea salt just before serving to preserve the volatile aromatic compounds in the garlic and the fresh acidity of the tomatoes."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Garlic and Tomatoes?",
+      "a": "Allow the mixture to cool to room temperature within two hours, then transfer to an airtight glass container. It can be refrigerated for up to 4 days. For longer storage, freeze in portion-sized containers for up to 3 months; the texture of the tomatoes may become slightly softer upon thawing, making it ideal for soups or sauces rather than fresh salads."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For tomatoes, use roasted red peppers or sun-dried tomatoes for a smokier, more concentrated umami profile. For garlic, use shallots or leeks for a milder, sweeter aromatic base, or add a pinch of asafoetida (hing) for a vegan-friendly sulfurous depth that mimics garlic's pungency."
+    }
+  ]
+}
