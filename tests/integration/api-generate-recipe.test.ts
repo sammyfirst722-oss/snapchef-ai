@@ -76,7 +76,7 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     expect(json.error).toContain('select or scan at least one ingredient')
   })
 
-  it('successfully generates recipe via Tier 1 Primary (openrouter/auto)', async () => {
+  it('successfully generates recipe via Tier 1 Primary (openrouter/free)', async () => {
     process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
 
     const mockRecipeData = {
@@ -101,7 +101,7 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        model: 'openrouter/auto',
+        model: 'openrouter/free',
         choices: [{ message: { content: JSON.stringify(mockRecipeData) } }],
       }),
     })
@@ -125,7 +125,7 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     expect(fetchUrl).toBe('https://openrouter.ai/api/v1/chat/completions')
     expect(fetchOptions.headers.Authorization).toBe('Bearer sk-or-v1-test-key')
     const sentBody = JSON.parse(fetchOptions.body)
-    expect(sentBody.model).toBe('openrouter/auto')
+    expect(sentBody.model).toBe('openrouter/free')
   })
 
   it('parses responses wrapped in markdown code fences', async () => {
@@ -147,7 +147,7 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        model: 'openrouter/auto',
+        model: 'openrouter/free',
         choices: [{ message: { content: `\`\`\`json\n${JSON.stringify(mockRecipeData)}\n\`\`\`` } }],
       }),
     })
@@ -203,7 +203,7 @@ describe('POST /api/generate-recipe Integration Tests', () => {
 
     expect(mockFetch).toHaveBeenCalledTimes(2)
     const tier1Call = JSON.parse(mockFetch.mock.calls[0][1].body)
-    expect(tier1Call.model).toBe('openrouter/auto')
+    expect(tier1Call.model).toBe('openrouter/free')
     const tier2Call = JSON.parse(mockFetch.mock.calls[1][1].body)
     expect(tier2Call.model).toBe('openai/gpt-4o-mini')
   })

@@ -75,14 +75,14 @@ describe('POST /api/scan-fridge Integration Tests', () => {
     expect(json.error).toContain('No image provided')
   })
 
-  it('successfully analyzes image with Tier 1 Primary Vision model (stealth/space-bunny-alpha)', async () => {
+  it('successfully analyzes image with Tier 1 Primary Vision model (nvidia/nemotron-3.5-super-vl:free)', async () => {
     process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
 
     const detected = ['eggs', 'cheddar cheese', 'bell pepper', 'butter']
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        model: 'stealth/space-bunny-alpha',
+        model: 'nvidia/nemotron-3.5-super-vl:free',
         choices: [{ message: { content: JSON.stringify(detected) } }],
       }),
     })
@@ -103,7 +103,7 @@ describe('POST /api/scan-fridge Integration Tests', () => {
     const [fetchUrl, fetchOptions] = mockFetch.mock.calls[0]
     expect(fetchUrl).toBe('https://openrouter.ai/api/v1/chat/completions')
     const sentBody = JSON.parse(fetchOptions.body)
-    expect(sentBody.model).toBe('stealth/space-bunny-alpha')
+    expect(sentBody.model).toBe('nvidia/nemotron-3.5-super-vl:free')
     expect(sentBody.messages[0].content).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ type: 'text' }),
@@ -122,7 +122,7 @@ describe('POST /api/scan-fridge Integration Tests', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        model: 'stealth/space-bunny-alpha',
+        model: 'nvidia/nemotron-3.5-super-vl:free',
         choices: [{ message: { content: `\`\`\`json\n${JSON.stringify(detected)}\n\`\`\`` } }],
       }),
     })
@@ -170,7 +170,7 @@ describe('POST /api/scan-fridge Integration Tests', () => {
 
     expect(mockFetch).toHaveBeenCalledTimes(2)
     const tier1Call = JSON.parse(mockFetch.mock.calls[0][1].body)
-    expect(tier1Call.model).toBe('stealth/space-bunny-alpha')
+    expect(tier1Call.model).toBe('nvidia/nemotron-3.5-super-vl:free')
     const tier2Call = JSON.parse(mockFetch.mock.calls[1][1].body)
     expect(tier2Call.model).toBe('openai/gpt-4o-mini')
   })
@@ -227,7 +227,7 @@ describe('POST /api/scan-fridge Integration Tests', () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => ({
-        model: 'stealth/space-bunny-alpha',
+        model: 'nvidia/nemotron-3.5-super-vl:free',
         choices: [{ message: { content: JSON.stringify(detected) } }],
       }),
     })
