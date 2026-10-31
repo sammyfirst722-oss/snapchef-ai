@@ -1,0 +1,21 @@
+{
+  "pair": "garlic-and-spinach",
+  "title": "Why Garlic and Spinach Works So Well Together",
+  "flavorProfile": "Garlic brings a pungent, spicy heat and a subtle sweetness that cuts through the mild, earthy bitterness of spinach. The sulfur compounds in garlic amplify the vegetal umami of spinach, while a touch of olive‑oil fat carries both flavors, creating a balanced sweet‑savory profile with a hint of acidity when lemon is added.",
+  "nutritionalSynergy": "Garlic’s allicin enhances iron absorption from spinach’s non‑heme iron, while spinach’s vitamin C further boosts this effect. The combination delivers a potent mix of vitamin K, folate, and antioxidants, supporting cardiovascular health and immune function. The fat from cooking oil aids in the uptake of fat‑soluble vitamins A and K present in spinach.",
+  "prepTechniques": [
+    "Mince garlic finely and sauté in oil over medium heat before adding spinach to release aroma without burning.",
+    "Add spinach in batches, allowing each handful to wilt before adding more; this controls moisture and prevents over‑cooking.",
+    "Finish with a splash of lemon juice and a sprinkle of toasted pine nuts for bright acidity and texture contrast."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Garlic and Spinach?",
+      "a": "Cool to room temperature within two hours, then transfer to an airtight container and refrigerate for up to three days; for longer storage, portion and freeze in a single‑serve bag, reheating gently on the stovetop."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Replace garlic with shallots or roasted garlic for a milder flavor; swap spinach for kale, Swiss chard, or arugula, adjusting cooking time to maintain texture."
+    }
+  ]
+}

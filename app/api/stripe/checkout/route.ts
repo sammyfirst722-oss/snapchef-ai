@@ -14,15 +14,15 @@ export async function POST(req: NextRequest) {
   try {
     const { plan = 'lifetime', isTwa = false } = await req.json().catch(() => ({}))
 
-    // Google Play Policy 3.1 Guard: Disallow external Stripe credit card checkout inside Android app
+    // Google Play Policy Compliance: Provide Play Billing guidance for Android TWA
     if (isAndroidTwa(req, isTwa)) {
       return NextResponse.json(
         {
-          error: 'google_play_billing_required',
-          message: 'In-app digital purchases on Android must use Google Play Store billing. Please restore your purchase with your email or use the website.',
+          usePlayBilling: true,
+          message: 'In-app digital purchases on Android use Google Play Store billing.',
           isAndroidApp: true,
         },
-        { status: 403 }
+        { status: 200 }
       )
     }
 
@@ -48,10 +48,11 @@ export async function POST(req: NextRequest) {
               price_data: {
                 currency: 'usd',
                 product_data: {
-                  name: 'SnapChef AI Pro (Monthly)',
-                  description: 'Unlimited AI Fridge Camera Scans & Custom Recipes',
+                  name: 'SnapChef Pro Monthly Pass',
+                  description:
+                    'Unlimited AI camera fridge scans, recipe generator, and meal planner.',
                 },
-                unit_amount: 499, // $4.99
+                unit_amount: 499, // $4.99/mo
                 recurring: {
                   interval: 'month' as const,
                 },
@@ -64,8 +65,9 @@ export async function POST(req: NextRequest) {
               price_data: {
                 currency: 'usd',
                 product_data: {
-                  name: 'SnapChef AI Pro (Lifetime Pass)',
-                  description: 'Pay once, own SnapChef Pro forever with unlimited AI scans',
+                  name: 'SnapChef Pro Lifetime Pass',
+                  description:
+                    'One-time payment for lifetime unlimited AI fridge camera scans and custom recipes.',
                 },
                 unit_amount: 1999, // $19.99
               },
@@ -75,17 +77,20 @@ export async function POST(req: NextRequest) {
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      mode: plan === 'monthly' ? 'subscription' : 'payment',
       line_items: lineItems,
-      success_url: `${origin}/?upgraded=true`,
+      mode: plan === 'monthly' ? 'subscription' : 'payment',
+      success_url: `${origin}/?upgraded=true&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/?canceled=true`,
+      metadata: {
+        plan,
+      },
     })
 
     return NextResponse.json({ checkoutUrl: session.url })
   } catch (err: any) {
     console.error('Stripe checkout error:', err)
     return NextResponse.json(
-      { error: err.message || 'Failed to create checkout session' },
+      { error: err.message || 'Unable to start checkout session' },
       { status: 500 }
     )
   }

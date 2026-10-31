@@ -1,0 +1,21 @@
+{
+  "pair": "broccoli-and-chicken",
+  "title": "Why Broccoli and Chicken Works So Well Together",
+  "flavorProfile": "The tender, mildly sweet florets of broccoli provide a bright, vegetal counterpoint to the rich, savory depth of chicken. When roasted or sautéed together, the natural sugars in broccoli caramelize, enhancing umami notes from the chicken’s protein and any added aromatics. A touch of acidity—lemon zest, rice‑vinegar, or a splash of white wine—cuts through the fat, while a drizzle of sesame oil or a sprinkle of toasted nuts adds a subtle nutty richness, creating a balanced sweet‑savory‑fat‑acid harmony.",
+  "nutritionalSynergy": "Broccoli is a powerhouse of vitamin C, K, folate, and sulforaphane, while chicken supplies high‑quality lean protein, B‑vitamins, and selenium. Vitamin C boosts iron absorption from chicken’s heme iron, and the protein matrix aids the uptake of broccoli’s fat‑soluble compounds like lutein when a small amount of healthy fat (olive oil, butter) is used. Together they support muscle repair, immune function, and antioxidant defenses, making the dish both satiating and nutritionally synergistic.",
+  "prepTechniques": [
+    "Blanch broccoli florets 2‑3 minutes, then shock in ice water to lock color and crispness before finishing in the pan with chicken for optimal texture and aroma.",
+    "Sear chicken pieces skin‑side down over medium‑high heat to render fat, then de‑glaze with a splash of broth or wine; add broccoli last so it finishes in the same flavorful steam without over‑cooking.",
+    "Finish with a quick toss of toasted almond slivers, a squeeze of lemon, and a drizzle of sesame‑infused oil; plate on a warm dish and garnish with micro‑greens for visual contrast and aroma lift."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Broccoli and Chicken?",
+      "a": "Cool the dish to room temperature within two hours, then transfer to an airtight container. Refrigerate for up to 3 days or freeze in a single‑layer tray before bagging for up to 2 months. Reheat gently in a skillet with a splash of broth to restore moisture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Swap chicken for turkey breast, tofu, or tempeh for a plant‑based version; keep cooking times short to avoid dryness. Replace broccoli with cauliflower, Romanesco, or green beans—choose varieties that retain a firm bite to preserve texture balance."
+    }
+  ]
+}

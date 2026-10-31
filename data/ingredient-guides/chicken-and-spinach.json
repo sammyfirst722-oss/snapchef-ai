@@ -1,0 +1,21 @@
+{
+  "pair": "chicken-and-spinach",
+  "title": "Why Chicken and Spinach Works So Well Together",
+  "flavorProfile": "The mild, slightly sweet flesh of chicken provides a neutral canvas that absorbs the earthy, slightly bitter notes of spinach; the Maillard-derived umami from seared chicken complements spinach’s vegetal freshness, while a splash of acidity (lemon or wine) balances the fat from the poultry, creating a harmonious sweet-savory-umami equilibrium.",
+  "nutritionalSynergy": "Chicken supplies high-quality complete protein and heme iron, while spinach is rich in non-heme iron, calcium, vitamin K, and antioxidants such as lutein. The vitamin C in a light citrus glaze enhances iron absorption from both sources, and the protein matrix improves the bioavailability of spinach’s fat-soluble nutrients, making the dish a powerhouse of muscle-building and bone-supporting nutrients.",
+  "prepTechniques": [
+    "Pat chicken breasts dry and season before searing hot to lock in juices and develop a golden crust that adds depth to the spinach’s flavor.",
+    "Deglaze the pan with white wine or broth, then add spinach at the last minute; its quick wilt preserves bright color and prevents over-cooking, while the residual heat gently steams the leaves.",
+    "Finish with a drizzle of herb-infused olive oil and a sprinkle of toasted pine nuts for texture, then plate on a warm plate to keep the chicken moist and the spinach vibrant."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Chicken and Spinach?",
+      "a": "Cool the dish to room temperature within two hours, transfer to an airtight container, refrigerate for up to 3 days or freeze for up to 2 months; reheat gently on the stovetop with a splash of broth to restore moisture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Replace chicken with turkey breast or firm tofu for a lighter protein; swap spinach for kale, Swiss chard, or arugula, adjusting cooking time to accommodate tougher leaves."
+    }
+  ]
+}

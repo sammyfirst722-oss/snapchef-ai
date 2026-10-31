@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -21,8 +21,10 @@ import {
   Star,
   Lock,
   Mail,
+  Smartphone,
 } from 'lucide-react'
 import { isUserPro, setUserPro, restoreProByEmail, getUserEmail } from '@/lib/fridge-store'
+import { isPlayBillingAvailable, isAndroidTwa, purchaseWithPlayBilling } from '@/lib/play-billing'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
 
@@ -35,8 +37,15 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
   const [selectedPlan, setSelectedPlan] = useState<'lifetime' | 'monthly'>('lifetime')
   const [loading, setLoading] = useState(false)
   const [restoreEmail, setRestoreEmail] = useState('')
+  const [hasPlayBilling, setHasPlayBilling] = useState(false)
   const isPro = isUserPro()
   const userEmail = getUserEmail()
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setHasPlayBilling(isPlayBillingAvailable())
+    }
+  }, [open])
 
   const handleRestore = () => {
     if (!restoreEmail.trim()) {
@@ -60,29 +69,37 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
     setLoading(true)
 
     try {
-      const isAndroidApp =
-        typeof window !== 'undefined' &&
-        (document.referrer.includes('android-app://') ||
-          (window.matchMedia('(display-mode: standalone)').matches && navigator.userAgent.includes('Android')))
+      // 1. Google Play In-App Billing if inside Android TWA / Play Store app
+      if (isPlayBillingAvailable()) {
+        const sku = selectedPlan === 'monthly' ? 'snapchef_pro_monthly' : 'snapchef_pro_lifetime'
+        const price = selectedPlan === 'monthly' ? '4.99' : '19.99'
+        const label = selectedPlan === 'monthly' ? 'SnapChef Pro Monthly' : 'SnapChef Pro Lifetime Access'
 
+        const result = await purchaseWithPlayBilling(sku, price, label)
+        if (result.success) {
+          setUserPro(true)
+          toast.success('Welcome to SnapChef Pro! ⭐', {
+            description: 'Google Play purchase confirmed. Unlimited AI scans unlocked!',
+          })
+          onOpenChange(false)
+        } else if (result.error && !result.error.toLowerCase().includes('cancel') && !result.error.toLowerCase().includes('dismiss')) {
+          toast.error('Google Play purchase failed', {
+            description: result.error,
+          })
+        }
+        return
+      }
+
+      // 2. Web Stripe Checkout fallback for desktop/browser
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: selectedPlan, isTwa: isAndroidApp }),
+        body: JSON.stringify({ plan: selectedPlan, isTwa: isAndroidTwa() }),
       })
 
       const data = await res.json()
 
-      if (data.isAndroidApp || res.status === 403) {
-        toast.info('Google Play Notice', {
-          description: data.message || 'In-app purchases on Android must use Google Play. Please use the email restore option below or open snapchef-ai.vercel.app in your browser.',
-          duration: 6000,
-        })
-        return
-      }
-
       if (data.checkoutUrl) {
-        // Redirect to Stripe checkout
         window.location.href = data.checkoutUrl
         return
       }
@@ -221,8 +238,17 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
                 disabled={loading}
                 className="w-full gap-2 font-black bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg text-sm h-11 rounded-2xl active:scale-98"
               >
-                <Sparkles className="h-4 w-4 fill-white" />
-                <span>{`Get Pro Access — ${selectedPlan === 'lifetime' ? '$19.99' : '$4.99/mo'}`}</span>
+                {hasPlayBilling ? (
+                  <>
+                    <Smartphone className="h-4 w-4" />
+                    <span>{`1-Tap Buy with Google Play • ${selectedPlan === 'lifetime' ? '$19.99' : '$4.99/mo'}`}</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="h-4 w-4 fill-white" />
+                    <span>{`Get Pro Access — ${selectedPlan === 'lifetime' ? '$19.99' : '$4.99/mo'}`}</span>
+                  </>
+                )}
               </Button>
 
               {/* Restore Pro Access Form */}
@@ -251,7 +277,11 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
               </div>
 
               <div className="flex items-center justify-center text-[11px] text-muted-foreground pt-1">
-                <span>🔒 Secure Stripe 256-bit Checkout</span>
+                {hasPlayBilling ? (
+                  <span>🔒 Google Play In-App Purchase Protection</span>
+                ) : (
+                  <span>🔒 Secure Stripe 256-bit Checkout</span>
+                )}
               </div>
             </div>
           </>
