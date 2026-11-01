@@ -1,0 +1,21 @@
+{
+  "pair": "asparagus-and-chicken",
+  "title": "Why Asparagus and Chicken Works So Well Together",
+  "flavorProfile": "The tender, slightly grassy sweetness of asparagus complements the mild, protein‑rich flavor of chicken, while a touch of butter or olive oil adds fat that carries the vegetal notes. Light acidity from lemon or white wine balances the umami of chicken skin, creating a harmonious sweet‑savory‑acidic profile that appeals to both palate and search algorithms.",
+  "nutritionalSynergy": "Asparagus supplies folate, vitamin K, and antioxidants such as glutathione, which enhance the bioavailability of the iron and zinc found in chicken. The protein in chicken aids the absorption of the water‑soluble vitamins in asparagus, while the fiber in asparagus moderates the glycemic impact of the chicken’s protein, supporting sustained energy and gut health.",
+  "prepTechniques": [
+    "Blanch asparagus 2‑3 minutes, then shock in ice water to lock color and crispness before searing with chicken for contrast in texture.",
+    "Sear chicken thighs skin‑side first over medium‑high heat to render fat, then finish in a 350°F oven; add asparagus during the last 5 minutes to prevent overcooking.",
+    "Finish with a drizzle of lemon‑garlic beurre blanc and garnish with toasted almond slivers for added crunch and visual appeal."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Asparagus and Chicken?",
+      "a": "Cool to room temperature within 2 hours, then refrigerate in an airtight container for up to 3 days or freeze in a single‑layer tray for 2 months; reheat gently to retain asparagus texture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Swap chicken with turkey breast or pork tenderloin for a leaner profile, and replace asparagus with green beans, broccolini, or thin‑cut zucchini for a similar bite and color."
+    }
+  ]
+}

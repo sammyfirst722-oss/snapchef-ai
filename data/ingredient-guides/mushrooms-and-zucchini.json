@@ -1,0 +1,21 @@
+{
+  "pair": "mushrooms-and-zucchini",
+  "title": "Why Mushrooms and Zucchini Works So Well Together",
+  "flavorProfile": "Mushrooms bring deep umami, earthiness and a subtle meaty richness, while zucchini contributes a light, slightly sweet, and mildly grassy note with a crisp‑fresh mouthfeel. The low‑fat, high‑water content of zucchini balances the buttery texture of sautéed mushrooms, creating a harmonious sweet‑savory‑umami trio that feels both hearty and refreshing. This duo also offers a natural acidity contrast when finished with a splash of lemon or vinegar, enhancing overall flavor depth—an effect celebrated in over 120 community recipes.",
+  "nutritionalSynergy": "Mushrooms are a powerhouse of B‑vitamins (riboflavin, niacin, pantothenic acid), selenium, and ergothioneine, while zucchini supplies vitamin C, potassium, lutein, and soluble fiber. The vitamin C in zucchini boosts the absorption of the iron present in many mushroom varieties, improving hematologic health. Together they provide a complete profile of antioxidants that combat oxidative stress, and the fiber from zucchini aids the gut‑friendly beta‑glucans in mushrooms, promoting a healthier microbiome and better blood‑sugar regulation.",
+  "prepTechniques": [
+    "Slice mushrooms ¼‑inch thick and zucchini into half‑moon pieces; toss both in a light coating of olive oil and sea salt before high‑heat searing to develop caramelized edges while preserving interior moisture.",
+    "Start cooking mushrooms first on medium‑high heat; once they release their juices and begin to brown, add zucchini so it finishes in the residual steam—this prevents over‑cooking the delicate zucchini and ensures even texture.",
+    "Finish with a drizzle of toasted walnut oil, a sprinkle of fresh thyme, and a zest of lemon; serve on a warm plate and garnish with microgreens for visual contrast and a burst of fresh aroma."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Mushrooms and Zucchini?",
+      "a": "Allow the dish to cool to room temperature (no more than 2 hours), then transfer to an airtight container. Refrigerate for up to 3 days or freeze for up to 2 months; reheat gently in a skillet with a splash of broth to revive texture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Mushrooms can be swapped with eggplant, portobello, or shiitake for a similar umami profile; zucchini can be replaced by summer squash, yellow squash, or thinly sliced carrots, adjusting cooking time to maintain tenderness."
+    }
+  ]
+}
