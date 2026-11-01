@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { SwRegister } from '@/components/sw-register'
+import { EcosystemFooter } from '@/components/ecosystem-footer'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -26,8 +27,6 @@ export const viewport: Viewport = {
   themeColor: '#052e16',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 }
 
 export default function RootLayout({
@@ -37,9 +36,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen bg-background text-foreground antialiased font-sans">
+      <body className="min-h-screen bg-background text-foreground antialiased font-sans flex flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <div className="flex-1 flex flex-col">
+            {children}
+          </div>
+          <EcosystemFooter />
           <Toaster position="top-center" richColors closeButton />
           <SwRegister />
         </ThemeProvider>

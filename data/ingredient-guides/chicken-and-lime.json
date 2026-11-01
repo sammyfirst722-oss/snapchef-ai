@@ -1,0 +1,21 @@
+{
+  "pair": "chicken-and-lime",
+  "title": "Why Chicken and Lime Works So Well Together",
+  "flavorProfile": "The bright acidity of lime cuts through the mild, slightly sweet flavor of chicken, creating a harmonious balance of sweet, savory, and acidic notes. The lime’s citrus oils add a subtle bitterness that counteracts the natural fattiness of the meat, while the chicken’s protein provides a savory backbone that absorbs the lime’s zest, resulting in a complex, refreshing taste profile.",
+  "nutritionalSynergy": "Chicken is a rich source of high‑quality protein, niacin, selenium, and B‑vitamins, while lime delivers vitamin C, folate, and flavonoids. Vitamin C enhances iron absorption from the chicken, and the antioxidants in lime help reduce oxidative stress. Together, they support muscle repair, immune function, and metabolic health, making this pairing both flavorful and nutritionally synergistic.",
+  "prepTechniques": [
+    "Marinate the chicken in lime juice, zest, garlic, and a touch of honey for 30 minutes to tenderize and infuse bright citrus flavor while the acidity helps break down muscle fibers for a juicy texture.",
+    "Sear the chicken at high heat to lock in juices, then finish in a lime‑infused broth at a lower temperature to maintain moisture and prevent overcooking.",
+    "Plate with a drizzle of lime reduction, a sprinkle of fresh cilantro, and a side of lightly sautéed greens to add color, crunch, and a complementary herbal note."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Chicken and Lime?",
+      "a": "Cool the dish to room temperature, then refrigerate in an airtight container for up to 3 days. For longer storage, freeze in portioned containers for up to 2 months. Reheat gently in a skillet or microwave, adding a splash of water or broth to keep the chicken moist."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "For chicken, use turkey or tofu for a lighter protein; for lime, substitute lemon or grapefruit for a slightly different citrus profile. Adjust the amount of acid to maintain the balance—use ¾ the quantity of lemon or grapefruit juice for a milder flavor."
+    }
+  ]
+}

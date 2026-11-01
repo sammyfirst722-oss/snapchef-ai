@@ -1,0 +1,21 @@
+{
+  "pair": "bell-pepper-and-lime",
+  "title": "Why Bell-pepper and Lime Works So Well Together",
+  "flavorProfile": "The pairing of bell pepper and lime creates a dynamic contrast between the pepper's inherent sugar content and mild vegetal sweetness, and the lime's sharp, volatile citric acidity. Bell peppers provide a crisp, hydrating body and a subtle earthy note, while lime cuts through any perceived heaviness, brightening the overall profile. This combination is particularly effective in raw preparations like salsas and ceviches, where the lime juice denatures proteins and enhances the perception of freshness, while the pepper adds textural complexity and a clean, non-bitter finish that balances the high acidity without overwhelming the palate.",
+  "nutritionalSynergy": "Bell peppers are exceptionally high in Vitamin C, containing more per gram than citrus fruits, while limes provide additional ascorbic acid and flavonoids. The combination significantly boosts antioxidant capacity, helping to combat oxidative stress. Furthermore, the vitamin C in both ingredients enhances the non-heme iron absorption if the dish is paired with legumes or leafy greens. The bioactive compounds in bell peppers, such as capsanthin and lutein, work synergistically with the limonoids in lime to support immune function and reduce inflammation, making this pairing a potent functional food combination for cardiovascular and immune health.",
+  "prepTechniques": [
+    "Dice the bell peppers uniformly into small brunoise or fine dice to ensure even distribution of texture and to allow the lime juice to penetrate the flesh quickly, maximizing the flavor integration within minutes.",
+    "Add the lime juice only at the very end of preparation or just before serving to preserve the volatile aromatic compounds and prevent the bell peppers from becoming waterlogged and losing their crisp snap.",
+    "For a more complex flavor profile, char the bell pepper skins briefly before dicing and adding the lime; the smoky notes from the charred skin contrast beautifully with the bright, zesty acidity of the lime, creating a depth that raw peppers alone cannot achieve."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Bell-pepper and Lime?",
+      "a": "Store leftovers in an airtight glass container in the refrigerator for up to 3 days. The high water content of the bell peppers will cause the mixture to release liquid over time; drain any excess liquid before serving to maintain the ideal texture. Do not freeze this combination, as the cell structure of the bell peppers breaks down completely upon thawing, resulting in a mushy, unappetizing texture."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "If substituting for lime, use fresh lemon juice for a slightly less sharp, more floral acidity, or a splash of white wine vinegar for a milder, fermented tang. For bell peppers, you can substitute with cucumber for a similar hydrating crunch and mild flavor, or with jicama for a firmer, slightly sweeter texture that holds up well to acidic marinades."
+    }
+  ]
+}

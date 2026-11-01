@@ -1,0 +1,21 @@
+{
+  "pair": "spinach-and-tomatoes",
+  "title": "Why Spinach and Tomatoes Works So Well Together",
+  "flavorProfile": "Spinach offers a mild, slightly bitter, earthy green note with a subtle sweetness, while tomatoes contribute bright acidity, natural sugars, and a juicy, savory depth. Together they balance each other: the tomato’s acidity cuts through spinach’s bitterness, the natural sugars mellow the green’s earthiness, and the shared umami compounds (glutamates) create a cohesive, layered flavor profile.",
+  "nutritionalSynergy": "Combining spinach’s high iron, folate, and vitamin K with tomatoes’ abundant lycopene, vitamin C, and potassium enhances nutrient absorption. Vitamin C from tomatoes boosts iron bioavailability from spinach, while the fat-soluble lycopene is better absorbed when cooked with a small amount of healthy fat. This pairing also supports antioxidant synergy, reducing oxidative stress and supporting cardiovascular health.",
+  "prepTechniques": [
+    "Sauté spinach briefly in a hot pan with a splash of olive oil to preserve its bright color and release its natural sugars, then add tomatoes to caramelize their sugars and mellow acidity.",
+    "Use a two-stage cooking: first blanch spinach to soften fibers, then finish with a quick sauté of tomatoes to maintain their juiciness and prevent overcooking the greens.",
+    "Plate by layering wilted spinach as a bed, topping with roasted tomato wedges, and finishing with a drizzle of aged balsamic glaze and a sprinkle of toasted pine nuts for texture and visual appeal."
+  ],
+  "faq": [
+    {
+      "q": "How to store leftovers made with Spinach and Tomatoes?",
+      "a": "Refrigerate in an airtight container for up to 3 days; stir gently before reheating to redistribute moisture. For longer storage, freeze in portioned containers; thaw in the fridge overnight and reheat on the stovetop or in the microwave, adding a splash of water or broth to prevent drying."
+    },
+    {
+      "q": "Can I substitute either ingredient?",
+      "a": "Replace spinach with kale or Swiss chard for a heartier green, or use roasted red peppers for a sweeter tomato alternative. For a vegan option, swap olive oil with avocado oil or coconut oil, and use a plant-based broth to enhance umami."
+    }
+  ]
+}
