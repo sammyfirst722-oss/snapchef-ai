@@ -186,3 +186,25 @@ describe('lib/rate-limit.ts Unit Tests', () => {
     })
   })
 })
+
+describe('rejected requests do not fill the window (Redis path)', () => {
+  it('does not record a request that was refused, so a noisy client cannot extend a lockout', async () => {
+    process.env.UPSTASH_REDIS_REST_URL = 'https://example.upstash.io'
+    process.env.UPSTASH_REDIS_REST_TOKEN = 'test-token'
+    _resetRateLimitsForTesting()
+    vi.clearAllMocks()
+    mockPipeline.exec.mockResolvedValue([null, 5, null, null]) // window already holds 5
+    const refused = await rateLimit('burst', 5, 60)
+    expect(refused.success).toBe(false)
+    expect(mockPipeline.zadd).not.toHaveBeenCalled()
+    mockPipeline.exec.mockResolvedValue([null, 4, null, null]) // room for one more
+    const allowed = await rateLimit('burst', 5, 60)
+    expect(allowed.success).toBe(true)
+    expect(allowed.remaining).toBe(0)
+    expect(mockPipeline.zadd).toHaveBeenCalledTimes(1)
+  })
+  it('getClientIp prefers the platform-set x-real-ip over a client-supplied forwarded list', () => {
+    const req = new NextRequest('https://example.com/api', { headers: { 'x-real-ip': '203.0.113.9', 'x-forwarded-for': '1.2.3.4, 203.0.113.9' } })
+    expect(getClientIp(req)).toBe('203.0.113.9')
+  })
+})

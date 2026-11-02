@@ -17,6 +17,8 @@ export const maxDuration = 60
 
 // Whole-site ceiling per day, so one abuser (or a bug) can never drain the OpenRouter credit.
 const GLOBAL_DAILY_CEILING = Number(process.env.RECIPE_DAILY_CEILING) || 3000
+// Each visitor's own daily budget, far below the site-wide ceiling, so one computer cannot use up everyone's share.
+const PER_IP_DAILY_LIMIT = 300
 
 interface RecipePayload {
   title: string
@@ -68,6 +70,15 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    const dailyResult = await rateLimit(`generate-recipe:daily:${ip}`, PER_IP_DAILY_LIMIT, 86400)
+    if (!dailyResult.success) {
+      return NextResponse.json(
+        { error: 'You have reached today\'s recipe limit. Please try again tomorrow.', retryAfter: 3600 },
+        { status: 429, headers: { 'Retry-After': '3600' } }
+      )
+    }
+
+    // Site-wide ceiling. Only requests that were allowed count toward it (see lib/rate-limit.ts).
     const globalResult = await rateLimit('generate-recipe:GLOBAL', GLOBAL_DAILY_CEILING, 86400)
     if (!globalResult.success) {
       return NextResponse.json(

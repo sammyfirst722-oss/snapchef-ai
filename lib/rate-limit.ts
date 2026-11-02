@@ -126,21 +126,25 @@ export async function rateLimit(
   const key = `snapchef:ratelimit:${identifier}`
 
   try {
-    const pipeline = redis.pipeline()
-    // Remove expired entries outside the sliding window
-    pipeline.zremrangebyscore(key, 0, windowStart)
-    // Count active entries in current window
-    pipeline.zcard(key)
-    // Add current request timestamp
-    pipeline.zadd(key, { score: now, member: `${now}:${Math.random().toString(36).substring(2, 9)}` })
-    // Ensure key expires after window
-    pipeline.expire(key, windowSeconds)
-
-    const results = await pipeline.exec()
+    // 1) Drop expired entries and count what is left in the window
+    const check = redis.pipeline()
+    check.zremrangebyscore(key, 0, windowStart)
+    check.zcard(key)
+    const results = await check.exec()
     const count = (results[1] as number) || 0
 
     const success = count < limit
-    const remaining = Math.max(0, limit - count - 1)
+
+    // 2) Only record the request if it is ALLOWED. Rejected requests must not fill the window,
+    //    otherwise one noisy client could keep everyone locked out (and keep the lockout going).
+    if (success) {
+      const record = redis.pipeline()
+      record.zadd(key, { score: now, member: `${now}:${Math.random().toString(36).substring(2, 9)}` })
+      record.expire(key, windowSeconds)
+      await record.exec()
+    }
+
+    const remaining = Math.max(0, limit - count - (success ? 1 : 0))
     const reset = Math.ceil((now + windowSeconds * 1000) / 1000)
 
     return {
@@ -160,13 +164,14 @@ export async function rateLimit(
  * Extracts client IP address from Next.js request headers
  */
 export function getClientIp(req: NextRequest): string {
-  const xForwardedFor = req.headers.get('x-forwarded-for')
-  if (xForwardedFor) {
-    return xForwardedFor.split(',')[0].trim()
-  }
+  // On Vercel, x-real-ip is set by the platform to the real client address (it cannot be faked by the caller).
   const xRealIp = req.headers.get('x-real-ip')
   if (xRealIp) {
     return xRealIp.trim()
+  }
+  const xForwardedFor = req.headers.get('x-forwarded-for')
+  if (xForwardedFor) {
+    return xForwardedFor.split(',')[0].trim()
   }
   const cfConnectingIp = req.headers.get('cf-connecting-ip')
   if (cfConnectingIp) {
