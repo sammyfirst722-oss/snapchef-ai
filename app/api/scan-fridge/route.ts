@@ -13,6 +13,12 @@ import {
 const SCAN_LIMIT = 10
 const SCAN_WINDOW_SECONDS = 60
 
+// AI calls can take a while: allow up to 60 seconds before Vercel cuts the request off.
+export const maxDuration = 60
+
+// Whole-site ceiling per day, so one abuser (or a bug) can never drain the OpenRouter credit.
+const GLOBAL_DAILY_CEILING = Number(process.env.SCAN_DAILY_CEILING) || 1500
+
 function isValidIngredientList(parsed: any): parsed is string[] {
   return (
     Array.isArray(parsed) &&
@@ -42,6 +48,14 @@ export async function POST(req: NextRequest) {
             'Retry-After': String(retryAfter),
           },
         }
+      )
+    }
+
+    const globalResult = await rateLimit('scan-fridge:GLOBAL', GLOBAL_DAILY_CEILING, 86400)
+    if (!globalResult.success) {
+      return NextResponse.json(
+        { error: 'SnapChef is very busy right now. Please try again in a little while.', retryAfter: 3600 },
+        { status: 429, headers: { 'Retry-After': '3600' } }
       )
     }
 
