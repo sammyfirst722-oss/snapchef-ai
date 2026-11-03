@@ -165,7 +165,7 @@ export async function issueEntitlement(input: IssueInput): Promise<IssueResult> 
 export type Lookup =
   | { state: 'active'; plan: Plan; paidThrough: number | null }
   | { state: 'none' } // no cookie, unknown token, revoked or expired
-  | { state: 'unverified' } // Redis was down: a well-formed cookie is trusted for now
+  | { state: 'unverified' } // Redis was down: cannot be checked, so it does NOT count as Pro
 
 export async function lookupToken(token: string | undefined | null, nowSeconds = Math.floor(Date.now() / 1000)): Promise<Lookup> {
   if (!isWellFormedToken(token)) return { state: 'none' }
@@ -176,7 +176,7 @@ export async function lookupToken(token: string | undefined | null, nowSeconds =
     if (isRecordActive(rec, nowSeconds)) return { state: 'active', plan: rec!.plan, paidThrough: rec!.paidThrough }
     return { state: 'none' }
   } catch (err) {
-    console.error('[entitlements] lookup failed, trusting well-formed cookie:', err)
+    console.error('[entitlements] lookup failed, cannot verify cookie:', err)
     return { state: 'unverified' }
   }
 }
@@ -186,7 +186,7 @@ export async function lookupRequest(req: NextRequest): Promise<Lookup> {
 }
 
 export function isProLookup(l: Lookup): boolean {
-  return l.state === 'active' || l.state === 'unverified'
+  return l.state === 'active' // 'unverified' (Redis down) is not Pro: never give away paid AI calls on a guess
 }
 
 /**

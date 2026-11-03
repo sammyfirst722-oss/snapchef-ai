@@ -29,3 +29,24 @@ export function checkProSession(s: ProSessionLike | null | undefined, nowSeconds
   }
   return { ok: true, plan: s.mode === 'subscription' ? 'monthly' : 'lifetime' }
 }
+
+/**
+ * Paid-through time of a subscription (seconds).
+ * Stripe API versions from 2025-03-31 (basil) moved `current_period_end` from the subscription to each
+ * subscription item. Read the old place first, then the latest end among the items.
+ */
+export function subscriptionPeriodEnd(sub: any): number | null {
+  if (typeof sub?.current_period_end === 'number') return sub.current_period_end
+  const ends: number[] = (sub?.items?.data ?? [])
+    .map((i: any) => i?.current_period_end)
+    .filter((n: unknown): n is number => typeof n === 'number')
+  return ends.length ? Math.max(...ends) : null
+}
+
+/**
+ * The subscription an invoice belongs to. Older API versions put it in `invoice.subscription`;
+ * newer ones in `invoice.parent.subscription_details.subscription`. Returns an id string or object, whichever Stripe sent.
+ */
+export function invoiceSubscription(invoice: any): unknown {
+  return invoice?.subscription ?? invoice?.parent?.subscription_details?.subscription ?? undefined
+}

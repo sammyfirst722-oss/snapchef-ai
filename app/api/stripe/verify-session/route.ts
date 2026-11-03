@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { checkProSession } from '@/lib/stripe-pro'
+import { checkProSession, subscriptionPeriodEnd } from '@/lib/stripe-pro'
 import { rateLimit, getClientIp } from '@/lib/rate-limit'
 import { cookieOptions, enforcementEnabled, issueEntitlement, PRO_COOKIE, type IndexKind } from '@/lib/entitlements'
 
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
   const sub = idOf(session.subscription)
   if (pi) index.pi = pi
   if (sub) index.sub = sub
-  const periodEnd = typeof session.subscription?.current_period_end === 'number' ? session.subscription.current_period_end : null
+  const periodEnd = subscriptionPeriodEnd(session.subscription)
   const issued = await issueEntitlement({
     source: 'stripe',
     plan: result.plan,

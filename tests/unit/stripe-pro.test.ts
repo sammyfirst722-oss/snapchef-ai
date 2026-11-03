@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { checkProSession } from '@/lib/stripe-pro'
+import { checkProSession, invoiceSubscription, subscriptionPeriodEnd } from '@/lib/stripe-pro'
 
 const NOW = 1_800_000_000
 const good = {
@@ -41,5 +41,31 @@ describe('checkProSession (server proof that SnapChef Pro was really bought)', (
 
   it('rejects an unsupported mode', () => {
     expect(checkProSession({ ...good, mode: 'setup' }, NOW)).toEqual({ ok: false, reason: 'unsupported_mode' })
+  })
+})
+
+describe('subscriptionPeriodEnd (old and new Stripe API shapes)', () => {
+  it('reads the old subscription-level field', () => {
+    expect(subscriptionPeriodEnd({ current_period_end: 1234 })).toBe(1234)
+  })
+  it('reads the item-level field used since API 2025-03-31 (basil)', () => {
+    expect(subscriptionPeriodEnd({ items: { data: [{ current_period_end: 100 }, { current_period_end: 300 }] } })).toBe(300)
+  })
+  it('returns null when neither exists', () => {
+    expect(subscriptionPeriodEnd({})).toBeNull()
+    expect(subscriptionPeriodEnd(null)).toBeNull()
+    expect(subscriptionPeriodEnd({ items: { data: [{}] } })).toBeNull()
+  })
+})
+
+describe('invoiceSubscription (old and new Stripe API shapes)', () => {
+  it('reads invoice.subscription', () => {
+    expect(invoiceSubscription({ subscription: 'sub_1' })).toBe('sub_1')
+  })
+  it('reads invoice.parent.subscription_details.subscription', () => {
+    expect(invoiceSubscription({ parent: { subscription_details: { subscription: 'sub_2' } } })).toBe('sub_2')
+  })
+  it('returns undefined when absent', () => {
+    expect(invoiceSubscription({})).toBeUndefined()
   })
 })

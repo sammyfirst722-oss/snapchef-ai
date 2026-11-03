@@ -99,12 +99,12 @@ describe('entitlements: storage', () => {
     expect((await lookupToken(t.token, NOW)).state).toBe('none')
   })
 
-  it('fails OPEN for an existing well-formed cookie when Redis is down, but not for garbage', async () => {
+  it('does NOT count as Pro when Redis is down (cannot verify), and garbage is none', async () => {
     const t = (await issueEntitlement({ source: 'stripe', plan: 'lifetime', paidThrough: null, index: { cs: 'cs_test_5' } })) as any
     kv.failing = true
     const l = await lookupToken(t.token, NOW)
     expect(l.state).toBe('unverified')
-    expect(isProLookup(l)).toBe(true)
+    expect(isProLookup(l)).toBe(false)
     expect((await lookupToken('garbage', NOW)).state).toBe('none')
   })
 

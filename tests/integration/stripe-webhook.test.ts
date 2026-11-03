@@ -89,6 +89,13 @@ describe('POST /api/stripe/webhook', () => {
     expect((await lookupToken(issued.token)).state).toBe('none')
   })
 
+  it('renewal extends Pro when the period end is on the subscription item (newer Stripe API)', async () => {
+    const issued = (await issueEntitlement({ source: 'stripe', plan: 'monthly', paidThrough: nowS() + 100, index: { cs: 'cs_test_g', sub: 'sub_g' } })) as any
+    const future = nowS() + 25 * 24 * 3600
+    await POST(signedRequest(evt('customer.subscription.updated', { id: 'sub_g', status: 'active', items: { data: [{ current_period_end: future }] } })))
+    expect(await lookupToken(issued.token)).toMatchObject({ state: 'active', paidThrough: future })
+  })
+
   it('subscription going unpaid turns Pro off at once', async () => {
     const issued = (await issueEntitlement({ source: 'stripe', plan: 'monthly', paidThrough: nowS() + 100, index: { sub: 'sub_e' } })) as any
     await POST(signedRequest(evt('customer.subscription.updated', { id: 'sub_e', status: 'unpaid', current_period_end: nowS() })))

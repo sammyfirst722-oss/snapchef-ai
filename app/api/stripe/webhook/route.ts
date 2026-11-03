@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { checkProSession, PRO_APP_ID } from '@/lib/stripe-pro'
+import { checkProSession, invoiceSubscription, PRO_APP_ID, subscriptionPeriodEnd } from '@/lib/stripe-pro'
 import { findToken, issueEntitlement, revokeToken, setPaidThrough, type IndexKind } from '@/lib/entitlements'
 
 // Stripe tells us here when a SnapChef Pro purchase is cancelled, refunded or disputed.
@@ -85,7 +85,8 @@ export async function POST(req: NextRequest) {
           return ok({ revoked: true })
         }
         // active / trialing / past_due: paid through the end of the current period (cancel_at_period_end keeps it too)
-        if (typeof obj.current_period_end === 'number') await setPaidThrough(token, obj.current_period_end)
+        const periodEnd = subscriptionPeriodEnd(obj)
+        if (periodEnd !== null) await setPaidThrough(token, periodEnd)
         return ok({ updated: true })
       }
 
@@ -104,7 +105,7 @@ export async function POST(req: NextRequest) {
         if (!done && typeof obj.invoice === 'string' && stripeKey) {
           // A subscription payment: the charge points to an invoice, and the invoice points to the subscription.
           const invoice: any = await stripe.invoices.retrieve(obj.invoice)
-          done = await revokeFirst([['sub', idOf(invoice.subscription)]], 'refunded')
+          done = await revokeFirst([['sub', idOf(invoiceSubscription(invoice))]], 'refunded')
         }
         return ok({ revoked: done })
       }
@@ -116,7 +117,7 @@ export async function POST(req: NextRequest) {
           done = await revokeFirst([['pi', idOf(charge.payment_intent)]], 'disputed')
           if (!done && typeof charge.invoice === 'string') {
             const invoice: any = await stripe.invoices.retrieve(charge.invoice)
-            done = await revokeFirst([['sub', idOf(invoice.subscription)]], 'disputed')
+            done = await revokeFirst([['sub', idOf(invoiceSubscription(invoice))]], 'disputed')
           }
         }
         return ok({ revoked: done })
