@@ -194,28 +194,14 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
       }
     }
 
-    // Tier 3: Resilient Smart Fallback Detections (Never leave the user with an empty/broken screen)
-    const simulatedDetections = [
-      'eggs',
-      'chicken',
-      'cheddar cheese',
-      'butter',
-      'garlic',
-      'milk',
-      'spinach',
-      'bell pepper',
-      'tomatoes',
-      'onions',
-    ]
-
+    // Both AI tiers failed (or no key / no credit). Never invent ingredients that are not in the photo:
+    // say plainly that scanning is unavailable so the person can add items by hand or try again later.
     return NextResponse.json(
       {
-        ingredients: simulatedDetections,
-        photoCount: rawImages.length,
-        source: 'smart-detect-preview',
-        note: 'Live camera detection preview.',
+        error: 'Photo scanning is temporarily unavailable. Please add your ingredients by hand, or try again later.',
+        source: 'unavailable',
       },
-      { headers: rateLimitHeaders }
+      { status: 503, headers: { ...rateLimitHeaders, 'Retry-After': '300' } }
     )
   } catch (err: any) {
     console.error('Scan fridge error:', err)

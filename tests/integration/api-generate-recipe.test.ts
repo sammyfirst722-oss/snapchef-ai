@@ -238,6 +238,25 @@ describe('POST /api/generate-recipe Integration Tests', () => {
     expect(json.recipe.title).toContain('rice')
   })
 
+  it('out of OpenRouter credit (HTTP 402 on both tiers): still answers 200 with the curated recipe built from the ingredients', async () => {
+    process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
+
+    const outOfCredit = {
+      ok: false,
+      status: 402,
+      text: async () => '{"error":{"message":"Insufficient credits","code":402}}',
+    }
+    mockFetch.mockResolvedValueOnce(outOfCredit).mockResolvedValueOnce(outOfCredit)
+
+    const res = await POST(createRequest({ ingredients: ['salmon', 'rice', 'lemon'] }))
+    const json = await res.json()
+
+    expect(res.status).toBe(200)
+    expect(json.source).toBe('curated-generator')
+    expect(json.recipe.title).toContain('salmon')
+    expect(mockFetch).toHaveBeenCalledTimes(2)
+  })
+
   it('uses Tier 3 curated generator when OPENROUTER_API_KEY is not configured', async () => {
     const req = createRequest({
       ingredients: ['tofu', 'noodles', 'soy sauce'],

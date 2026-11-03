@@ -175,7 +175,7 @@ describe('POST /api/scan-fridge Integration Tests', () => {
     expect(tier2Call.model).toBe('openai/gpt-4o-mini')
   })
 
-  it('falls back to Tier 3 smart detection preview when both AI tiers fail', async () => {
+  it('says scanning is unavailable (503) when both AI tiers fail, and never invents ingredients', async () => {
     process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
 
     // Tier 1 fails
@@ -199,13 +199,32 @@ describe('POST /api/scan-fridge Integration Tests', () => {
     const res = await POST(req)
     const json = await res.json()
 
-    expect(res.status).toBe(200)
-    expect(json.source).toBe('smart-detect-preview')
-    expect(json.ingredients).toContain('eggs')
-    expect(json.ingredients).toContain('chicken')
+    expect(res.status).toBe(503)
+    expect(json.source).toBe('unavailable')
+    expect(json.error).toMatch(/temporarily unavailable/i)
+    expect(json.ingredients).toBeUndefined()
   })
 
-  it('uses Tier 3 smart detection preview when OPENROUTER_API_KEY is not set', async () => {
+  it('out of OpenRouter credit (HTTP 402 on both tiers): honest 503, no made-up ingredients, nothing thrown', async () => {
+    process.env.OPENROUTER_API_KEY = 'sk-or-v1-test-key'
+
+    const outOfCredit = {
+      ok: false,
+      status: 402,
+      text: async () => '{"error":{"message":"Insufficient credits","code":402}}',
+    }
+    mockFetch.mockResolvedValueOnce(outOfCredit).mockResolvedValueOnce(outOfCredit)
+
+    const res = await POST(createRequest({ imageBase64: 'testImage' }))
+    const json = await res.json()
+
+    expect(res.status).toBe(503)
+    expect(json.source).toBe('unavailable')
+    expect(json.ingredients).toBeUndefined()
+    expect(mockFetch).toHaveBeenCalledTimes(2)
+  })
+
+  it('answers 503 (not fake ingredients) when OPENROUTER_API_KEY is not set', async () => {
     const req = createRequest({
       imageBase64: 'testImage',
     })
@@ -213,10 +232,9 @@ describe('POST /api/scan-fridge Integration Tests', () => {
     const res = await POST(req)
     const json = await res.json()
 
-    expect(res.status).toBe(200)
-    expect(json.source).toBe('smart-detect-preview')
-    expect(Array.isArray(json.ingredients)).toBe(true)
-    expect(json.ingredients.length).toBeGreaterThan(0)
+    expect(res.status).toBe(503)
+    expect(json.source).toBe('unavailable')
+    expect(json.ingredients).toBeUndefined()
     expect(mockFetch).not.toHaveBeenCalled()
   })
 
