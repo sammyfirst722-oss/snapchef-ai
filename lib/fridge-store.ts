@@ -67,13 +67,6 @@ export function clearFridgeItems() {
 
 const USER_EMAIL_KEY = 'snapchef_user_email_v1'
 
-export const VIP_PRO_EMAILS = [
-  'sammyfirst722@gmail.com',
-  'sammyfirst722-oss@gmail.com',
-  'sammyfirstplaystore@gmail.com',
-  'faqurdone@gmail.com',
-]
-
 export function getUserEmail(): string | null {
   if (typeof window === 'undefined') return null
   try {
@@ -98,11 +91,6 @@ export function setUserEmail(email: string) {
 export function isUserPro(): boolean {
   if (typeof window === 'undefined') return false
   try {
-    // If user email is VIP, automatically Pro
-    const email = localStorage.getItem(USER_EMAIL_KEY)?.toLowerCase().trim()
-    if (email && VIP_PRO_EMAILS.includes(email)) {
-      return true
-    }
     return localStorage.getItem(PRO_STATUS_KEY) === 'true'
   } catch {
     return false
@@ -116,40 +104,6 @@ export function setUserPro(isPro: boolean) {
     window.dispatchEvent(new Event('snapchef_pro_changed'))
   } catch (err) {
     console.error(err)
-  }
-}
-
-export function restoreProByEmail(email: string): {
-  success: boolean
-  message: string
-  isVip?: boolean
-} {
-  const clean = email.trim().toLowerCase()
-  if (!clean || !clean.includes('@')) {
-    return { success: false, message: 'Please enter a valid email address.' }
-  }
-
-  setUserEmail(clean)
-
-  if (VIP_PRO_EMAILS.includes(clean)) {
-    setUserPro(true)
-    return {
-      success: true,
-      message: `VIP Pro status unlocked for ${clean}. Unlimited scans and full features active!`,
-      isVip: true,
-    }
-  }
-
-  if (isUserPro()) {
-    return {
-      success: true,
-      message: `SnapChef Pro is active for ${clean}. Unlimited scans available!`,
-    }
-  }
-
-  return {
-    success: false,
-    message: `No active Pro subscription found for ${clean}. Upgrade to unlock unlimited scans.`,
   }
 }
 

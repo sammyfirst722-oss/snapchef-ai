@@ -79,10 +79,11 @@ export async function POST(req: NextRequest) {
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: plan === 'monthly' ? 'subscription' : 'payment',
-      success_url: `${origin}/?upgraded=true&session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${origin}/?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/?canceled=true`,
       metadata: {
         plan,
+        app: 'snapchef',
       },
     })
 

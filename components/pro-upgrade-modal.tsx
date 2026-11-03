@@ -23,7 +23,7 @@ import {
   Mail,
   Smartphone,
 } from 'lucide-react'
-import { isUserPro, setUserPro, restoreProByEmail, getUserEmail } from '@/lib/fridge-store'
+import { isUserPro, setUserPro, getUserEmail } from '@/lib/fridge-store'
 import { isPlayBillingAvailable, isAndroidTwa, purchaseWithPlayBilling } from '@/lib/play-billing'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
@@ -36,7 +36,6 @@ interface ProUpgradeModalProps {
 export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
   const [selectedPlan, setSelectedPlan] = useState<'lifetime' | 'monthly'>('lifetime')
   const [loading, setLoading] = useState(false)
-  const [restoreEmail, setRestoreEmail] = useState('')
   const [hasPlayBilling, setHasPlayBilling] = useState(false)
   const isPro = isUserPro()
   const userEmail = getUserEmail()
@@ -46,24 +45,6 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
       setHasPlayBilling(isPlayBillingAvailable())
     }
   }, [open])
-
-  const handleRestore = () => {
-    if (!restoreEmail.trim()) {
-      toast.error('Please enter an email address')
-      return
-    }
-    const result = restoreProByEmail(restoreEmail)
-    if (result.success) {
-      toast.success('SnapChef Pro Active! ⭐', {
-        description: result.message,
-      })
-      onOpenChange(false)
-    } else {
-      toast.error('Unable to restore', {
-        description: result.message,
-      })
-    }
-  }
 
   const handleUpgrade = async () => {
     setLoading(true)
@@ -176,7 +157,7 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
                 <span>SnapChef Pro Active! ⭐</span>
               </div>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Account: <strong>{userEmail || 'sammyfirst722@gmail.com'}</strong>
+                Account: <strong>{userEmail || 'This device'}</strong>
                 <br />
                 Unlimited AI camera fridge scans and custom meals are unlocked on this device.
               </p>
@@ -250,31 +231,6 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
                   </>
                 )}
               </Button>
-
-              {/* Restore Pro Access Form */}
-              <div className="pt-2 border-t border-border/60 text-center">
-                <span className="text-[11px] text-muted-foreground block mb-1.5 font-medium">
-                  Already purchased or VIP account?
-                </span>
-                <div className="flex gap-1.5 items-center">
-                  <input
-                    type="email"
-                    placeholder="Enter email (e.g. sammyfirst722@gmail.com)"
-                    value={restoreEmail}
-                    onChange={(e) => setRestoreEmail(e.target.value)}
-                    className="flex-1 text-xs px-3 py-2 rounded-xl border border-border/80 bg-background text-foreground placeholder:text-muted-foreground/60"
-                  />
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    onClick={handleRestore}
-                    className="text-xs font-bold h-9 rounded-xl px-3 border-2 hover:bg-muted"
-                  >
-                    Restore
-                  </Button>
-                </div>
-              </div>
 
               <div className="flex items-center justify-center text-[11px] text-muted-foreground pt-1">
                 {hasPlayBilling ? (

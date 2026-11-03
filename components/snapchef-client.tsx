@@ -20,7 +20,6 @@ import {
   setUserPro,
   setUserEmail,
   getUserEmail,
-  restoreProByEmail,
 } from '@/lib/fridge-store'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -223,40 +222,42 @@ export function SnapChefClient() {
     const handleLikeChange = () => setLikedIds(getLikedRecipeIds())
     const handleProChange = () => setIsPro(isUserPro())
 
-    // Check for Stripe payment redirect (?email=..., ?upgraded=true)
+    // Returning from Stripe Checkout: ask the server whether Stripe says this session is really paid.
+    // Nothing in the address bar (like ?upgraded=true) unlocks Pro by itself.
     try {
       if (typeof window !== 'undefined' && window.location.search) {
         const params = new URLSearchParams(window.location.search)
-        const isUpgraded = params.get('upgraded') === 'true'
-        const emailParam = params.get('email')?.toLowerCase().trim()
-
-        if (isUpgraded) {
-          const emailToSave = emailParam || ''
-          if (emailToSave) setUserEmail(emailToSave)
-          setUserPro(true)
-          setIsPro(true)
-          toast.success('SnapChef Pro Activated! ⭐', {
-            description: `Unlimited AI camera fridge scans unlocked.`,
-          })
-
-          // Clean URL without reloading page
+        const sessionId = params.get('session_id')
+        if (sessionId) {
           const cleanUrl = new URL(window.location.href)
-          cleanUrl.searchParams.delete('email')
+          cleanUrl.searchParams.delete('session_id')
           cleanUrl.searchParams.delete('upgraded')
           window.history.replaceState({}, '', cleanUrl.pathname + (cleanUrl.search || ''))
-        }
 
-        const vipParam = params.get('vip')?.toLowerCase().trim() || params.get('tester')?.toLowerCase().trim()
-        if (vipParam) {
-          const res = restoreProByEmail(vipParam)
-          if (res.success) {
-            setIsPro(true)
-            toast.success('SnapChef Pro Active! ⭐', { description: res.message })
-            const cleanUrl = new URL(window.location.href)
-            cleanUrl.searchParams.delete('vip')
-            cleanUrl.searchParams.delete('tester')
-            window.history.replaceState({}, '', cleanUrl.pathname + (cleanUrl.search || ''))
-          }
+          fetch('/api/stripe/verify-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId }),
+          })
+            .then((r) => r.json().catch(() => ({})))
+            .then((d) => {
+              if (d && d.ok) {
+                setUserPro(true)
+                setIsPro(true)
+                toast.success('SnapChef Pro Activated! ⭐', {
+                  description: 'Payment confirmed. Unlimited AI camera fridge scans unlocked.',
+                })
+              } else {
+                toast.error('We could not confirm your payment', {
+                  description: 'If you were charged, please contact us and we will fix it.',
+                })
+              }
+            })
+            .catch(() => {
+              toast.error('We could not confirm your payment', {
+                description: 'Please check your connection and try again.',
+              })
+            })
         }
       }
     } catch (err) {
