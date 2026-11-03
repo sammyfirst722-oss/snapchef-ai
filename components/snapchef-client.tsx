@@ -264,6 +264,18 @@ export function SnapChefClient() {
       console.warn('Payment param check error:', err)
     }
 
+    // Ask the server whether this browser really has Pro. Only acted on once SERVER_PRO_ENFORCE is on
+    // (the server says so in `enforce`); until then the old browser setting stays in charge.
+    fetch('/api/entitlement', { cache: 'no-store' })
+      .then((r) => r.json().catch(() => null))
+      .then((d) => {
+        if (d && d.enforce === true && typeof d.pro === 'boolean' && d.pro !== isUserPro()) {
+          setUserPro(d.pro)
+          setIsPro(d.pro)
+        }
+      })
+      .catch(() => {})
+
     window.addEventListener('snapchef_fridge_changed', handleFridgeUpdate)
     window.addEventListener('pb_recipe_favorites_changed', handleFavChange)
     window.addEventListener('pb_recipe_likes_changed', handleLikeChange)

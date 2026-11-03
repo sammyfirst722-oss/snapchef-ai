@@ -8,6 +8,15 @@ import {
   OPENROUTER_BACKUP_MODEL,
   OpenRouterMessage,
 } from '@/lib/openrouter'
+import {
+  cookieOptions,
+  enforcementEnabled,
+  isProLookup,
+  isWellFormedVisitorId,
+  lookupRequest,
+  newVisitorId,
+  VISITOR_COOKIE,
+} from '@/lib/entitlements'
 
 // Limit: 10 scans per 60 seconds per IP to protect API costs while allowing multi-shelf workflows
 const SCAN_LIMIT = 10
@@ -21,6 +30,12 @@ const GLOBAL_DAILY_CEILING = Number(process.env.SCAN_DAILY_CEILING) || 1500
 // Each visitor's own daily budget, far below the site-wide ceiling, so one computer cannot use up everyone's share.
 const PER_IP_DAILY_LIMIT = 200
 
+// Free-visitor scan cap, enforced on the server ONLY when SERVER_PRO_ENFORCE=true (see lib/entitlements.ts).
+// Counted per anonymous visitor cookie, not per IP, because families, offices and phone carriers share one IP.
+// The per-IP number is only a backstop for someone who throws their cookie away on every request.
+const FREE_DAILY_SCANS = 3
+const FREE_PER_IP_DAILY_BACKSTOP = 30
+
 function isValidIngredientList(parsed: any): parsed is string[] {
   return (
     Array.isArray(parsed) &&
@@ -29,7 +44,7 @@ function isValidIngredientList(parsed: any): parsed is string[] {
   )
 }
 
-export async function POST(req: NextRequest) {
+async function handle(req: NextRequest, ctx: { newVisitorId: string | null }): Promise<NextResponse> {
   try {
     const ip = getClientIp(req)
     const rateLimitResult = await rateLimit(`scan-fridge:${ip}`, SCAN_LIMIT, SCAN_WINDOW_SECONDS)
@@ -59,6 +74,30 @@ export async function POST(req: NextRequest) {
         { error: 'You have reached today\'s scan limit. Please try again tomorrow.', retryAfter: 3600 },
         { status: 429, headers: { 'Retry-After': '3600' } }
       )
+    }
+
+    // Free visitors get a daily cap on the server; Pro (cookie checked against the saved purchase) does not.
+    if (enforcementEnabled()) {
+      const lookup = await lookupRequest(req)
+      if (!isProLookup(lookup)) {
+        const ipBackstop = await rateLimit(`scan-fridge:freeip:${ip}`, FREE_PER_IP_DAILY_BACKSTOP, 86400)
+        let vid = req.cookies.get(VISITOR_COOKIE)?.value
+        if (!isWellFormedVisitorId(vid)) {
+          vid = newVisitorId()
+          ctx.newVisitorId = vid
+        }
+        const freeResult = ipBackstop.success ? await rateLimit(`scan-fridge:freevid:${vid}`, FREE_DAILY_SCANS, 86400) : ipBackstop
+        if (!freeResult.success) {
+          return NextResponse.json(
+            {
+              error: `You reached your ${FREE_DAILY_SCANS} free scans for today! Upgrade to SnapChef Pro for unlimited camera scans.`,
+              code: 'free_limit_reached',
+              retryAfter: 3600,
+            },
+            { status: 429, headers: { 'Retry-After': '3600' } }
+          )
+        }
+      }
     }
 
     // Site-wide ceiling. Only requests that were allowed count toward it (see lib/rate-limit.ts).
@@ -210,4 +249,13 @@ Do not include conversational text or markdown code blocks, just raw JSON.`
       { status: 500 }
     )
   }
+}
+
+export async function POST(req: NextRequest) {
+  const ctx = { newVisitorId: null as string | null }
+  const res = await handle(req, ctx)
+  if (ctx.newVisitorId) {
+    res.cookies.set(VISITOR_COOKIE, ctx.newVisitorId, { ...cookieOptions, maxAge: 60 * 60 * 24 * 400 })
+  }
+  return res
 }

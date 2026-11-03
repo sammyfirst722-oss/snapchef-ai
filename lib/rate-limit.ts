@@ -34,7 +34,7 @@ function cleanupMemoryStore(now: number, maxAgeSeconds: number) {
 let _redis: Redis | null = null
 let _redisChecked = false
 
-function getRedis(): Redis | null {
+export function getRedis(): Redis | null {
   if (_redisChecked) return _redis
   _redisChecked = true
 

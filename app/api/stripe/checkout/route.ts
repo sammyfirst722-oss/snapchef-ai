@@ -85,6 +85,10 @@ export async function POST(req: NextRequest) {
         plan,
         app: 'snapchef',
       },
+      // Refund and cancel events carry the payment/subscription, not the checkout session, so tag those too.
+      ...(plan === 'monthly'
+        ? { subscription_data: { metadata: { app: 'snapchef', plan } } }
+        : { payment_intent_data: { metadata: { app: 'snapchef', plan } } }),
     })
 
     return NextResponse.json({ checkoutUrl: session.url })
