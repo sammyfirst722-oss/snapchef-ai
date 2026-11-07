@@ -27,6 +27,7 @@ import { isUserPro, setUserPro, getUserEmail } from '@/lib/fridge-store'
 import { isPlayBillingAvailable, isAndroidTwa, purchaseWithPlayBilling } from '@/lib/play-billing'
 import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import { trackFunnel } from '@/lib/funnel-client'
 
 interface ProUpgradeModalProps {
   open: boolean
@@ -47,7 +48,9 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
   }, [open])
 
   const handleUpgrade = async () => {
+    if (loading) return // a second press while one is running must not start a second checkout
     setLoading(true)
+    trackFunnel('checkout_click', { plan: selectedPlan })
 
     try {
       // 1. Google Play In-App Billing if inside Android TWA / Play Store app
@@ -85,11 +88,13 @@ export function ProUpgradeModal({ open, onOpenChange }: ProUpgradeModalProps) {
         return
       }
 
+      trackFunnel('checkout_error', { plan: selectedPlan, reason: 'no_checkout_url' })
       toast.error('Checkout is temporarily unavailable', {
         description: data.error || 'Please try again in a few moments.',
       })
     } catch (err: any) {
       console.error('Checkout error:', err)
+      trackFunnel('checkout_error', { plan: selectedPlan, reason: 'network_exception' })
       toast.error('Unable to start checkout', {
         description: 'Please check your connection and try again.',
       })

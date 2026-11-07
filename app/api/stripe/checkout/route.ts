@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { getSiteUrl } from '@/lib/site-url'
+import { recordFunnel } from '@/lib/funnel'
 
 function isAndroidTwa(req: NextRequest, bodyIsTwa?: boolean): boolean {
   if (bodyIsTwa) return true
@@ -39,7 +41,8 @@ export async function POST(req: NextRequest) {
       apiVersion: '2024-04-10' as any,
     })
 
-    const origin = req.headers.get('origin') || 'http://localhost:3000'
+    // Only known addresses (never the raw Origin header, never a silent localhost fallback).
+    const origin = getSiteUrl(req.headers)
 
     const lineItems =
       plan === 'monthly'
@@ -91,9 +94,21 @@ export async function POST(req: NextRequest) {
         : { payment_intent_data: { metadata: { app: 'snapchef', plan } } }),
     })
 
+    await recordFunnel({
+      event: 'checkout_created',
+      app: 'snapchef',
+      plan: plan === 'monthly' ? 'monthly' : 'lifetime',
+      surface: 'web',
+    })
     return NextResponse.json({ checkoutUrl: session.url })
   } catch (err: any) {
     console.error('Stripe checkout error:', err)
+    await recordFunnel({
+      event: 'checkout_error',
+      app: 'snapchef',
+      surface: 'web',
+      reason: typeof err?.code === 'string' ? err.code : 'exception',
+    })
     return NextResponse.json(
       { error: err.message || 'Unable to start checkout session' },
       { status: 500 }

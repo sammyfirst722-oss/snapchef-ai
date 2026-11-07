@@ -11,6 +11,7 @@ vi.mock('@/lib/rate-limit', async () => {
 import { POST } from '@/app/api/stripe/verify-session/route'
 import { _setKvForTesting, lookupToken, PRO_COOKIE } from '@/lib/entitlements'
 import { makeFakeKv } from '../helpers/fake-kv'
+import { _setFunnelStoreForTesting } from '@/lib/funnel'
 
 const SID = 'cs_test_abcdefghij1234567890'
 const paid = (extra: object = {}) => ({
@@ -82,5 +83,27 @@ describe('POST /api/stripe/verify-session (server memory)', () => {
     const res = await call()
     const token = (res.headers.get('set-cookie') || '').match(/sc_pro=(pro_[A-Za-z0-9_-]+)/)![1]
     expect(await lookupToken(token)).toMatchObject({ state: 'active', plan: 'monthly', paidThrough: end })
+  })
+})
+
+describe('verify-session funnel counting', () => {
+  it('counts verify_fail with the reason, and verify_ok on success', async () => {
+    const { _setFunnelStoreForTesting } = await import('@/lib/funnel')
+    const { makeFakeFunnelStore } = await import('../helpers/fake-funnel-store')
+    const fs = makeFakeFunnelStore()
+    _setFunnelStoreForTesting(fs)
+    process.env.STRIPE_SECRET_KEY = 'sk_test_x'
+    _setKvForTesting(makeFakeKv())
+    retrieve.mockReset().mockResolvedValue({ ...paid(), payment_status: 'unpaid', status: 'expired' })
+    const bad = await call()
+    expect(bad.status).toBe(402)
+    const failLine = JSON.parse(fs.lists.get('fnlog:snapchef')![0])
+    expect(failLine.event).toBe('verify_fail')
+    retrieve.mockReset().mockResolvedValue(paid())
+    const ok = await call()
+    expect(ok.status).toBe(200)
+    expect(JSON.parse(fs.lists.get('fnlog:snapchef')![0]).event).toBe('verify_ok')
+    _setFunnelStoreForTesting(undefined)
+    _setKvForTesting(null)
   })
 })

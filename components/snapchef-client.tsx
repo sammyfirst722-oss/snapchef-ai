@@ -60,6 +60,7 @@ import { AiLeftoverGenerator } from '@/components/ai-leftover-generator'
 import { ProUpgradeModal } from '@/components/pro-upgrade-modal'
 import { MobileNav } from '@/components/mobile-nav'
 import { GroceryAffiliate } from '@/components/grocery-affiliate'
+import { trackFunnel } from '@/lib/funnel-client'
 import { NewsletterForm } from '@/components/newsletter-form'
 import { useTheme } from 'next-themes'
 import { toast } from 'sonner'
@@ -228,7 +229,14 @@ export function SnapChefClient() {
       if (typeof window !== 'undefined' && window.location.search) {
         const params = new URLSearchParams(window.location.search)
         const sessionId = params.get('session_id')
+        if (params.get('canceled') === 'true') {
+          trackFunnel('checkout_canceled')
+          const cancelUrl = new URL(window.location.href)
+          cancelUrl.searchParams.delete('canceled')
+          window.history.replaceState({}, '', cancelUrl.pathname + (cancelUrl.search || ''))
+        }
         if (sessionId) {
+          trackFunnel('checkout_returned')
           const cleanUrl = new URL(window.location.href)
           cleanUrl.searchParams.delete('session_id')
           cleanUrl.searchParams.delete('upgraded')
@@ -242,6 +250,7 @@ export function SnapChefClient() {
             .then((r) => r.json().catch(() => ({})))
             .then((d) => {
               if (d && d.ok) {
+                trackFunnel('pro_unlocked')
                 setUserPro(true)
                 setIsPro(true)
                 toast.success('SnapChef Pro Activated! ⭐', {
